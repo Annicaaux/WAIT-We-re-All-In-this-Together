@@ -122,13 +122,13 @@ with tab1:
                 box-shadow: 2px 2px 4px rgba(0,0,0,0.15);
                 margin-top: 0.5rem;
                 cursor: pointer;">
-                Beitreten
+                🚀 Beitreten
             </button>
         </form>
         """
         st.markdown(button_html, unsafe_allow_html=True)
 
-        if st.session_state.get(f"joined_{group['id']}") != True and st.experimental_get_query_params().get(btn_key):
+        if st.session_state.get(f"joined_{group['id']}") != True and st.query_params.get(btn_key):
             if answer:
                 group['members'].append("Du")
                 group['answers']['Du'] = answer
