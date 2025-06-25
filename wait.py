@@ -25,7 +25,7 @@ st.markdown("""
             text-align: center;
         }
         .stButton > button {
-            background-color: #cabfaa !important;
+            background: linear-gradient(135deg, #a5d8ff, #c3f0ca) !important;
             color: #2f2f2f !important;
             border: none;
             padding: 0.6em 1.2em;
@@ -35,7 +35,7 @@ st.markdown("""
             transition: all 0.2s ease-in-out;
         }
         .stButton > button:hover {
-            background-color: #b7ab94 !important;
+            background: linear-gradient(135deg, #94cbee, #b7e4bd) !important;
             transform: scale(1.02);
         }
     </style>
