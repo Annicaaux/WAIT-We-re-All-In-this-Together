@@ -12,12 +12,9 @@ st.markdown("""
             font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
             color: #2f2f2f;
         }
-        .toggle-section {
-            margin-bottom: 1rem;
-        }
         .toggle-button {
-            background: linear-gradient(135deg, #ffcc80, #f48fb1);
-            color: #2f2f2f;
+            background: linear-gradient(135deg, #f48fb1, #ce93d8);
+            color: #fff;
             font-weight: bold;
             padding: 0.8rem 1.2rem;
             border: none;
@@ -30,7 +27,7 @@ st.markdown("""
             transition: all 0.2s ease-in-out;
         }
         .toggle-button:hover {
-            background: linear-gradient(135deg, #ffb74d, #f06292);
+            background: linear-gradient(135deg, #ec407a, #ab47bc);
         }
         .toggle-content {
             background-color: #ffffff;
@@ -40,19 +37,21 @@ st.markdown("""
             margin-top: 0.5rem;
         }
         .postit {
-            padding: 1rem;
-            margin: 0.5rem;
-            border-radius: 6px;
-            box-shadow: 3px 3px 6px rgba(0,0,0,0.1);
-            min-height: 100px;
-            font-family: "Patrick Hand", "Comic Sans MS", cursive;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-family: 'Patrick Hand', 'Comic Sans MS', cursive;
             text-align: center;
-            background-color: #fff9b1;
+            padding: 1rem;
+            margin: 0.5rem;
+            width: 160px;
+            height: 160px;
+            background-color: #fff68f;
+            border: 1px solid #e0d97a;
+            border-radius: 4px;
+            box-shadow: 4px 4px 10px rgba(0,0,0,0.15);
             transform: rotate(-2deg);
-            border: 1px solid #e8e1a1;
+            font-size: 1.1rem;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -77,31 +76,40 @@ tab1, tab2, tab3, tab4 = st.tabs(["Lerngruppen finden", "Gruppe erstellen", "Mei
 # Tab 1: Gruppen anzeigen
 with tab1:
     st.subheader("Offene Lerngruppen")
-    for group in st.session_state.groups:
+    colors = [
+        "linear-gradient(135deg, #81d4fa, #4fc3f7)",
+        "linear-gradient(135deg, #aed581, #9ccc65)",
+        "linear-gradient(135deg, #ffcc80, #ffb74d)",
+        "linear-gradient(135deg, #f48fb1, #ce93d8)",
+        "linear-gradient(135deg, #b39ddb, #9575cd)"
+    ]
+
+    for idx, group in enumerate(st.session_state.groups):
         group_key = f"grp_{group['id']}"
         if group_key not in st.session_state.expanded:
             st.session_state.expanded[group_key] = False
 
-        col = st.columns([0.85, 0.15])
-        with col[0]:
-            if st.button(f"📖 {group['topic']} – {group['time']} – {group['room']}", key=f"btn_{group['id']}"):
-                st.session_state.expanded[group_key] = not st.session_state.expanded[group_key]
+        button_color = colors[idx % len(colors)]
+        custom_btn = f"""
+            <button class='toggle-button' style='background: {button_color};' onclick="var el = document.getElementById('{group_key}'); el.style.display = el.style.display === 'none' ? 'block' : 'none';">
+                📖 {group['topic']} – {group['time']} – {group['room']}
+            </button>
+        """
+        st.markdown(custom_btn, unsafe_allow_html=True)
 
-        if st.session_state.expanded[group_key]:
-            with st.container():
-                st.markdown("<div class='toggle-content'>", unsafe_allow_html=True)
-                st.markdown(f"**Freie Plätze:** {group['max'] - len(group['members'])}")
-                st.markdown(f"**Frage zum Einstieg:** _{group['question']}_")
-                answer = st.text_input(f"Deine Antwort ({group['id']})", key=f"answer_{group['id']}")
-                if st.button(f"Beitreten ({group['id']})"):
-                    if answer:
-                        group['members'].append("Du")
-                        group['answers']['Du'] = answer
-                        st.session_state.joined.append(group['id'])
-                        st.success("Du bist der Gruppe beigetreten!")
-                    else:
-                        st.warning("Bitte beantworte die Frage, bevor du beitrittst.")
-                st.markdown("</div>", unsafe_allow_html=True)
+        st.markdown(f"<div id='{group_key}' style='display:none' class='toggle-content'>", unsafe_allow_html=True)
+        st.markdown(f"**Freie Plätze:** {group['max'] - len(group['members'])}")
+        st.markdown(f"**Frage zum Einstieg:** _{group['question']}_")
+        answer = st.text_input(f"Deine Antwort ({group['id']})", key=f"answer_{group['id']}")
+        if st.button(f"Beitreten ({group['id']})"):
+            if answer:
+                group['members'].append("Du")
+                group['answers']['Du'] = answer
+                st.session_state.joined.append(group['id'])
+                st.success("Du bist der Gruppe beigetreten!")
+            else:
+                st.warning("Bitte beantworte die Frage, bevor du beitrittst.")
+        st.markdown("</div>", unsafe_allow_html=True)
 
 # Tab 2: Gruppenerstellung
 with tab2:
@@ -166,28 +174,13 @@ with tab4:
 
     st.markdown("### Beiträge")
     cols = st.columns(3)
-    colors = ["#fff9b1", "#fff4a3", "#ffe7a8", "#fffbe0", "#ffefc2"]
     for i, text in enumerate(aktuelle['entries']):
         with cols[i % 3]:
-            st.markdown(
-                f"""
-                <div class='postit' style='background-color:{random.choice(colors)}; transform: rotate({random.choice([-3,-2,-1,0,1,2,3])}deg);'>
-                    {text}
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
+            st.markdown(f"<div class='postit'>{text}</div>", unsafe_allow_html=True)
 
     st.markdown("### Letzte Woche")
     letzte = st.session_state.pinnwand[-2]
     st.markdown(f"**🗓️ {letzte['question']}**")
     for i, text in enumerate(letzte['entries']):
         with cols[i % 3]:
-            st.markdown(
-                f"""
-                <div class='postit' style='background-color:{random.choice(colors)}; transform: rotate({random.choice([-3,-2,-1,0,1,2,3])}deg);'>
-                    {text}
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
+            st.markdown(f"<div class='postit'>{text}</div>", unsafe_allow_html=True)
