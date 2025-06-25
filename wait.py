@@ -3,6 +3,30 @@ from datetime import datetime
 import random
 
 st.set_page_config(page_title="StudyTogether", layout="wide")
+
+# Farben und Schriftart global setzen
+st.markdown("""
+    <style>
+        html, body, [class*="st"] {
+            background-color: #f5f0e6;
+            font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
+            color: #2f2f2f;
+        }
+        .postit {
+            padding: 1rem;
+            margin: 0.5rem;
+            border-radius: 6px;
+            box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
+            height: 120px;
+            font-family: "Patrick Hand", "Comic Sans MS", cursive;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
 st.title("📚 StudyTogether – Finde deine Lerngruppe")
 
 # Session State Init
@@ -79,7 +103,7 @@ with tab3:
                     st.markdown(f"- {name}: _{ans}_")
                 chat = st.text_input(f"Nachricht an Gruppe ({group['id']})", key=f"chat_{group['id']}")
                 if chat:
-                    st.markdown(f"**Du:** {chat}")  # Nicht persistent für Einfachheit
+                    st.markdown(f"**Du:** {chat}")
 
 with tab4:
     st.subheader("Frage der Woche")
@@ -91,21 +115,14 @@ with tab4:
             aktuelle['entries'].append(new)
             st.success("Danke für deinen Beitrag!")
 
-    # Anzeige als Post-its
     st.markdown("### Beiträge")
     cols = st.columns(3)
-    colors = ["#fff9b1", "#fff6a2", "#fff1a8", "#ffef88", "#ffeda6"]
+    colors = ["#fff9b1", "#fff4a3", "#ffe7a8", "#fffbe0", "#ffefc2"]
     for i, text in enumerate(aktuelle['entries']):
         with cols[i % 3]:
             st.markdown(
                 f"""
-                <div style='background-color:{random.choice(colors)}; 
-                            padding:1rem; margin:0.5rem; 
-                            border-radius:6px; 
-                            box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
-                            transform: rotate({random.choice([-2,-1,0,1,2])}deg); 
-                            font-family: "Comic Sans MS", "Patrick Hand", cursive; 
-                            height: 120px;'>
+                <div class='postit' style='background-color:{random.choice(colors)}; transform: rotate({random.choice([-2,-1,0,1,2])}deg);'>
                     {text}
                 </div>
                 """,
@@ -119,13 +136,7 @@ with tab4:
         with cols[i % 3]:
             st.markdown(
                 f"""
-                <div style='background-color:{random.choice(colors)}; 
-                            padding:1rem; margin:0.5rem; 
-                            border-radius:6px; 
-                            box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
-                            transform: rotate({random.choice([-3,-2,-1,1,2,3])}deg); 
-                            font-family: "Comic Sans MS", "Patrick Hand", cursive; 
-                            height: 120px;'>
+                <div class='postit' style='background-color:{random.choice(colors)}; transform: rotate({random.choice([-3,-2,-1,1,2,3])}deg);'>
                     {text}
                 </div>
                 """,
