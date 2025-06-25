@@ -12,6 +12,33 @@ st.markdown("""
             font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
             color: #2f2f2f;
         }
+        section[data-testid="stExpander"] > div {
+            background-color: #fefcf7;
+            border: 1px solid #e2dbc9;
+            border-radius: 12px;
+            padding: 0.5rem;
+        }
+        .stTextInput > div > input,
+        .stTextArea textarea,
+        .stSelectbox div[data-baseweb="select"] > div,
+        .stSlider,
+        .stTimeInput input {
+            background-color: #f1f7f4 !important;
+            color: #2f2f2f;
+            border: 1px solid #ccd5ce;
+            border-radius: 8px;
+        }
+        .stTabs [role="tablist"] > div {
+            background-color: #eae3d2;
+            padding: 0.4rem 1rem;
+            border-radius: 8px;
+            margin-right: 0.5rem;
+            font-weight: bold;
+        }
+        .stTabs [aria-selected="true"] {
+            background-color: #d4ccc0 !important;
+            border-bottom: 3px solid #b4a89a !important;
+        }
         .postit {
             padding: 1rem;
             margin: 0.5rem;
