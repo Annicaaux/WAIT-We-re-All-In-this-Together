@@ -24,6 +24,20 @@ st.markdown("""
             justify-content: center;
             text-align: center;
         }
+        .stButton > button {
+            background-color: #cabfaa !important;
+            color: #2f2f2f !important;
+            border: none;
+            padding: 0.6em 1.2em;
+            border-radius: 12px;
+            font-weight: bold;
+            box-shadow: 1px 1px 5px rgba(0,0,0,0.1);
+            transition: all 0.2s ease-in-out;
+        }
+        .stButton > button:hover {
+            background-color: #b7ab94 !important;
+            transform: scale(1.02);
+        }
     </style>
 """, unsafe_allow_html=True)
 
