@@ -18,15 +18,24 @@ st.markdown("""
             border-radius: 16px;
             padding: 1rem;
         }
-        .stTextInput > div > input,
+        .stTextInput input,
         .stTextArea textarea,
         .stSelectbox div[data-baseweb="select"] > div,
         .stSlider,
         .stTimeInput input {
-            background-color: #e0f7fa !important;
-            color: #2f2f2f;
-            border: 1px solid #80deea;
-            border-radius: 10px;
+            background-color: #ffffff !important;
+            color: #2f2f2f !important;
+            border: 2px solid #cba3d8 !important;
+            border-radius: 10px !important;
+            padding: 0.4rem 0.8rem !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+        }
+        .stTextInput input:focus,
+        .stTextArea textarea:focus,
+        .stTimeInput input:focus {
+            outline: none !important;
+            border: 2px solid #a678b5 !important;
+            background-color: #f9f7fc !important;
         }
         .stTabs [role="tablist"] > div {
             background-color: #dcedc8;
