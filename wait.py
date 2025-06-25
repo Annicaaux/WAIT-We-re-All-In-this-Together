@@ -3,6 +3,12 @@ from datetime import datetime
 import random
 
 st.set_page_config(page_title="StudyTogether", layout="wide")
+tab1, tab2, tab3, tab4 = st.tabs([
+    "🌍 Lerngruppen finden", 
+    "🛠️ Gruppe erstellen", 
+    "👥 Meine Gruppen", 
+    "📌 Pinnwand"
+])
 
 # Farben und Schriftart global setzen
 st.markdown("""
@@ -146,7 +152,7 @@ with tab1:
 
 # Tab 2: Gruppenerstellung
 with tab2:
-    with st.expander("➕ Neue Lerngruppe erstellen", expanded=True):
+    st.expander("➕ Neue Lerngruppe erstellen", expanded=True):
         topic = st.text_input("Thema")
         time = st.time_input("Uhrzeit", value=datetime.now().time())
         room = st.selectbox("Raum", ["Raum A1", "A2", "Bibliothek Gruppenraum 1", "Café Campus", "Lernwiese", "Lounge"])
