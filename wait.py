@@ -122,7 +122,7 @@ with tab1:
                 box-shadow: 2px 2px 4px rgba(0,0,0,0.15);
                 margin-top: 0.5rem;
                 cursor: pointer;">
-                🚀 Beitreten
+                Beitreten
             </button>
         </form>
         """
