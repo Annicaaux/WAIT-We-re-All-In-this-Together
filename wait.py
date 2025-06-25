@@ -13,31 +13,31 @@ st.markdown("""
             color: #2f2f2f;
         }
         section[data-testid="stExpander"] > div {
-            background-color: #fefcf7;
-            border: 1px solid #e2dbc9;
-            border-radius: 12px;
-            padding: 0.5rem;
+            background-color: #fce4ec;
+            border: 1px solid #f8bbd0;
+            border-radius: 16px;
+            padding: 1rem;
         }
         .stTextInput > div > input,
         .stTextArea textarea,
         .stSelectbox div[data-baseweb="select"] > div,
         .stSlider,
         .stTimeInput input {
-            background-color: #f1f7f4 !important;
+            background-color: #e0f7fa !important;
             color: #2f2f2f;
-            border: 1px solid #ccd5ce;
-            border-radius: 8px;
+            border: 1px solid #80deea;
+            border-radius: 10px;
         }
         .stTabs [role="tablist"] > div {
-            background-color: #eae3d2;
+            background-color: #dcedc8;
             padding: 0.4rem 1rem;
-            border-radius: 8px;
+            border-radius: 10px;
             margin-right: 0.5rem;
             font-weight: bold;
         }
         .stTabs [aria-selected="true"] {
-            background-color: #d4ccc0 !important;
-            border-bottom: 3px solid #b4a89a !important;
+            background-color: #aed581 !important;
+            border-bottom: 3px solid #9ccc65 !important;
         }
         .postit {
             padding: 1rem;
@@ -52,18 +52,18 @@ st.markdown("""
             text-align: center;
         }
         .stButton > button {
-            background: linear-gradient(135deg, #a5d8ff, #c3f0ca) !important;
-            color: #2f2f2f !important;
+            background: linear-gradient(135deg, #f48fb1, #ce93d8) !important;
+            color: white !important;
             border: none;
             padding: 0.6em 1.2em;
             border-radius: 12px;
             font-weight: bold;
-            box-shadow: 1px 1px 5px rgba(0,0,0,0.1);
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
             transition: all 0.2s ease-in-out;
         }
         .stButton > button:hover {
-            background: linear-gradient(135deg, #94cbee, #b7e4bd) !important;
-            transform: scale(1.02);
+            background: linear-gradient(135deg, #ec407a, #ab47bc) !important;
+            transform: scale(1.03);
         }
     </style>
 """, unsafe_allow_html=True)
@@ -158,7 +158,7 @@ with tab4:
 
     st.markdown("### Beiträge")
     cols = st.columns(3)
-    colors = ["#fff9b1", "#fff4a3", "#ffe7a8", "#fffbe0", "#ffefc2"]
+    colors = ["#fff176", "#ffd54f", "#ffb74d", "#f8bbd0", "#ce93d8"]
     for i, text in enumerate(aktuelle['entries']):
         with cols[i % 3]:
             st.markdown(
