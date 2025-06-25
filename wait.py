@@ -8,12 +8,12 @@ st.set_page_config(page_title="StudyTogether", layout="wide")
 st.markdown("""
     <style>
         html, body, [class*="st"] {
-            background-color: #f5f0e6;
+            background-color: #fdfaf3;
             font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
             color: #2f2f2f;
         }
         .toggle-button {
-            background: linear-gradient(135deg, #f48fb1, #ce93d8);
+            background: linear-gradient(135deg, #ffb6b9, #fcd5ce);
             color: #fff;
             font-weight: bold;
             padding: 0.8rem 1.2rem;
@@ -27,7 +27,7 @@ st.markdown("""
             transition: all 0.2s ease-in-out;
         }
         .toggle-button:hover {
-            background: linear-gradient(135deg, #ec407a, #ab47bc);
+            background: linear-gradient(135deg, #e5989b, #f9dcc4);
         }
         .toggle-content {
             background-color: #ffffff;
@@ -57,97 +57,52 @@ st.markdown("""
 
 st.title("📚 StudyTogether – Finde deine Lerngruppe")
 
-# Tabs einrichten mit Icons
-tab1, tab2, tab3, tab4 = st.tabs([
-    "🌍 Lerngruppen finden",
-    "🛠️ Gruppe erstellen",
-    "👥 Meine Gruppen",
-    "📌 Pinnwand"
-])
+# Tabs definieren
+tab1, tab2, tab3, tab4 = st.tabs(["🌍 Lerngruppen finden", "🛠️ Gruppe erstellen", "👥 Meine Gruppen", "📌 Pinnwand"])
 
-# Initialisierung
+# Farben definieren
+farben = [
+    ("#ffd6a5", "#ffb86f"),
+    ("#b5ead7", "#70d6ff"),
+    ("#caffbf", "#9bf6ff"),
+    ("#ffc6ff", "#cdb4db"),
+    ("#fdffb6", "#ffffa5")
+]
+
+# Session State
 if "groups" not in st.session_state:
-    st.session_state.groups = [
-        {"id": 1, "topic": "Statistik Klausur", "time": "10:00", "room": "Raum A1", "max": 4, "members": ["Anna", "Ben"], "question": "Was ist deine größte Prokrastinationsgefahr?", "answers": {}},
-        {"id": 2, "topic": "Klinische Psychologie", "time": "14:30", "room": "Bibliothek Gruppenraum 2", "max": 3, "members": ["Chris"], "question": "Was motiviert dich heute zu lernen?", "answers": {}},
-        {"id": 3, "topic": "Biopsychologie", "time": "09:00", "room": "Café Campus", "max": 5, "members": [], "question": "Wenn dein Gehirn eine Farbe hätte – welche?", "answers": {}}
-    ]
+    st.session_state.groups = []
 if "joined" not in st.session_state:
     st.session_state.joined = []
-if "expanded" not in st.session_state:
-    st.session_state.expanded = {}
 
-# Tab 1: Gruppen anzeigen
+# Tab 1: Lerngruppen finden
 with tab1:
     st.subheader("Offene Lerngruppen")
-    colors = [
-        "linear-gradient(135deg, #81d4fa, #4fc3f7)",
-        "linear-gradient(135deg, #aed581, #9ccc65)",
-        "linear-gradient(135deg, #ffcc80, #ffb74d)",
-        "linear-gradient(135deg, #f48fb1, #ce93d8)",
-        "linear-gradient(135deg, #b39ddb, #9575cd)"
-    ]
-
-    join_colors = ["#4fc3f7", "#9ccc65", "#ffb74d", "#ce93d8", "#9575cd"]
-
     for idx, group in enumerate(st.session_state.groups):
-        group_key = f"grp_{group['id']}"
-        if group_key not in st.session_state.expanded:
-            st.session_state.expanded[group_key] = False
+        col1, col2 = st.columns([0.85, 0.15])
+        with col1:
+            st.markdown(f"**📖 {group['topic']}** – {group['time']} – {group['room']}")
+        with col2:
+            with st.expander("Anzeigen"):
+                st.markdown(f"**Freie Plätze:** {group['max'] - len(group['members'])}")
+                st.markdown(f"**Frage zum Einstieg:** _{group['question']}_")
+                answer = st.text_input("Deine Antwort", key=f"answer_{idx}")
+                color = farben[idx % len(farben)][0]
+                if st.button("🚀 Beitreten", key=f"join_{idx}"):
+                    if answer:
+                        group['members'].append("Du")
+                        group['answers']["Du"] = answer
+                        st.session_state.joined.append(group['id'])
+                        st.success("Du bist beigetreten!")
+                    else:
+                        st.warning("Bitte beantworte die Frage.")
 
-        button_color = colors[idx % len(colors)]
-        custom_btn = f"""
-            <button class='toggle-button' style='background: {button_color};' onclick="var el = document.getElementById('{group_key}'); el.style.display = el.style.display === 'none' ? 'block' : 'none';">
-                📖 {group['topic']} – {group['time']} – {group['room']}
-            </button>
-        """
-        st.markdown(custom_btn, unsafe_allow_html=True)
-
-        st.markdown(f"<div id='{group_key}' style='display:none' class='toggle-content'>", unsafe_allow_html=True)
-        st.markdown(f"**Freie Plätze:** {group['max'] - len(group['members'])}")
-        st.markdown(f"**Frage zum Einstieg:** _{group['question']}_")
-        answer = st.text_input(f"Deine Antwort ({group['id']})", key=f"answer_{group['id']}")
-
-        join_color = join_colors[idx % len(join_colors)]
-        btn_key = f"join_btn_{group['id']}"
-
-        button_html = f"""
-        <form action="" method="POST">
-            <input type="hidden" name="{btn_key}" value="1">
-            <button type="submit" style="
-                background-color: {join_color};
-                color: white;
-                font-weight: bold;
-                padding: 0.5rem 1.2rem;
-                border: none;
-                border-radius: 10px;
-                box-shadow: 2px 2px 4px rgba(0,0,0,0.15);
-                margin-top: 0.5rem;
-                cursor: pointer;">
-                🚀 Beitreten
-            </button>
-        </form>
-        """
-        st.markdown(button_html, unsafe_allow_html=True)
-
-        if st.session_state.get(f"joined_{group['id']}") != True and st.query_params.get(btn_key):
-            if answer:
-                group['members'].append("Du")
-                group['answers']['Du'] = answer
-                st.session_state.joined.append(group['id'])
-                st.session_state[f"joined_{group['id']}"] = True
-                st.success("Du bist der Gruppe beigetreten!")
-            else:
-                st.warning("Bitte beantworte die Frage, bevor du beitrittst.")
-
-        st.markdown("</div>", unsafe_allow_html=True)
-
-# Tab 2: Gruppenerstellung
+# Tab 2: Gruppe erstellen
 with tab2:
     with st.expander("➕ Neue Lerngruppe erstellen", expanded=True):
         topic = st.text_input("Thema")
         time = st.time_input("Uhrzeit", value=datetime.now().time())
-        room = st.selectbox("Raum", ["Raum A1", "A2", "Bibliothek Gruppenraum 1", "Café Campus", "Lernwiese", "Lounge"])
+        room = st.selectbox("Raum", ["Raum A1", "Bibliothek Gruppenraum", "Café Campus", "Lernwiese"])
         max_p = st.slider("Maximale Teilnehmerzahl", 2, 10, 4)
         frage = st.text_input("Einstiegsfrage", placeholder="Was willst du von deiner Gruppe wissen?")
         if st.button("Gruppe erstellen"):
@@ -175,17 +130,14 @@ with tab3:
         if group['id'] in st.session_state.joined:
             with st.expander(f"🫱 {group['topic']} – {group['room']} – {group['time']}"):
                 st.markdown("**Teilnehmer:innen:** " + ", ".join(group['members']))
-                st.markdown("**Einstiegsfrage & Antworten:**")
+                st.markdown("**Antworten:**")
                 for name, ans in group['answers'].items():
                     st.markdown(f"- {name}: _{ans}_")
-                chat = st.text_input(f"Nachricht an Gruppe ({group['id']})", key=f"chat_{group['id']}")
-                if chat:
-                    st.markdown(f"**Du:** {chat}")
 
 # Tab 4: Pinnwand
 if "pinnwand" not in st.session_state:
     st.session_state.pinnwand = [
-        {"week": "Letzte Woche", "question": "Was würde dein 13 Jähriges-Ich niemals von dir erwarten", "entries": [
+        {"week": "Letzte Woche", "question": "Was würde dein 13-jähriges Ich niemals von dir erwarten?", "entries": [
             "Dass ich freiwillig Steuern bezahle.",
             "Dass ich um 6:30 Uhr jogge und es mag.",
             "Dass ich Salat esse und dazu Wasser trinke.",
@@ -196,19 +148,18 @@ if "pinnwand" not in st.session_state:
     ]
 
 with tab4:
-    st.subheader("Frage der Woche")
+    st.subheader("Pinnwand")
     aktuelle = st.session_state.pinnwand[-1]
     letzte = st.session_state.pinnwand[-2]
 
-    st.markdown("### Aktuelle Woche")
     st.markdown(f"📅 **{aktuelle['question']}**")
     new = st.text_area("Deine Antwort", key="pin")
     if st.button("Absenden"):
         if new:
             aktuelle['entries'].append(new)
-            st.success("Danke für deinen Beitrag!")
+            st.success("Beitrag hinzugefügt!")
 
-    st.markdown("### Beiträge")
+    st.markdown("### Beiträge der Woche")
     cols = st.columns(3)
     for i, text in enumerate(aktuelle['entries']):
         with cols[i % 3]:
@@ -218,4 +169,4 @@ with tab4:
     st.markdown(f"🕰️ **{letzte['question']}**")
     for i, text in enumerate(letzte['entries']):
         with cols[i % 3]:
-            st.markdown(f"<div class='postit' style='background-color:#d7f9f3'>{text}</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='postit' style='background-color:#d0f4de'>{text}</div>", unsafe_allow_html=True)
