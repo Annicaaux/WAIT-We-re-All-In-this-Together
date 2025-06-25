@@ -12,51 +12,54 @@ st.markdown("""
             font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
             color: #2f2f2f;
         }
-        .toggle-btn {
-            background: linear-gradient(135deg, #f48fb1, #ce93d8);
-            color: #fff;
+        .toggle-section {
+            margin-bottom: 1rem;
+        }
+        .toggle-button {
+            background: linear-gradient(135deg, #ffcc80, #f48fb1);
+            color: #2f2f2f;
             font-weight: bold;
-            padding: 0.7rem 1.4rem;
+            padding: 0.8rem 1.2rem;
             border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.15);
-            transition: all 0.2s ease-in-out;
-            width: 100%;
-            text-align: left;
-        }
-        .toggle-btn:hover {
-            background: linear-gradient(135deg, #ec407a, #ab47bc);
-        }
-        .create-btn {
-            background: linear-gradient(135deg, #81d4fa, #80cbc4);
-            color: #fff;
-            font-weight: bold;
-            padding: 0.7rem 1.4rem;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.15);
-            transition: all 0.2s ease-in-out;
-            width: 100%;
-            text-align: left;
-        }
-        .create-btn:hover {
-            background: linear-gradient(135deg, #4fc3f7, #4db6ac);
-        }
-        .collapsible {
-            background-color: #ffffff;
             border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            text-align: left;
+            font-size: 1.1rem;
+            transition: all 0.2s ease-in-out;
+        }
+        .toggle-button:hover {
+            background: linear-gradient(135deg, #ffb74d, #f06292);
+        }
+        .toggle-content {
+            background-color: #ffffff;
+            border-radius: 10px;
             padding: 1rem;
-            margin-top: 0.5rem;
             box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            margin-top: 0.5rem;
+        }
+        .postit {
+            padding: 1rem;
+            margin: 0.5rem;
+            border-radius: 6px;
+            box-shadow: 3px 3px 6px rgba(0,0,0,0.1);
+            min-height: 100px;
+            font-family: "Patrick Hand", "Comic Sans MS", cursive;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background-color: #fff9b1;
+            transform: rotate(-2deg);
+            border: 1px solid #e8e1a1;
         }
     </style>
 """, unsafe_allow_html=True)
 
 st.title("📚 StudyTogether – Finde deine Lerngruppe")
 
-# Session State Init
+# State
 if "groups" not in st.session_state:
     st.session_state.groups = [
         {"id": 1, "topic": "Statistik Klausur", "time": "10:00", "room": "Raum A1", "max": 4, "members": ["Anna", "Ben"], "question": "Was ist deine größte Prokrastinationsgefahr?", "answers": {}},
@@ -65,58 +68,44 @@ if "groups" not in st.session_state:
     ]
 if "joined" not in st.session_state:
     st.session_state.joined = []
-if "show_create" not in st.session_state:
-    st.session_state.show_create = False
-if "expanded_groups" not in st.session_state:
-    st.session_state.expanded_groups = set()
+if "expanded" not in st.session_state:
+    st.session_state.expanded = {}
 
 # Tabs
 tab1, tab2, tab3, tab4 = st.tabs(["Lerngruppen finden", "Gruppe erstellen", "Meine Gruppen", "📌 Pinnwand"])
 
-# TAB 1: Gruppen finden
+# Tab 1: Gruppen anzeigen
 with tab1:
     st.subheader("Offene Lerngruppen")
-    color_classes = [
-        "background: linear-gradient(135deg, #f48fb1, #ce93d8);",
-        "background: linear-gradient(135deg, #81d4fa, #80cbc4);",
-        "background: linear-gradient(135deg, #ffcc80, #f48fb1);",
-        "background: linear-gradient(135deg, #b39ddb, #64b5f6);",
-        "background: linear-gradient(135deg, #aed581, #81c784);"
-    ]
+    for group in st.session_state.groups:
+        group_key = f"grp_{group['id']}"
+        if group_key not in st.session_state.expanded:
+            st.session_state.expanded[group_key] = False
 
-    for idx, group in enumerate(st.session_state.groups):
-        label = f"📖 {group['topic']} – {group['time']} – {group['room']}"
-        color_style = color_classes[idx % len(color_classes)]
-        btn_html = f"""
-            <button class='toggle-btn' style='{color_style}' onclick="document.getElementById('group_{group['id']}').style.display = 
-            document.getElementById('group_{group['id']}').style.display === 'none' ? 'block' : 'none'">
-                {label}
-            </button>
-        """
-        st.markdown(btn_html, unsafe_allow_html=True)
+        col = st.columns([0.85, 0.15])
+        with col[0]:
+            if st.button(f"📖 {group['topic']} – {group['time']} – {group['room']}", key=f"btn_{group['id']}"):
+                st.session_state.expanded[group_key] = not st.session_state.expanded[group_key]
 
-        with st.container():
-            st.markdown(f"<div id='group_{group['id']}' style='display:none' class='collapsible'>", unsafe_allow_html=True)
-            st.markdown(f"**Freie Plätze:** {group['max'] - len(group['members'])}")
-            st.markdown(f"**Frage zum Einstieg:** _{group['question']}_")
-            answer = st.text_input(f"Deine Antwort ({group['id']})", key=f"answer_{group['id']}")
-            if st.button(f"Beitreten ({group['id']})"):
-                if answer:
-                    group['members'].append("Du")
-                    group['answers']['Du'] = answer
-                    st.session_state.joined.append(group['id'])
-                    st.success("Du bist der Gruppe beigetreten!")
-                else:
-                    st.warning("Bitte beantworte die Frage, bevor du beitrittst.")
-            st.markdown("</div>", unsafe_allow_html=True)
+        if st.session_state.expanded[group_key]:
+            with st.container():
+                st.markdown("<div class='toggle-content'>", unsafe_allow_html=True)
+                st.markdown(f"**Freie Plätze:** {group['max'] - len(group['members'])}")
+                st.markdown(f"**Frage zum Einstieg:** _{group['question']}_")
+                answer = st.text_input(f"Deine Antwort ({group['id']})", key=f"answer_{group['id']}")
+                if st.button(f"Beitreten ({group['id']})"):
+                    if answer:
+                        group['members'].append("Du")
+                        group['answers']['Du'] = answer
+                        st.session_state.joined.append(group['id'])
+                        st.success("Du bist der Gruppe beigetreten!")
+                    else:
+                        st.warning("Bitte beantworte die Frage, bevor du beitrittst.")
+                st.markdown("</div>", unsafe_allow_html=True)
 
-# TAB 2: Gruppe erstellen
+# Tab 2: Gruppenerstellung
 with tab2:
-    if st.button("➕ Neue Lerngruppe erstellen", key="create_toggle_btn", use_container_width=True):
-        st.session_state.show_create = not st.session_state.show_create
-
-    if st.session_state.show_create:
-        st.markdown("<div class='collapsible'>", unsafe_allow_html=True)
+    with st.expander("➕ Neue Lerngruppe erstellen", expanded=True):
         topic = st.text_input("Thema")
         time = st.time_input("Uhrzeit", value=datetime.now().time())
         room = st.selectbox("Raum", ["Raum A1", "A2", "Bibliothek Gruppenraum 1", "Café Campus", "Lernwiese", "Lounge"])
@@ -139,9 +128,8 @@ with tab2:
                 st.success("Gruppe erstellt und beigetreten!")
             else:
                 st.warning("Bitte gib Thema und Frage an.")
-        st.markdown("</div>", unsafe_allow_html=True)
 
-# TAB 3: Meine Gruppen
+# Tab 3: Meine Gruppen
 with tab3:
     st.subheader("Deine Gruppen")
     for group in st.session_state.groups:
@@ -155,7 +143,7 @@ with tab3:
                 if chat:
                     st.markdown(f"**Du:** {chat}")
 
-# TAB 4: Pinnwand
+# Tab 4: Pinnwand
 if "pinnwand" not in st.session_state:
     st.session_state.pinnwand = [
         {"week": "Letzte Woche", "question": "Wie gehst du mit Lernblockaden um?", "entries": [
@@ -178,12 +166,12 @@ with tab4:
 
     st.markdown("### Beiträge")
     cols = st.columns(3)
-    colors = ["#fff176", "#ffd54f", "#ffb74d", "#f8bbd0", "#ce93d8"]
+    colors = ["#fff9b1", "#fff4a3", "#ffe7a8", "#fffbe0", "#ffefc2"]
     for i, text in enumerate(aktuelle['entries']):
         with cols[i % 3]:
             st.markdown(
                 f"""
-                <div class='collapsible' style='background-color:{random.choice(colors)}; transform: rotate({random.choice([-2,-1,0,1,2])}deg);'>
+                <div class='postit' style='background-color:{random.choice(colors)}; transform: rotate({random.choice([-3,-2,-1,0,1,2,3])}deg);'>
                     {text}
                 </div>
                 """,
@@ -197,7 +185,7 @@ with tab4:
         with cols[i % 3]:
             st.markdown(
                 f"""
-                <div class='collapsible' style='background-color:{random.choice(colors)}; transform: rotate({random.choice([-2,-1,0,1,2])}deg);'>
+                <div class='postit' style='background-color:{random.choice(colors)}; transform: rotate({random.choice([-3,-2,-1,0,1,2,3])}deg);'>
                     {text}
                 </div>
                 """,
