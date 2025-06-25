@@ -55,6 +55,18 @@ st.markdown("""
         }
     </style>
 """, unsafe_allow_html=True)
+<style>
+    .join-button {
+        font-weight: bold;
+        padding: 0.5rem 1.2rem;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        margin-top: 0.5rem;
+        box-shadow: 2px 2px 4px rgba(0,0,0,0.15);
+        color: white;
+    }
+</style>
 
 st.title("📚 StudyTogether – Finde deine Lerngruppe")
 
@@ -100,15 +112,45 @@ with tab1:
         st.markdown(f"<div id='{group_key}' style='display:none' class='toggle-content'>", unsafe_allow_html=True)
         st.markdown(f"**Freie Plätze:** {group['max'] - len(group['members'])}")
         st.markdown(f"**Frage zum Einstieg:** _{group['question']}_")
-        answer = st.text_input(f"Deine Antwort ({group['id']})", key=f"answer_{group['id']}")
-        if st.button(f"Beitreten ({group['id']})"):
-            if answer:
-                group['members'].append("Du")
-                group['answers']['Du'] = answer
-                st.session_state.joined.append(group['id'])
-                st.success("Du bist der Gruppe beigetreten!")
-            else:
-                st.warning("Bitte beantworte die Frage, bevor du beitrittst.")
+       answer = st.text_input(f"Deine Antwort ({group['id']})", key=f"answer_{group['id']}")
+
+join_colors = [
+    "#4fc3f7",  # Gruppe 0 – Blau
+    "#9ccc65",  # Gruppe 1 – Grün
+    "#ffb74d",  # Gruppe 2 – Orange
+    "#ce93d8",  # Gruppe 3 – Flieder
+    "#9575cd"   # Gruppe 4 – Violett
+]
+join_color = join_colors[idx % len(join_colors)]
+
+btn_key = f"join_btn_{group['id']}"
+clicked = st.button("🚀 Beitreten", key=btn_key)
+
+st.markdown(
+    f\"\"\"
+    <style>
+        #{btn_key} {{
+            background-color: {join_color} !important;
+            color: white !important;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 10px;
+            font-weight: bold;
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.15);
+        }}
+    </style>
+    \"\"\",
+    unsafe_allow_html=True
+)
+
+if clicked:
+    if answer:
+        group['members'].append("Du")
+        group['answers']['Du'] = answer
+        st.session_state.joined.append(group['id'])
+        st.success("Du bist der Gruppe beigetreten!")
+    else:
+        st.warning("Bitte beantworte die Frage, bevor du beitrittst.")
         st.markdown("</div>", unsafe_allow_html=True)
 
 # Tab 2: Gruppenerstellung
