@@ -30,6 +30,8 @@ tab1, tab2, tab3, tab4 = st.tabs(["Lerngruppen finden", "Gruppe erstellen", "Mei
 with tab1:
     st.subheader("Offene Lerngruppen")
     for group in st.session_state.groups:
+        if not all(k in group for k in ("members", "max", "id", "topic", "time", "room", "question")):
+            continue  # skip corrupted entries
         if len(group["members"]) >= group["max"]:
             continue
         if group["id"] in st.session_state.joined:
@@ -67,6 +69,8 @@ with tab2:
 with tab3:
     st.subheader("Deine Gruppen")
     for group in st.session_state.groups:
+        if not all(k in group for k in ("members", "id", "topic", "room", "time", "answers")):
+            continue
         if group["id"] in st.session_state.joined:
             with st.expander(f"🫱 {group['topic']} – {group['room']} – {group['time']}"):
                 st.markdown("**Teilnehmer:innen:** " + ", ".join(group['members']))
