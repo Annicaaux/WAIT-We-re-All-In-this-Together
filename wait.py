@@ -1,120 +1,129 @@
 import streamlit as st
-from datetime import date
+from datetime import datetime
+import random
 
-st.set_page_config(page_title="Campus Lerngruppen App", layout="centered")
-st.title("🎓 Campus Lerngruppen App")
+st.set_page_config(page_title="StudyTogether", layout="wide")
+st.title("📚 StudyTogether – Finde deine Lerngruppe")
 
-# Initial Session State
+# Session State Init
 if "groups" not in st.session_state:
     st.session_state.groups = [
-        {
-            "id": 1,
-            "thema": "Statistik 1",
-            "beschreibung": "",
-            "groesse": "3/5",
-            "zeit": "25. Juni, 14:00 Uhr",
-            "ort": "Seminarraum A",
-            "datum": date.today(),
-            "frage": "Was machst du am liebsten in der Lernpause?",
-            "antworten": [
-                "Kaffee holen und spazieren",
-                "Meditation oder Musik hören",
-                "Kurz TikTok checken"
-            ]
-        },
-        {
-            "id": 2,
-            "thema": "Allgemeine Psychologie: Aufmerksamkeit",
-            "beschreibung": "",
-            "groesse": "2/3",
-            "zeit": "26. Juni, 10:00 Uhr",
-            "ort": "Bibliothek 1. OG",
-            "datum": date.today(),
-            "frage": "Wie motivierst du dich an anstrengenden Tagen?",
-            "antworten": ["Ich belohne mich mit Serien", "Ich erinnere mich an meine Ziele"]
-        },
-        {
-            "id": 3,
-            "thema": "Biopsychologie Prüfungsvorbereitung",
-            "beschreibung": "",
-            "groesse": "1/4",
-            "zeit": "27. Juni, 16:00 Uhr",
-            "ort": "Hörsaal 3",
-            "datum": date.today(),
-            "frage": "Was ist dein Lern-Life-Hack?",
-            "antworten": ["Pomodoro-Timer", "Mit Karteikarten abfragen"]
-        }
+        {"id": 1, "topic": "Statistik Klausur", "time": "10:00", "room": "Raum A1", "max": 4, "members": ["Anna", "Ben"], "question": "Was ist deine größte Prokrastinationsgefahr?", "answers": {}},
+        {"id": 2, "topic": "Klinische Psychologie", "time": "14:30", "room": "Bibliothek Gruppenraum 2", "max": 3, "members": ["Chris"], "question": "Was motiviert dich heute zu lernen?", "answers": {}},
+        {"id": 3, "topic": "Biopsychologie", "time": "09:00", "room": "Café Campus", "max": 5, "members": [], "question": "Wenn dein Gehirn eine Farbe hätte – welche?", "answers": {}}
+    ]
+if "joined" not in st.session_state:
+    st.session_state.joined = []
+if "pinnwand" not in st.session_state:
+    st.session_state.pinnwand = [
+        {"week": "Letzte Woche", "question": "Wie gehst du mit Lernblockaden um?", "entries": [
+            "Ich tanze durch die Wohnung zu ABBA.",
+            "Ich tu so, als erkläre ich's meinem Meerschweinchen.",
+            "Blockaden ignoriere ich bis zur Panikattacke 🫠"
+        ]},
+        {"week": "Diese Woche", "question": "Was gibt dir gerade Energie beim Lernen?", "entries": []}
     ]
 
-if "submitted_weekly" not in st.session_state:
-    st.session_state.submitted_weekly = [
-        "Ich will mein Studium wirklich gut abschließen.",
-        "Mein Ziel ist der Masterplatz – das treibt mich an.",
-        "Ich lerne mit Freund:innen, das macht es leichter.",
-        "Ich will beim nächsten Test besser abschneiden.",
-        "Wenn ich heute lerne, kann ich mir morgen frei nehmen.",
-        "Ich möchte mir selbst beweisen, dass ich das kann.",
-        "Die Deadline rückt näher.",
-        "Ich möchte nicht wieder alles auf den letzten Drücker machen."
-    ]
+# Tabs
+tab1, tab2, tab3, tab4 = st.tabs(["Lerngruppen finden", "Gruppe erstellen", "Meine Gruppen", "📌 Pinnwand"])
 
-# Sidebar-Navigation
-tab = st.sidebar.selectbox("Navigation", ["Lerngruppe erstellen", "Lerngruppen finden", "Pinnwand"])
-
-# 🛠️ Tab: Lerngruppe erstellen
-if tab == "Lerngruppe erstellen":
-    st.header("Neue Lerngruppe erstellen")
-    thema = st.text_input("Thema")
-    beschreibung = st.text_area("Beschreibung")
-    groesse = st.text_input("Größe (z.B. 3/5)")
-    ort = st.text_input("Ort")
-    zeit = st.text_input("Zeit (z.B. 14:00 Uhr)")
-    datum = st.date_input("Datum", value=date.today())
-    if st.button("➕ Gruppe erstellen"):
-        new_id = max(g["id"] for g in st.session_state.groups) + 1
-        st.session_state.groups.append({
-            "id": new_id,
-            "thema": thema,
-            "beschreibung": beschreibung,
-            "groesse": groesse,
-            "zeit": zeit,
-            "ort": ort,
-            "datum": datum,
-            "frage": "Was ist dein bestes Lern-Life-Hack?",
-            "antworten": []
-        })
-        st.success("✅ Lerngruppe erstellt!")
-
-# 🔍 Tab: Lerngruppen finden
-elif tab == "Lerngruppen finden":
-    st.header("Offene Lerngruppen")
+with tab1:
+    st.subheader("Offene Lerngruppen")
     for group in st.session_state.groups:
-        with st.expander(f"{group['thema']} • {group['zeit']} • {group['ort']}"):
-            st.write(f"**Beschreibung:** {group['beschreibung']}")
-            st.write(f"**Frage:** {group['frage']}")
-            if "joined" not in group:
-                antw = st.text_input("Antwort eingeben:", key=f"ans_{group['id']}")
-                if st.button("Beitreten", key=f"join_{group['id']}") and antw:
-                    group["antworten"].append(antw)
-                    group["joined"] = True
-                    st.success("🚀 Beigetreten!")
-            else:
-                st.write("**Antworten anderer:**")
-                for a in group["antworten"]:
-                    st.write(f"- {a}")
+        if len(group["members"]) >= group["max"]:
+            continue
+        if group["id"] in st.session_state.joined:
+            continue
+        with st.expander(f"📖 {group['topic']} – {group['time']} – {group['room']}"):
+            st.markdown(f"**Freie Plätze:** {group['max'] - len(group['members'])}")
+            st.markdown(f"**Frage zum Einstieg:** _{group['question']}_")
+            answer = st.text_input(f"Deine Antwort ({group['id']})", key=f"answer_{group['id']}")
+            if st.button(f"Beitreten ({group['id']})"):
+                if answer:
+                    group['members'].append("Du")
+                    group['answers']['Du'] = answer
+                    st.session_state.joined.append(group['id'])
+                    st.success("Du bist der Gruppe beigetreten!")
+                else:
+                    st.warning("Bitte beantworte die Frage, bevor du beitrittst.")
 
-# 🖼️ Tab: Pinnwand
-else:
-    st.header("Frage der Woche")
-    st.write("**Was motiviert dich aktuell am meisten beim Lernen?**")
-    antwort = st.text_area("Anonym antworten")
-    if st.button("Antwort absenden"):
-        if antwort.strip():
-            st.session_state.submitted_weekly.insert(0, antwort.strip())
-            st.success("Danke für deine Antwort!")
-    st.markdown("---")
-    st.subheader("Antworten anderer (Post‑Its)")
+with tab2:
+    st.subheader("Neue Lerngruppe erstellen")
+    topic = st.text_input("Thema")
+    time = st.time_input("Uhrzeit", value=datetime.now().time())
+    room = st.selectbox("Raum", ["Raum A1", "A2", "Bibliothek Gruppenraum 1", "Café Campus", "Lernwiese", "Lounge"])
+    max_p = st.slider("Maximale Teilnehmerzahl", 2, 10, 4)
+    frage = st.text_input("Einstiegsfrage", placeholder="Was willst du von deiner Gruppe wissen?")
+    if st.button("Gruppe erstellen"):
+        if topic and frage:
+            new_group = {"id": random.randint(1000, 9999), "topic": topic, "time": time.strftime("%H:%M"), "room": room,
+                         "max": max_p, "members": ["Du"], "question": frage, "answers": {"Du": "(noch keine Antwort)"}}
+            st.session_state.groups.append(new_group)
+            st.session_state.joined.append(new_group['id'])
+            st.success("Gruppe erstellt und beigetreten!")
+        else:
+            st.warning("Bitte gib Thema und Frage an.")
+
+with tab3:
+    st.subheader("Deine Gruppen")
+    for group in st.session_state.groups:
+        if group["id"] in st.session_state.joined:
+            with st.expander(f"🫱 {group['topic']} – {group['room']} – {group['time']}"):
+                st.markdown("**Teilnehmer:innen:** " + ", ".join(group['members']))
+                st.markdown("**Einstiegsfrage & Antworten:**")
+                for name, ans in group['answers'].items():
+                    st.markdown(f"- {name}: _{ans}_")
+                chat = st.text_input(f"Nachricht an Gruppe ({group['id']})", key=f"chat_{group['id']}")
+                if chat:
+                    st.markdown(f"**Du:** {chat}")  # Nicht persistent für Einfachheit
+
+with tab4:
+    st.subheader("Frage der Woche")
+    aktuelle = st.session_state.pinnwand[-1]
+    st.markdown(f"🗓️ **{aktuelle['question']}**")
+    new = st.text_area("Deine Antwort", key="pin")
+    if st.button("Absenden"):
+        if new:
+            aktuelle['entries'].append(new)
+            st.success("Danke für deinen Beitrag!")
+
+    # Anzeige als Post-its
+    st.markdown("### Beiträge")
     cols = st.columns(3)
-    for i, a in enumerate(st.session_state.submitted_weekly):
+    colors = ["#fff9b1", "#fff6a2", "#fff1a8", "#ffef88", "#ffeda6"]
+    for i, text in enumerate(aktuelle['entries']):
         with cols[i % 3]:
-            st.markdown(f"> {a}")
+            st.markdown(
+                f"""
+                <div style='background-color:{random.choice(colors)}; 
+                            padding:1rem; margin:0.5rem; 
+                            border-radius:6px; 
+                            box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
+                            transform: rotate({random.choice([-2,-1,0,1,2])}deg); 
+                            font-family: "Comic Sans MS", "Patrick Hand", cursive; 
+                            height: 120px;'>
+                    {text}
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+
+    st.markdown("### Letzte Woche")
+    letzte = st.session_state.pinnwand[-2]
+    st.markdown(f"**🗓️ {letzte['question']}**")
+    for i, text in enumerate(letzte['entries']):
+        with cols[i % 3]:
+            st.markdown(
+                f"""
+                <div style='background-color:{random.choice(colors)}; 
+                            padding:1rem; margin:0.5rem; 
+                            border-radius:6px; 
+                            box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
+                            transform: rotate({random.choice([-3,-2,-1,1,2,3])}deg); 
+                            font-family: "Comic Sans MS", "Patrick Hand", cursive; 
+                            height: 120px;'>
+                    {text}
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
