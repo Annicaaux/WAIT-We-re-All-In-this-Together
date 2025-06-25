@@ -55,40 +55,12 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# ...[restlicher Code bleibt gleich]...
+st.title("📚 StudyTogether – Finde deine Lerngruppe")
 
-# Tab 4: Pinnwand
-if "pinnwand" not in st.session_state:
-    st.session_state.pinnwand = [
-        {"week": "Letzte Woche", "question": "Was würde dein 13 Jähriges-Ich niemals von dir erwarten", "entries": [
-            "Dass ich freiwillig Steuern bezahle.",
-            "Dass ich um 6:30 Uhr jogge und es mag.",
-            "Dass ich Salat esse und dazu Wasser trinke.",
-            "Dass ich mal 'Danke für die Therapiestunde' sage.",
-            "Dass ich manchmal keine Ahnung hab – und das okay finde."
-        ]},
-        {"week": "Diese Woche", "question": "Was gibt dir gerade Energie beim Lernen?", "entries": []}
-    ]
-
-with tab4:
-    st.subheader("Frage der Woche")
-    aktuelle = st.session_state.pinnwand[-1]
-    st.markdown(f"🗓️ **{aktuelle['question']}**")
-    new = st.text_area("Deine Antwort", key="pin")
-    if st.button("Absenden"):
-        if new:
-            aktuelle['entries'].append(new)
-            st.success("Danke für deinen Beitrag!")
-
-    st.markdown("### Beiträge")
-    cols = st.columns(3)
-    for i, text in enumerate(aktuelle['entries']):
-        with cols[i % 3]:
-            st.markdown(f"<div class='postit' style='background-color:#fff68f'>{text}</div>", unsafe_allow_html=True)
-
-    st.markdown("### Letzte Woche")
-    letzte = st.session_state.pinnwand[-2]
-    st.markdown(f"**🗓️ {letzte['question']}**")
-    for i, text in enumerate(letzte['entries']):
-        with cols[i % 3]:
-            st.markdown(f"<div class='postit' style='background-color:#d7f9f3'>{text}</div>", unsafe_allow_html=True)
+# Tabs einrichten mit Icons
+tab1, tab2, tab3, tab4 = st.tabs([
+    "🌍 Lerngruppen finden",
+    "🛠️ Gruppe erstellen",
+    "👥 Meine Gruppen",
+    "📌 Pinnwand"
+])
