@@ -53,7 +53,7 @@ if "pinnwand" not in st.session_state:
     ]
 
 # ----- Tabs Setup -----
-tab1, tab2, tab3, tab4 = st.tabs(["🌍 Lerngruppen finden", "🛠️ Gruppe erstellen", "👥 Meine Gruppen", "📌 Pinnwand"])
+tab1, tab2, tab3, tab4 = st.tabs(["Lerngruppen finden", "Gruppe erstellen", "Meine Gruppen", "Pinnwand"])
 
 # ----- Tab 1: Lerngruppen finden -----
 with tab1:
@@ -81,7 +81,7 @@ with tab1:
         st.markdown(f"**Frage zum Einstieg:** _{group['question']}_")
         answer = st.text_input(f"Deine Antwort ({group['id']})", key=f"answer_{group['id']}")
 
-        if st.button("🚀 Beitreten", key=f"btn_{group['id']}"):
+        if st.button("Beitreten", key=f"btn_{group['id']}"):
             if answer:
                 if group['id'] not in st.session_state.joined:
                     group['members'].append("Du")
