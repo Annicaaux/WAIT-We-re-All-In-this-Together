@@ -55,43 +55,53 @@ if "pinnwand" not in st.session_state:
 # ----- Tabs Setup -----
 tab1, tab2, tab3, tab4 = st.tabs(["Lerngruppen finden", "Gruppe erstellen", "Meine Gruppen", "Pinnwand"])
 
-# ----- Tab 1: Lerngruppen finden -----
+# Tab 1: Lerngruppen finden
 with tab1:
     st.subheader("Offene Lerngruppen")
-    color_styles = [
-        "linear-gradient(135deg, #81d4fa, #4fc3f7)",
-        "linear-gradient(135deg, #aed581, #9ccc65)",
-        "linear-gradient(135deg, #ffcc80, #ffb74d)",
-        "linear-gradient(135deg, #f48fb1, #ce93d8)",
-        "linear-gradient(135deg, #b39ddb, #9575cd)"
-    ]
+
+    pastellfarben = ["#ffe0e0", "#e0f7fa", "#f3e5f5", "#fff9c4", "#e0f2f1"]
 
     for idx, group in enumerate(st.session_state.groups):
-        group_key = f"grp_{group['id']}"
-        style = color_styles[idx % len(color_styles)]
+        farbe = pastellfarben[idx % len(pastellfarben)]
+        btn_key = f"join_{group['id']}"
 
-        st.markdown(f"""
-            <button class='toggle-button' style='background: {style};' onclick="var el = document.getElementById('{group_key}'); el.style.display = el.style.display === 'none' ? 'block' : 'none';">
-                📖 {group['topic']} – {group['time']} – {group['room']}
-            </button>
-        """, unsafe_allow_html=True)
+        # Gruppenblock anzeigen
+        with st.container():
+            st.markdown(f"### 📖 {group['topic']} – {group['time']} – {group['room']}")
+            st.markdown(f"**Frage zum Einstieg:** _{group['question']}_")
+            st.markdown(f"**Freie Plätze:** {group['max'] - len(group['members'])}")
 
-        st.markdown(f"<div id='{group_key}' style='display:none' class='toggle-content'>", unsafe_allow_html=True)
-        st.markdown(f"**Freie Plätze:** {group['max'] - len(group['members'])}")
-        st.markdown(f"**Frage zum Einstieg:** _{group['question']}_")
-        answer = st.text_input(f"Deine Antwort ({group['id']})", key=f"answer_{group['id']}")
+            # Eingabefeld für Antwort
+            answer = st.text_input(f"Deine Antwort ({group['id']})", key=f"answer_{group['id']}")
 
-        if st.button("Beitreten", key=f"btn_{group['id']}"):
-            if answer:
-                if group['id'] not in st.session_state.joined:
-                    group['members'].append("Du")
-                    group['answers']['Du'] = answer
-                    st.session_state.joined.append(group['id'])
-                    st.success("Du bist der Gruppe beigetreten!")
+            # Button-Stil injizieren (einmalig pro Button)
+            st.markdown(f"""
+                <style>
+                #{btn_key} {{
+                    background-color: {farbe};
+                    color: #2f2f2f;
+                    border: none;
+                    padding: 0.5rem 1rem;
+                    font-weight: bold;
+                    border-radius: 10px;
+                    box-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+                    cursor: pointer;
+                }}
+                </style>
+            """, unsafe_allow_html=True)
+
+            # Button anzeigen
+            if st.button("Beitreten", key=btn_key):
+                if answer:
+                    if group['id'] not in st.session_state.joined:
+                        group['members'].append("Du")
+                        group['answers']['Du'] = answer
+                        st.session_state.joined.append(group['id'])
+                        st.success("Du bist der Gruppe beigetreten!")
+                    else:
+                        st.info("Du bist bereits beigetreten.")
                 else:
-                    st.info("Du bist bereits Mitglied dieser Gruppe.")
-            else:
-                st.warning("Bitte beantworte die Frage.")
+                    st.warning("Bitte beantworte die Frage vor dem Beitreten.")
 
         st.markdown("</div>", unsafe_allow_html=True)
 
