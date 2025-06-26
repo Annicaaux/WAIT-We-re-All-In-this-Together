@@ -59,24 +59,37 @@ tab1, tab2, tab3, tab4 = st.tabs(["Lerngruppen finden", "Gruppe erstellen", "Mei
 with tab1:
     st.subheader("Offene Lerngruppen")
 
-    pastellfarben = ["#ffe0e0", "#e0f7fa", "#f3e5f5", "#fff9c4", "#e0f2f1"]
+    # Farbpalette für Gruppen
+    pastellfarben = [
+        "#ffe0e0", "#e0f7fa", "#f3e5f5", "#fff9c4", "#e0f2f1", "#f8edeb", "#e6e6fa"
+    ]
 
     for idx, group in enumerate(st.session_state.groups):
         farbe = pastellfarben[idx % len(pastellfarben)]
-        btn_key = f"join_{group['id']}"
+        btn_key = f"btn_{group['id']}"
+        answer_key = f"answer_{group['id']}"
 
-        # Gruppenblock anzeigen
-        with st.container():
-            st.markdown(f"### 📖 {group['topic']} – {group['time']} – {group['room']}")
-            st.markdown(f"**Frage zum Einstieg:** _{group['question']}_")
-            st.markdown(f"**Freie Plätze:** {group['max'] - len(group['members'])}")
+        # Gruppenkarte mit farbigem Hintergrund
+        st.markdown(f"""
+            <div style='
+                background-color: {farbe};
+                padding: 1.5rem;
+                border-radius: 16px;
+                margin-bottom: 1rem;
+                box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
+            '>
+                <h4>📖 {group['topic']} – {group['time']} – {group['room']}</h4>
+                <p><strong>Frage zum Einstieg:</strong> {group['question']}</p>
+                <p><strong>Freie Plätze:</strong> {group['max'] - len(group['members'])}</p>
+            </div>
+        """, unsafe_allow_html=True)
 
-            # Eingabefeld für Antwort
-            answer = st.text_input(f"Deine Antwort ({group['id']})", key=f"answer_{group['id']}")
+        # Antwortfeld unter der Karte
+        answer = st.text_input("Deine Antwort", key=answer_key)
 
-            # Button-Stil injizieren (einmalig pro Button)
-            st.markdown(f"""
-                <style>
+        # Stil für den Beitreten-Button
+        st.markdown(f"""
+            <style>
                 #{btn_key} {{
                     background-color: {farbe};
                     color: #2f2f2f;
@@ -87,22 +100,22 @@ with tab1:
                     box-shadow: 2px 2px 4px rgba(0,0,0,0.1);
                     cursor: pointer;
                 }}
-                </style>
-            """, unsafe_allow_html=True)
+            </style>
+        """, unsafe_allow_html=True)
 
-            # Button anzeigen
-            if st.button("Beitreten", key=btn_key):
-                if answer:
-                    if group['id'] not in st.session_state.joined:
-                        group['members'].append("Du")
-                        group['answers']['Du'] = answer
-                        st.session_state.joined.append(group['id'])
-                        st.success("Du bist der Gruppe beigetreten!")
-                    else:
-                        st.info("Du bist bereits beigetreten.")
+        # Button + Logik
+        if st.button("🚀 Beitreten", key=btn_key):
+            if answer:
+                if group['id'] not in st.session_state.joined:
+                    group['members'].append("Du")
+                    group['answers']['Du'] = answer
+                    st.session_state.joined.append(group['id'])
+                    st.success("Du bist der Gruppe beigetreten!")
                 else:
-                    st.warning("Bitte beantworte die Frage vor dem Beitreten.")
-
+                    st.info("Du bist bereits Mitglied dieser Gruppe.")
+            else:
+                st.warning("Bitte beantworte die Frage vor dem Beitreten.")
+                
         st.markdown("</div>", unsafe_allow_html=True)
 
 # ----- Tab 2: Gruppe erstellen -----
