@@ -792,13 +792,18 @@ def main():
     
     # Tab 4: Pinnwand
     with tab4:
-        st.markdown('<div class="pinnwand-container">', unsafe_allow_html=True)
-        st.markdown(f'<h2 class="week-question">Frage der Woche: {st.session_state.current_question}</h2>', unsafe_allow_html=True)
+        # Header Section
+        st.markdown(f"""
+        <div class="pinnwand-container">
+            <h2 class="week-question">Frage der Woche: {st.session_state.current_question}</h2>
+        </div>
+        """, unsafe_allow_html=True)
         
         # Add new entry form
+        st.markdown('<div class="form-container">', unsafe_allow_html=True)
         with st.form("pinnwand_form"):
             new_entry = st.text_area(
-                "Dein Beitrag:",
+                "💭 Dein Beitrag:",
                 placeholder="Was gibt dir gerade Energie beim Lernen?",
                 height=100
             )
@@ -810,22 +815,77 @@ def main():
                     st.rerun()
                 else:
                     show_warning_message("Bitte schreibe etwas, bevor du postest.")
-        
-        st.markdown("<hr style='margin: 2rem 0; border: none; height: 2px; background: rgba(102, 126, 234, 0.3);'>", unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
         
         # Display all pinnwand entries
-        st.markdown('<h3 style="margin-bottom: 2rem; color: #374151;">Antworten der Community:</h3>', unsafe_allow_html=True)
+        st.markdown("### 💫 Antworten der Community")
         
-        for i, entry in enumerate(st.session_state.pinnwand_entries):
-            st.markdown(f"""
-            <div class="postit">
-                <p style="margin: 0; font-size: 1rem; line-height: 1.5; color: #374151;">
-                    "{entry}"
+        if st.session_state.pinnwand_entries:
+            # Create columns for better layout
+            num_entries = len(st.session_state.pinnwand_entries)
+            cols_per_row = 2
+            
+            for i in range(0, num_entries, cols_per_row):
+                cols = st.columns(cols_per_row)
+                for j, col in enumerate(cols):
+                    entry_idx = i + j
+                    if entry_idx < num_entries:
+                        entry = st.session_state.pinnwand_entries[entry_idx]
+                        with col:
+                            # Determine post-it style based on index
+                            if entry_idx % 3 == 0:
+                                bg_color = "#fef3c7"
+                                border_color = "#f59e0b"
+                                rotation = "-1deg"
+                            elif entry_idx % 3 == 1:
+                                bg_color = "#dcfce7"
+                                border_color = "#10b981"
+                                rotation = "1deg"
+                            else:
+                                bg_color = "#fce7f3"
+                                border_color = "#ec4899"
+                                rotation = "-0.5deg"
+                            
+                            st.markdown(f"""
+                            <div style="
+                                background: {bg_color};
+                                padding: 1.5rem;
+                                border-radius: 15px;
+                                margin: 1rem 0;
+                                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                                border: 1px solid {border_color};
+                                position: relative;
+                                transform: rotate({rotation});
+                                transition: all 0.3s ease;
+                                min-height: 120px;
+                                display: flex;
+                                align-items: center;
+                            ">
+                                <div style="
+                                    position: absolute;
+                                    top: -10px;
+                                    right: 15px;
+                                    font-size: 1.2rem;
+                                ">📌</div>
+                                <p style="
+                                    margin: 0; 
+                                    font-size: 1rem; 
+                                    line-height: 1.5; 
+                                    color: #374151;
+                                    font-style: italic;
+                                ">"{entry}"</p>
+                            </div>
+                            """, unsafe_allow_html=True)
+        else:
+            st.markdown("""
+            <div style="text-align: center; padding: 3rem; background: rgba(255, 255, 255, 0.1); 
+                 border-radius: 20px; margin: 2rem 0; backdrop-filter: blur(10px);">
+                <h3 style="color: white; margin-bottom: 1rem;">Noch keine Beiträge</h3>
+                <p style="color: rgba(255, 255, 255, 0.8);">
+                    Sei der Erste und teile deine Motivation!
                 </p>
             </div>
             """, unsafe_allow_html=True)
-        
-        st.markdown('</div>', unsafe_allow_html=True)
         
         # Admin section to change question (hidden in expandier)
         with st.expander("🔧 Admin: Frage der Woche ändern"):
