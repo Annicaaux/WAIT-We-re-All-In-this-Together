@@ -726,9 +726,7 @@ def main():
         
         my_groups = [g for g in st.session_state.groups if g["id"] in st.session_state.joined_groups]
         
-        if not my_groups:
-            st.markdown("""
-            <div style="text-align: center; padding: 3rem; background: rgba(255,255,255,0.1); 
-                 border-radius: 20px; margin: 2rem 0; backdrop-filter: blur(10px);">
-                <h3 style="color: white; margin-bottom: 1rem;">Du bist noch keiner Gruppe beigetreten</h3>
-                <p style="color: rgba(255,255,255,0.8); font-
+      
+           
+
+                
