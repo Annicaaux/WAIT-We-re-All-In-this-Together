@@ -18,7 +18,7 @@ st.markdown("""
     
     /* Global Styles */
     .stApp {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #8B1538 0%, #4A0E1C 100%);
         font-family: 'Inter', sans-serif;
     }
     
@@ -72,9 +72,9 @@ st.markdown("""
     }
     
     .stTabs [aria-selected="true"] {
-        background: linear-gradient(135deg, #667eea, #764ba2) !important;
+        background: linear-gradient(135deg, #8B1538, #4A0E1C) !important;
         color: white !important;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 4px 15px rgba(139, 21, 56, 0.4);
     }
     
     /* Group card styling */
@@ -96,19 +96,19 @@ st.markdown("""
     }
     
     .group-card-stats {
-        border-top-color: #667eea;
+        border-top-color: #8B1538;
     }
     
     .group-card-psychology {
-        border-top-color: #10b981;
+        border-top-color: #DC2626;
     }
     
     .group-card-bio {
-        border-top-color: #f59e0b;
+        border-top-color: #B91C1C;
     }
     
     .group-card-new {
-        border-top-color: #ec4899;
+        border-top-color: #991B1B;
     }
     
     .group-header {
@@ -126,9 +126,9 @@ st.markdown("""
         align-items: center;
         justify-content: center;
         font-size: 1.8rem;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #8B1538, #4A0E1C);
         color: white;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        box-shadow: 0 4px 15px rgba(139, 21, 56, 0.3);
     }
     
     .group-title {
@@ -157,17 +157,17 @@ st.markdown("""
     }
     
     .group-question {
-        background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+        background: linear-gradient(135deg, #FEF2F2, #FECACA);
         padding: 1.5rem;
         border-radius: 15px;
         margin: 1.5rem 0;
-        border-left: 4px solid #0ea5e9;
+        border-left: 4px solid #DC2626;
     }
     
     .question-label {
         font-size: 0.85rem;
         font-weight: 600;
-        color: #0369a1;
+        color: #991B1B;
         margin-bottom: 0.5rem;
         text-transform: uppercase;
         letter-spacing: 0.5px;
@@ -181,13 +181,13 @@ st.markdown("""
     }
     
     .spaces-badge {
-        background: linear-gradient(135deg, #dcfce7, #bbf7d0);
-        color: #166534;
+        background: linear-gradient(135deg, #FEF2F2, #FECACA);
+        color: #991B1B;
         padding: 0.5rem 1rem;
         border-radius: 20px;
         font-size: 0.85rem;
         font-weight: 600;
-        border: 1px solid #86efac;
+        border: 1px solid #FCA5A5;
     }
     
     /* Form styling */
@@ -215,7 +215,7 @@ st.markdown("""
         border-radius: 16px;
         padding: 2rem;
         margin: 1rem 0;
-        border-left: 5px solid #10b981;
+        border-left: 5px solid #8B1538;
         backdrop-filter: blur(20px);
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     }
@@ -228,13 +228,13 @@ st.markdown("""
     }
     
     .member-tag {
-        background: linear-gradient(135deg, #dbeafe, #bfdbfe);
-        color: #1e40af;
+        background: linear-gradient(135deg, #FEF2F2, #FECACA);
+        color: #991B1B;
         padding: 0.5rem 1rem;
         border-radius: 20px;
         font-size: 0.85rem;
         font-weight: 500;
-        border: 1px solid #93c5fd;
+        border: 1px solid #FCA5A5;
     }
     
     .answer-item {
@@ -242,12 +242,12 @@ st.markdown("""
         padding: 1rem;
         border-radius: 10px;
         margin: 0.5rem 0;
-        border-left: 3px solid #667eea;
+        border-left: 3px solid #8B1538;
     }
     
     .answer-author {
         font-weight: 600;
-        color: #667eea;
+        color: #8B1538;
         margin-bottom: 0.5rem;
     }
     
@@ -266,9 +266,13 @@ st.markdown("""
     .week-question {
         font-size: 1.5rem;
         font-weight: 600;
-        color: 	#8b2500;
+        color: #7F1D1D;
         margin-bottom: 2rem;
         line-height: 1.4;
+        background: linear-gradient(135deg, #FEF2F2, #FECACA);
+        padding: 1.5rem;
+        border-radius: 15px;
+        border: 2px solid #FCA5A5;
     }
     
     .postit {
@@ -310,25 +314,25 @@ st.markdown("""
     
     /* Button styling */
     .stButton > button {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #8B1538, #4A0E1C);
         color: white;
         border: none;
         border-radius: 50px;
         padding: 0.75rem 2rem;
         font-weight: 600;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 4px 15px rgba(139, 21, 56, 0.4);
     }
     
     .stButton > button:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        box-shadow: 0 8px 25px rgba(139, 21, 56, 0.6);
     }
     
     /* Success button */
     .success-btn {
-        background: linear-gradient(135deg, #10b981, #059669) !important;
-        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4) !important;
+        background: linear-gradient(135deg, #DC2626, #991B1B) !important;
+        box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4) !important;
     }
     
     /* Input styling */
@@ -347,13 +351,13 @@ st.markdown("""
     .stTextArea > div > div > textarea:focus,
     .stSelectbox > div > div > select:focus,
     .stTimeInput > div > div > input:focus {
-        border-color: #667eea;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        border-color: #8B1538;
+        box-shadow: 0 0 0 3px rgba(139, 21, 56, 0.1);
     }
     
     /* Slider styling */
     .stSlider > div > div > div > div {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #8B1538, #4A0E1C);
     }
     
     /* Metrics styling */
@@ -393,8 +397,8 @@ st.markdown("""
     }
     
     .stSuccess {
-        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
-        border-left: 4px solid #10b981;
+        background: linear-gradient(135deg, rgba(220, 38, 38, 0.1), rgba(153, 27, 27, 0.1));
+        border-left: 4px solid #DC2626;
     }
     
     .stWarning {
@@ -403,8 +407,8 @@ st.markdown("""
     }
     
     .stInfo {
-        background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.1));
-        border-left: 4px solid #3b82f6;
+        background: linear-gradient(135deg, rgba(139, 21, 56, 0.1), rgba(74, 14, 28, 0.1));
+        border-left: 4px solid #8B1538;
     }
     
     /* Responsive design */
