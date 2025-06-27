@@ -27,16 +27,6 @@ st.markdown("""
     footer {visibility: hidden;}
     header {visibility: hidden;}
     
-    /* Main container */
-    .main-container {
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(20px);
-        border-radius: 20px;
-        padding: 2rem;
-        margin: 1rem;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    
     /* Title styling */
     .main-title {
         text-align: center;
@@ -88,6 +78,7 @@ st.markdown("""
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         border-top: 4px solid;
         transition: all 0.3s ease;
+        color: #374151;
     }
     
     .group-card:hover {
@@ -134,7 +125,7 @@ st.markdown("""
     .group-title {
         font-size: 1.4rem;
         font-weight: 600;
-        color: #1f2937;
+        color: #1f2937 !important;
         margin: 0;
     }
     
@@ -171,13 +162,6 @@ st.markdown("""
         margin-bottom: 0.5rem;
         text-transform: uppercase;
         letter-spacing: 0.5px;
-    }
-    
-    .question-text {
-        font-style: italic;
-        color: #374151;
-        font-size: 1.1rem;
-        line-height: 1.6;
     }
     
     .question-text {
@@ -227,13 +211,6 @@ st.markdown("""
         backdrop-filter: blur(20px);
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         color: #374151;
-    }
-    
-    .member-tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        margin: 1rem 0;
     }
     
     .member-tag {
@@ -286,43 +263,6 @@ st.markdown("""
         border: 2px solid #F9A8D4;
     }
     
-    .postit {
-        background: linear-gradient(135deg, #fef3c7, #fde68a);
-        padding: 1.5rem;
-        border-radius: 15px;
-        margin: 1rem 0;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        border: 1px solid #f59e0b;
-        position: relative;
-        transform: rotate(-1deg);
-        transition: all 0.3s ease;
-    }
-    
-    .postit:nth-child(2n) {
-        transform: rotate(1deg);
-        background: linear-gradient(135deg, #dcfce7, #bbf7d0);
-        border-color: #10b981;
-    }
-    
-    .postit:nth-child(3n) {
-        transform: rotate(-0.5deg);
-        background: linear-gradient(135deg, #fce7f3, #fbcfe8);
-        border-color: #ec4899;
-    }
-    
-    .postit:hover {
-        transform: rotate(0deg) scale(1.02);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    }
-    
-    .postit::before {
-        content: '📌';
-        position: absolute;
-        top: -10px;
-        right: 15px;
-        font-size: 1.2rem;
-    }
-    
     /* Button styling */
     .stButton > button {
         background: linear-gradient(135deg, #A0616A, #6B2C3A);
@@ -339,12 +279,6 @@ st.markdown("""
         transform: translateY(-2px);
         box-shadow: 0 8px 25px rgba(160, 97, 106, 0.6);
         background: linear-gradient(135deg, #8B5A6B, #5A1F2A);
-    }
-    
-    /* Success button */
-    .success-btn {
-        background: linear-gradient(135deg, #C4626D, #A0616A) !important;
-        box-shadow: 0 4px 15px rgba(196, 98, 109, 0.4) !important;
     }
     
     /* Input styling */
@@ -365,11 +299,6 @@ st.markdown("""
     .stTimeInput > div > div > input:focus {
         border-color: #A0616A;
         box-shadow: 0 0 0 3px rgba(160, 97, 106, 0.1);
-    }
-    
-    /* Slider styling */
-    .stSlider > div > div > div > div {
-        background: linear-gradient(135deg, #A0616A, #6B2C3A);
     }
     
     /* Metrics styling */
@@ -394,55 +323,9 @@ st.markdown("""
         margin-top: 0.5rem;
     }
     
-    /* Expander styling */
-    .streamlit-expanderHeader {
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 10px;
-        font-weight: 600;
-    }
-    
-    /* Alert styling */
-    .stAlert {
-        border-radius: 15px;
-        border: none;
-        backdrop-filter: blur(10px);
-    }
-    
-    .stSuccess {
-        background: linear-gradient(135deg, rgba(196, 98, 109, 0.1), rgba(160, 97, 106, 0.1));
-        border-left: 4px solid #C4626D;
-    }
-    
-    .stWarning {
-        background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.1));
-        border-left: 4px solid #f59e0b;
-    }
-    
-    .stInfo {
-        background: linear-gradient(135deg, rgba(160, 97, 106, 0.1), rgba(107, 44, 58, 0.1));
-        border-left: 4px solid #A0616A;
-    }
-    
-    /* Text color fixes for all white containers */
-    .group-card,
-    .form-container,
-    .my-group-card,
-    .pinnwand-container,
-    .stTextInput label,
-    .stTextArea label,
-    .stSelectbox label,
-    .stTimeInput label,
-    .stSlider label,
+    /* Text color fixes */
     .stForm {
         color: #374151 !important;
-    }
-    
-    .group-card * {
-        color: #374151 !important;
-    }
-    
-    .group-title {
-        color: #1f2937 !important;
     }
     
     /* Responsive design */
@@ -526,76 +409,14 @@ def init_session_state():
             "Die Vorstellung, dass ich bald Experte in meinem Fach bin"
         ]
     
-    if "lernpausen_activities" not in st.session_state:
-        st.session_state.lernpausen_activities = {
-            "solo": [
-                {
-                    "name": "5-Minuten Atemübung",
-                    "duration": "5 min",
-                    "type": "Entspannung",
-                    "description": "Bewusste Atemübung zum Stressabbau",
-                    "instructions": "Setze dich bequem hin. Atme 4 Sekunden ein, halte 4 Sekunden an, atme 6 Sekunden aus. Wiederhole 10 Mal."
-                },
-                {
-                    "name": "Fenster-Blick Meditation",
-                    "duration": "3-10 min",
-                    "type": "Achtsamkeit",
-                    "description": "Entspannung durch bewusstes Schauen",
-                    "instructions": "Schaue aus dem Fenster. Benenne 5 Dinge die du siehst, 4 die du hörst, 3 die du spürst, 2 die du riechst."
-                },
-                {
-                    "name": "Energie-Snack Break",
-                    "duration": "10 min",
-                    "type": "Körper",
-                    "description": "Gesunde Pause mit bewusster Ernährung",
-                    "instructions": "Bereite einen gesunden Snack zu (Nüsse, Obst, Tee). Esse bewusst und langsam, ohne Handy oder Laptop."
-                },
-                {
-                    "name": "Zimmer-Spaziergang",
-                    "duration": "5-15 min",
-                    "type": "Bewegung",
-                    "description": "Sanfte Bewegung ohne das Haus zu verlassen",
-                    "instructions": "Gehe langsam durch dein Zuhause. Strecke dich, räume 2-3 Dinge auf, öffne ein Fenster für frische Luft."
-                }
-            ],
-            "gruppe": [
-                {
-                    "name": "Gemeinsamer Spaziergang",
-                    "duration": "20-30 min",
-                    "type": "Bewegung & Verbindung",
-                    "description": "Frische Luft und lockere Gespräche",
-                    "instructions": "Trefft euch für einen entspannten Spaziergang. Regel: Kein Reden über Uni in den ersten 10 Minuten!"
-                },
-                {
-                    "name": "2-Wahrheiten-1-Lüge",
-                    "duration": "15 min",
-                    "type": "Spiel & Kennenlernen",
-                    "description": "Lockeres Kennenlernspiel",
-                    "instructions": "Jeder erzählt 3 Aussagen über sich - 2 wahre, 1 erfundene. Die anderen raten, welche gelogen ist."
-                },
-                {
-                    "name": "Dankbarkeits-Runde",
-                    "duration": "10 min",
-                    "type": "Achtsamkeit & Teilen",
-                    "description": "Positive Gedanken teilen",
-                    "instructions": "Jeder teilt 2 Dinge mit: Wofür bin ich heute dankbar? Was hat mich diese Woche zum Lächeln gebracht?"
-                },
-                {
-                    "name": "Mini-Café Pause",
-                    "duration": "25 min",
-                    "type": "Entspannung & Gespräch",
-                    "description": "Gemeinsam zur Ruhe kommen",
-                    "instructions": "Holt euch Getränke, setzt euch gemütlich hin. Redet über alles außer Uni: Hobbys, Träume, lustige Erlebnisse."
-                }
-            ]
-        }
+    if "current_question" not in st.session_state:
+        st.session_state.current_question = "Was gibt dir gerade Energie beim Lernen?"
     
     if "pause_statistics" not in st.session_state:
         st.session_state.pause_statistics = {
             "solo_pausen": 0,
             "gruppen_pausen": 0,
-            "total_time": 0,
-            "favorite_type": "Noch keine Daten"
+            "total_time": 0
         }
 
 # --- Helper Functions ---
@@ -866,7 +687,7 @@ def main():
                     </div>
                     
                     <h4 style="margin: 1.5rem 0 1rem 0; color: #374151;">Mitglieder:</h4>
-                    <div class="member-tags">
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1rem 0;">
                 """, unsafe_allow_html=True)
                 
                 for member in group["members"]:
@@ -995,7 +816,7 @@ def main():
             </div>
             """, unsafe_allow_html=True)
         
-        # Admin section to change question (hidden in expandier)
+        # Admin section to change question (hidden in expander)
         with st.expander("🔧 Admin: Frage der Woche ändern"):
             new_question = st.text_input(
                 "Neue Frage:",
@@ -1064,166 +885,99 @@ def main():
             </div>
             """, unsafe_allow_html=True)
         
-        # Pause Type Selection
-        pause_type = st.radio(
-            "Was für eine Pause brauchst du gerade?",
-            ["🧘 Solo-Pause (Ich möchte allein entspannen)", "👥 Gruppen-Pause (Ich möchte mit anderen Zeit verbringen)"],
-            horizontal=True
-        )
+        # Simple pause activities
+        st.markdown("### 🎯 Schnelle Pausenideen")
         
-        if "Solo-Pause" in pause_type:
-            st.markdown("### 🧘 Solo-Aktivitäten für deine persönliche Auszeit")
-            
-            # Random activity suggestion
-            if st.button("🎲 Zufällige Aktivität vorschlagen", use_container_width=True):
-                activity = random.choice(st.session_state.lernpausen_activities["solo"])
-                st.session_state.current_solo_activity = activity
-            
-            # Display current activity
-            if "current_solo_activity" in st.session_state:
-                activity = st.session_state.current_solo_activity
-                st.markdown(f"""
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.markdown("#### 🧘 Solo-Pausen")
+            if st.button("🌬️ 5-Min Atemübung starten", use_container_width=True):
+                st.markdown("""
                 <div class="form-container">
-                    <h3 style="color: #831843; margin-bottom: 1rem;">🎯 {activity["name"]}</h3>
-                    <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
-                        <span style="background: #FDF2F8; color: #831843; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem;">
-                            ⏱️ {activity["duration"]}
-                        </span>
-                        <span style="background: #FCE7F3; color: #831843; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem;">
-                            🏷️ {activity["type"]}
-                        </span>
-                    </div>
-                    <p style="color: #6B7280; font-style: italic; margin-bottom: 1.5rem;">
-                        {activity["description"]}
-                    </p>
-                    <div style="background: #F9FAFB; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #A0616A;">
-                        <h4 style="color: #374151; margin-bottom: 1rem;">📝 So geht's:</h4>
-                        <p style="color: #374151; line-height: 1.6; margin: 0;">
-                            {activity["instructions"]}
-                        </p>
-                    </div>
+                    <h4 style="color: #831843;">🌬️ Entspannte Atmung</h4>
+                    <p style="color: #6B7280;">Setze dich bequem hin und folge diesem Rhythmus:</p>
+                    <ul style="color: #374151;">
+                        <li>4 Sekunden einatmen</li>
+                        <li>4 Sekunden anhalten</li>
+                        <li>6 Sekunden ausatmen</li>
+                        <li>Wiederhole das 10 Mal</li>
+                    </ul>
                 </div>
                 """, unsafe_allow_html=True)
-                
-                col1, col2 = st.columns(2)
-                with col1:
-                    if st.button("✅ Pause gemacht!", key="solo_done", use_container_width=True):
-                        st.session_state.pause_statistics["solo_pausen"] += 1
-                        # Estimate time based on activity duration
-                        duration_str = activity["duration"]
-                        if "min" in duration_str:
-                            time_estimate = int(''.join(filter(str.isdigit, duration_str.split('-')[0])))
-                            st.session_state.pause_statistics["total_time"] += time_estimate
-                        show_success_message(f"Toll! Du hast dir {activity['duration']} für dich genommen. 💚")
-                        st.balloons()
-                
-                with col2:
-                    if st.button("🔄 Andere Aktivität", key="solo_new", use_container_width=True):
-                        st.session_state.current_solo_activity = random.choice(st.session_state.lernpausen_activities["solo"])
-                        st.rerun()
+                if st.button("✅ Atemübung gemacht!", key="breath_done"):
+                    st.session_state.pause_statistics["solo_pausen"] += 1
+                    st.session_state.pause_statistics["total_time"] += 5
+                    show_success_message("Super! 5 Minuten für deine Entspannung. 💚")
+                    st.balloons()
             
-            # All solo activities overview
-            with st.expander("📚 Alle Solo-Aktivitäten anzeigen"):
-                for activity in st.session_state.lernpausen_activities["solo"]:
-                    st.markdown(f"""
-                    <div style="background: #F9FAFB; padding: 1rem; margin: 0.5rem 0; border-radius: 10px; border-left: 3px solid #A0616A;">
-                        <strong style="color: #831843;">{activity["name"]}</strong> 
-                        <span style="color: #6B7280;">({activity["duration"]}, {activity["type"]})</span><br>
-                        <em style="color: #6B7280;">{activity["description"]}</em>
-                    </div>
-                    """, unsafe_allow_html=True)
+            if st.button("🚶 Zimmer-Spaziergang", use_container_width=True):
+                st.markdown("""
+                <div class="form-container">
+                    <h4 style="color: #831843;">🚶 Sanfte Bewegung</h4>
+                    <p style="color: #374151;">
+                        Stehe auf und gehe langsam durch dein Zuhause. 
+                        Strecke dich, räume 2-3 Dinge auf, öffne ein Fenster für frische Luft.
+                        Nimm bewusst deine Umgebung wahr.
+                    </p>
+                </div>
+                """, unsafe_allow_html=True)
+                if st.button("✅ Spaziergang gemacht!", key="walk_done"):
+                    st.session_state.pause_statistics["solo_pausen"] += 1
+                    st.session_state.pause_statistics["total_time"] += 10
+                    show_success_message("Toll! Bewegung tut gut. 💚")
+                    st.balloons()
         
-        else:  # Gruppen-Pause
-            st.markdown("### 👥 Gruppen-Aktivitäten für gemeinsame Pausen")
+        with col2:
+            st.markdown("#### 👥 Gruppen-Pausen")
             
-            # Show group members for planning
             my_groups = [g for g in st.session_state.groups if g["id"] in st.session_state.joined_groups]
             if my_groups:
-                group_for_pause = st.selectbox(
-                    "Mit welcher Lerngruppe möchtest du eine Pause machen?",
-                    options=[g["topic"] for g in my_groups],
-                    help="Wähle eine deiner Lerngruppen für eine gemeinsame Pause"
-                )
-                
-                selected_group = next(g for g in my_groups if g["topic"] == group_for_pause)
-                st.markdown(f"""
-                <div style="background: rgba(255, 255, 255, 0.1); padding: 1rem; border-radius: 10px; margin: 1rem 0; backdrop-filter: blur(10px);">
-                    <p style="color: white; margin: 0;">
-                        <strong>Mitglieder:</strong> {", ".join(selected_group["members"])} 
-                        <span style="opacity: 0.8;">({len(selected_group["members"])} Personen)</span>
-                    </p>
-                </div>
-                """, unsafe_allow_html=True)
-            
-            # Random group activity suggestion
-            if st.button("🎲 Gruppen-Aktivität vorschlagen", use_container_width=True):
-                activity = random.choice(st.session_state.lernpausen_activities["gruppe"])
-                st.session_state.current_group_activity = activity
-            
-            # Display current group activity
-            if "current_group_activity" in st.session_state:
-                activity = st.session_state.current_group_activity
-                st.markdown(f"""
-                <div class="form-container">
-                    <h3 style="color: #831843; margin-bottom: 1rem;">🎯 {activity["name"]}</h3>
-                    <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
-                        <span style="background: #FDF2F8; color: #831843; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem;">
-                            ⏱️ {activity["duration"]}
-                        </span>
-                        <span style="background: #FCE7F3; color: #831843; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem;">
-                            🏷️ {activity["type"]}
-                        </span>
-                    </div>
-                    <p style="color: #6B7280; font-style: italic; margin-bottom: 1.5rem;">
-                        {activity["description"]}
-                    </p>
-                    <div style="background: #F9FAFB; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #A0616A;">
-                        <h4 style="color: #374151; margin-bottom: 1rem;">📝 So geht's:</h4>
-                        <p style="color: #374151; line-height: 1.6; margin: 0;">
-                            {activity["instructions"]}
+                if st.button("🌿 Gemeinsamer Spaziergang planen", use_container_width=True):
+                    st.markdown("""
+                    <div class="form-container">
+                        <h4 style="color: #831843;">🌿 Frische Luft & Gespräche</h4>
+                        <p style="color: #374151;">
+                            Plant einen 20-30 minütigen Spaziergang mit eurer Lerngruppe.
+                            <strong>Regel:</strong> Die ersten 10 Minuten wird nicht über die Uni geredet!
+                        </p>
+                        <p style="color: #6B7280; font-style: italic;">
+                            Schreibt in eure Gruppenchats und verabredet euch!
                         </p>
                     </div>
-                </div>
-                """, unsafe_allow_html=True)
-                
-                # Time planning
-                st.markdown("#### 📅 Wann macht ihr die Pause?")
-                col1, col2 = st.columns(2)
-                with col1:
-                    pause_time = st.time_input("⏰ Wann?", value=time(14, 0))
-                with col2:
-                    pause_location = st.selectbox("📍 Wo?", [
-                        "Bibliothek Eingang", "Café Campus", "Lernwiese", "Mensa Terrasse", 
-                        "Parkplatz Uni", "Online (Video-Call)", "Bei jemandem zu Hause"
-                    ])
-                
-                col1, col2 = st.columns(2)
-                with col1:
-                    if st.button("✅ Pause gemacht!", key="group_done", use_container_width=True):
+                    """, unsafe_allow_html=True)
+                    if st.button("✅ Spaziergang gemacht!", key="group_walk_done"):
                         st.session_state.pause_statistics["gruppen_pausen"] += 1
-                        # Estimate time based on activity duration
-                        duration_str = activity["duration"]
-                        if "min" in duration_str:
-                            time_estimate = int(''.join(filter(str.isdigit, duration_str.split('-')[0])))
-                            st.session_state.pause_statistics["total_time"] += time_estimate
-                        show_success_message(f"Großartig! Ihr habt {activity['duration']} miteinander verbracht. 🤝💚")
+                        st.session_state.pause_statistics["total_time"] += 25
+                        show_success_message("Fantastisch! Gemeinsame Zeit stärkt euch alle. 🤝💚")
                         st.balloons()
                 
-                with col2:
-                    if st.button("🔄 Andere Aktivität", key="group_new", use_container_width=True):
-                        st.session_state.current_group_activity = random.choice(st.session_state.lernpausen_activities["gruppe"])
-                        st.rerun()
-            
-            # All group activities overview
-            with st.expander("📚 Alle Gruppen-Aktivitäten anzeigen"):
-                for activity in st.session_state.lernpausen_activities["gruppe"]:
-                    st.markdown(f"""
-                    <div style="background: #F9FAFB; padding: 1rem; margin: 0.5rem 0; border-radius: 10px; border-left: 3px solid #A0616A;">
-                        <strong style="color: #831843;">{activity["name"]}</strong> 
-                        <span style="color: #6B7280;">({activity["duration"]}, {activity["type"]})</span><br>
-                        <em style="color: #6B7280;">{activity["description"]}</em>
+                if st.button("☕ Mini-Café Pause", use_container_width=True):
+                    st.markdown("""
+                    <div class="form-container">
+                        <h4 style="color: #831843;">☕ Entspannte Café-Zeit</h4>
+                        <p style="color: #374151;">
+                            Holt euch Getränke und setzt euch gemütlich zusammen.
+                            Redet über alles außer Uni: Hobbys, Träume, lustige Erlebnisse.
+                        </p>
+                        <p style="color: #6B7280; font-style: italic;">
+                            25 Minuten bewusste Auszeit vom Lernstress.
+                        </p>
                     </div>
                     """, unsafe_allow_html=True)
+                    if st.button("✅ Café-Pause gemacht!", key="cafe_done"):
+                        st.session_state.pause_statistics["gruppen_pausen"] += 1
+                        st.session_state.pause_statistics["total_time"] += 25
+                        show_success_message("Wunderbar! Soziale Verbindungen sind so wichtig. 💚")
+                        st.balloons()
+            else:
+                st.markdown("""
+                <div style="background: rgba(255, 255, 255, 0.1); padding: 1rem; border-radius: 10px; backdrop-filter: blur(10px);">
+                    <p style="color: white; margin: 0; text-align: center;">
+                        Tritt erst einer Lerngruppe bei, um Gruppen-Pausen zu planen!
+                    </p>
+                </div>
+                """, unsafe_allow_html=True)
         
         # Wellness Tips
         st.markdown("---")
@@ -1235,8 +989,7 @@ def main():
             "💧 **Hydration**: Regelmäßig Wasser trinken - dehydrierte Gehirne lernen schlechter",
             "👥 **Soziale Kontakte**: Isolation vermeiden - regelmäßig mit anderen sprechen",
             "😴 **Schlaf**: 7-8 Stunden Schlaf sind wichtiger als eine Nacht durchlernen",
-            "🍎 **Ernährung**: Gesunde Snacks statt Zucker - für konstante Energie",
-            "🧘 **Achtsamkeit**: Kurze Entspannungsübungen reduzieren Stress erheblich"
+            "🍎 **Ernährung**: Gesunde Snacks statt Zucker - für konstante Energie"
         ]
         
         for tip in wellness_tips:
