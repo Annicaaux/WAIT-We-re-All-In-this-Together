@@ -266,7 +266,7 @@ st.markdown("""
     .week-question {
         font-size: 1.5rem;
         font-weight: 600;
-        color: #1f2937;
+        color: 	#8b2500;
         margin-bottom: 2rem;
         line-height: 1.4;
     }
