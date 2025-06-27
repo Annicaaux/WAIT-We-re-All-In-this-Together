@@ -726,7 +726,7 @@ def main():
         
         my_groups = [g for g in st.session_state.groups if g["id"] in st.session_state.joined_groups]
         
-      
+           st.markdown(f"<div class='postit postit-secondary'>{text}</div>", unsafe_allow_html=True)
            
 
                 
