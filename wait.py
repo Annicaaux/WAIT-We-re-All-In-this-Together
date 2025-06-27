@@ -1,860 +1,734 @@
 import streamlit as st
+from datetime import datetime, time
+import random
+import uuid
 
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WAITT – we're all in this together</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: #333;
-            overflow-x: hidden;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            padding: 20px 0;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
+# --- Page Config ---
+st.set_page_config(
+    page_title="WAITT - We're all in this together",
+    page_icon="🎓",
+    layout="wide",
+    initial_sidebar_state="collapsed"
+)
+
+# --- Custom CSS ---
+st.markdown("""
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    /* Global Styles */
+    .stApp {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        font-family: 'Inter', sans-serif;
+    }
+    
+    /* Hide Streamlit branding */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    
+    /* Main container */
+    .main-container {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        border-radius: 20px;
+        padding: 2rem;
+        margin: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    /* Title styling */
+    .main-title {
+        text-align: center;
+        font-size: 3rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #ffffff, #f0f0f0);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 2rem;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    /* Tab styling */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 8px;
+        border-radius: 50px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .stTabs [data-baseweb="tab"] {
+        height: 50px;
+        padding: 0px 24px;
+        background: transparent;
+        border-radius: 50px;
+        color: rgba(255, 255, 255, 0.8);
+        font-weight: 500;
+        border: none;
+        transition: all 0.3s ease;
+    }
+    
+    .stTabs [aria-selected="true"] {
+        background: linear-gradient(135deg, #667eea, #764ba2) !important;
+        color: white !important;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    /* Group card styling */
+    .group-card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        padding: 2rem;
+        margin: 1rem 0;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(20px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        border-top: 4px solid;
+        transition: all 0.3s ease;
+    }
+    
+    .group-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+    
+    .group-card-stats {
+        border-top-color: #667eea;
+    }
+    
+    .group-card-psychology {
+        border-top-color: #10b981;
+    }
+    
+    .group-card-bio {
+        border-top-color: #f59e0b;
+    }
+    
+    .group-card-new {
+        border-top-color: #ec4899;
+    }
+    
+    .group-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .group-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+    
+    .group-title {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: #1f2937;
+        margin: 0;
+    }
+    
+    .group-meta {
+        display: flex;
+        gap: 1.5rem;
+        margin: 1rem 0;
+        font-size: 0.9rem;
+        color: #6b7280;
+    }
+    
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: #f3f4f6;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 500;
+    }
+    
+    .group-question {
+        background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+        padding: 1.5rem;
+        border-radius: 15px;
+        margin: 1.5rem 0;
+        border-left: 4px solid #0ea5e9;
+    }
+    
+    .question-label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #0369a1;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .question-text {
+        font-style: italic;
+        color: #374151;
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+    
+    .spaces-badge {
+        background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+        color: #166534;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        border: 1px solid #86efac;
+    }
+    
+    /* Form styling */
+    .form-container {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        padding: 2.5rem;
+        margin: 1rem 0;
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+    
+    .form-title {
+        text-align: center;
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 2rem;
+    }
+    
+    /* My groups styling */
+    .my-group-card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 16px;
+        padding: 2rem;
+        margin: 1rem 0;
+        border-left: 5px solid #10b981;
+        backdrop-filter: blur(20px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .member-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin: 1rem 0;
+    }
+    
+    .member-tag {
+        background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+        color: #1e40af;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        border: 1px solid #93c5fd;
+    }
+    
+    .answer-item {
+        background: #f9fafb;
+        padding: 1rem;
+        border-radius: 10px;
+        margin: 0.5rem 0;
+        border-left: 3px solid #667eea;
+    }
+    
+    .answer-author {
+        font-weight: 600;
+        color: #667eea;
+        margin-bottom: 0.5rem;
+    }
+    
+    /* Pinnwand styling */
+    .pinnwand-container {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        padding: 2.5rem;
+        margin: 1rem 0;
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+    
+    .week-question {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 2rem;
+        line-height: 1.4;
+    }
+    
+    .postit {
+        background: linear-gradient(135deg, #fef3c7, #fde68a);
+        padding: 1.5rem;
+        border-radius: 15px;
+        margin: 1rem 0;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        border: 1px solid #f59e0b;
+        position: relative;
+        transform: rotate(-1deg);
+        transition: all 0.3s ease;
+    }
+    
+    .postit:nth-child(2n) {
+        transform: rotate(1deg);
+        background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+        border-color: #10b981;
+    }
+    
+    .postit:nth-child(3n) {
+        transform: rotate(-0.5deg);
+        background: linear-gradient(135deg, #fce7f3, #fbcfe8);
+        border-color: #ec4899;
+    }
+    
+    .postit:hover {
+        transform: rotate(0deg) scale(1.02);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+    
+    .postit::before {
+        content: '📌';
+        position: absolute;
+        top: -10px;
+        right: 15px;
+        font-size: 1.2rem;
+    }
+    
+    /* Button styling */
+    .stButton > button {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+        border-radius: 50px;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    .stButton > button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+    }
+    
+    /* Success button */
+    .success-btn {
+        background: linear-gradient(135deg, #10b981, #059669) !important;
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4) !important;
+    }
+    
+    /* Input styling */
+    .stTextInput > div > div > input,
+    .stTextArea > div > div > textarea,
+    .stSelectbox > div > div > select,
+    .stTimeInput > div > div > input {
+        border-radius: 12px;
+        border: 2px solid #e5e7eb;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .stTextInput > div > div > input:focus,
+    .stTextArea > div > div > textarea:focus,
+    .stSelectbox > div > div > select:focus,
+    .stTimeInput > div > div > input:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    /* Slider styling */
+    .stSlider > div > div > div > div {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+    }
+    
+    /* Metrics styling */
+    .metric-container {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        padding: 1rem;
+        text-align: center;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .metric-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: white;
+    }
+    
+    .metric-label {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.8);
+        margin-top: 0.5rem;
+    }
+    
+    /* Expander styling */
+    .streamlit-expanderHeader {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        font-weight: 600;
+    }
+    
+    /* Alert styling */
+    .stAlert {
+        border-radius: 15px;
+        border: none;
+        backdrop-filter: blur(10px);
+    }
+    
+    .stSuccess {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
+        border-left: 4px solid #10b981;
+    }
+    
+    .stWarning {
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.1));
+        border-left: 4px solid #f59e0b;
+    }
+    
+    .stInfo {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.1));
+        border-left: 4px solid #3b82f6;
+    }
+    
+    /* Responsive design */
+    @media (max-width: 768px) {
+        .main-title {
             font-size: 2rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .nav-tabs {
-            display: flex;
-            gap: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 8px;
-            border-radius: 50px;
-            backdrop-filter: blur(10px);
-        }
-        
-        .nav-tab {
-            padding: 12px 24px;
-            border: none;
-            background: transparent;
-            color: #666;
-            cursor: pointer;
-            border-radius: 50px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .nav-tab.active {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        }
-        
-        .nav-tab:hover:not(.active) {
-            background: rgba(102, 126, 234, 0.1);
-            color: #667eea;
-        }
-        
-        .main-content {
-            padding: 40px 0;
-        }
-        
-        .tab-content {
-            display: none;
-            animation: slideIn 0.5s ease-out;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .section-title {
-            font-size: 2rem;
-            font-weight: 600;
-            margin-bottom: 30px;
-            text-align: center;
-            color: white;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        
-        .groups-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 25px;
-            margin-bottom: 40px;
-        }
-        
-        .group-card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 30px;
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .group-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-        }
-        
-        .group-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        }
-        
-        .group-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .group-icon {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-        }
-        
-        .group-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #333;
         }
         
         .group-meta {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 20px;
-            font-size: 0.9rem;
-            color: #666;
-        }
-        
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .group-question {
-            background: #f8f9ff;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            border-left: 4px solid #667eea;
-        }
-        
-        .question-label {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #667eea;
-            margin-bottom: 8px;
-        }
-        
-        .question-text {
-            font-style: italic;
-            color: #555;
-        }
-        
-        .answer-input {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #e1e5e9;
-            border-radius: 12px;
-            font-size: 1rem;
-            margin-bottom: 15px;
-            transition: all 0.3s ease;
-            resize: vertical;
-            min-height: 80px;
-        }
-        
-        .answer-input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-        
-        .join-btn {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .join-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-        }
-        
-        .join-btn:active {
-            transform: translateY(0);
-        }
-        
-        .join-btn.joined {
-            background: #10b981;
-            cursor: default;
-        }
-        
-        .spaces-indicator {
-            display: inline-flex;
-            align-items: center;
-            background: #e1f5fe;
-            color: #0277bd;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-        
-        .create-form {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 40px;
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        .form-group {
-            margin-bottom: 25px;
-        }
-        
-        .form-label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
-        }
-        
-        .form-input, .form-select {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #e1e5e9;
-            border-radius: 12px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-        
-        .form-input:focus, .form-select:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-        
-        .slider-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .slider {
-            flex: 1;
-            height: 6px;
-            border-radius: 3px;
-            background: #e1e5e9;
-            outline: none;
-            -webkit-appearance: none;
-        }
-        
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            cursor: pointer;
-        }
-        
-        .slider-value {
-            background: #667eea;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 20px;
-            font-weight: 600;
-            min-width: 40px;
-            text-align: center;
-        }
-        
-        .create-btn {
-            width: 100%;
-            padding: 18px;
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .create-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
-        }
-        
-        .my-groups-list {
-            display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 0.5rem;
         }
         
-        .my-group-card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 16px;
-            padding: 25px;
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-left: 5px solid #10b981;
+        .group-card {
+            padding: 1.5rem;
         }
         
-        .group-members {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin: 15px 0;
+        .form-container {
+            padding: 1.5rem;
         }
-        
-        .member-tag {
-            background: #f0f9ff;
-            color: #0369a1;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-        
-        .answers-section {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #e5e7eb;
-        }
-        
-        .answer-item {
-            background: #fafafa;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            border-left: 3px solid #667eea;
-        }
-        
-        .answer-author {
-            font-weight: 600;
-            color: #667eea;
-            margin-bottom: 5px;
-        }
-        
-        .pinnwand {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        .question-of-week {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 40px;
-            text-align: center;
-            margin-bottom: 40px;
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .week-question {
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 25px;
-        }
-        
-        .answer-area {
-            width: 100%;
-            min-height: 100px;
-            padding: 20px;
-            border: 2px solid #e1e5e9;
-            border-radius: 16px;
-            font-size: 1rem;
-            margin-bottom: 20px;
-            resize: vertical;
-            transition: all 0.3s ease;
-        }
-        
-        .answer-area:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-        
-        .submit-btn {
-            padding: 15px 40px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-        }
-        
-        .postits-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-        }
-        
-        .postit {
-            background: #fef3c7;
-            padding: 20px;
-            border-radius: 12px;
-            transform: rotate(-1deg);
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            position: relative;
-        }
-        
-        .postit:nth-child(2n) {
-            transform: rotate(1deg);
-            background: #dcfce7;
-        }
-        
-        .postit:nth-child(3n) {
-            transform: rotate(-0.5deg);
-            background: #fce7f3;
-        }
-        
-        .postit:hover {
-            transform: rotate(0deg) scale(1.05);
-            z-index: 10;
-        }
-        
-        .postit::before {
-            content: '📌';
-            position: absolute;
-            top: -10px;
-            right: 15px;
-            font-size: 1.5rem;
-        }
-        
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 25px;
-            border-radius: 12px;
-            color: white;
-            font-weight: 500;
-            z-index: 1000;
-            transform: translateX(400px);
-            transition: all 0.3s ease;
-        }
-        
-        .notification.success {
-            background: #10b981;
-        }
-        
-        .notification.warning {
-            background: #f59e0b;
-        }
-        
-        .notification.show {
-            transform: translateX(0);
-        }
-        
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                gap: 20px;
-            }
-            
-            .nav-tabs {
-                width: 100%;
-                justify-content: center;
-                flex-wrap: wrap;
-            }
-            
-            .nav-tab {
-                padding: 10px 16px;
-                font-size: 0.9rem;
-            }
-            
-            .groups-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .group-card {
-                padding: 20px;
-            }
-            
-            .create-form {
-                padding: 25px;
-                margin: 0 10px;
-            }
-            
-            .section-title {
-                font-size: 1.5rem;
-            }
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">WAITT</div>
-                <nav class="nav-tabs">
-                    <button class="nav-tab active" onclick="switchTab('find')">Gruppen finden</button>
-                    <button class="nav-tab" onclick="switchTab('create')">Erstellen</button>
-                    <button class="nav-tab" onclick="switchTab('my')">Meine Gruppen</button>
-                    <button class="nav-tab" onclick="switchTab('pinnwand')">Pinnwand</button>
-                </nav>
-            </div>
-        </div>
-    </header>
+    }
+</style>
+""", unsafe_allow_html=True)
 
-    <main class="main-content">
-        <div class="container">
-            <!-- Tab: Gruppen finden -->
-            <div id="find-tab" class="tab-content active">
-                <h2 class="section-title">Offene Lerngruppen</h2>
-                <div class="groups-grid" id="groups-container">
-                    <!-- Gruppen werden hier dynamisch eingefügt -->
-                </div>
-            </div>
-
-            <!-- Tab: Gruppe erstellen -->
-            <div id="create-tab" class="tab-content">
-                <h2 class="section-title">Neue Lerngruppe erstellen</h2>
-                <div class="create-form">
-                    <div class="form-group">
-                        <label class="form-label">Thema</label>
-                        <input type="text" class="form-input" id="topic-input" placeholder="z.B. Statistik Klausur">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Uhrzeit</label>
-                        <input type="time" class="form-input" id="time-input">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Ort</label>
-                        <select class="form-select" id="room-input">
-                            <option value="Raum A1">Raum A1</option>
-                            <option value="Raum A2">Raum A2</option>
-                            <option value="Bibliothek Gruppenraum">Bibliothek Gruppenraum</option>
-                            <option value="Café Campus">Café Campus</option>
-                            <option value="Lernwiese">Lernwiese</option>
-                            <option value="Online">Online</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Maximale Teilnehmerzahl</label>
-                        <div class="slider-container">
-                            <input type="range" class="slider" id="max-slider" min="2" max="10" value="4">
-                            <div class="slider-value" id="max-value">4</div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Einstiegsfrage</label>
-                        <textarea class="form-input" id="question-input" rows="3" placeholder="Was möchtest du von deiner Gruppe wissen?"></textarea>
-                    </div>
-                    <button class="create-btn" onclick="createGroup()">Gruppe erstellen</button>
-                </div>
-            </div>
-
-            <!-- Tab: Meine Gruppen -->
-            <div id="my-tab" class="tab-content">
-                <h2 class="section-title">Deine Gruppen</h2>
-                <div class="my-groups-list" id="my-groups-container">
-                    <!-- Meine Gruppen werden hier angezeigt -->
-                </div>
-            </div>
-
-            <!-- Tab: Pinnwand -->
-            <div id="pinnwand-tab" class="tab-content">
-                <div class="pinnwand">
-                    <h2 class="section-title">Community Pinnwand</h2>
-                    <div class="question-of-week">
-                        <div class="week-question" id="current-question">Was gibt dir gerade Energie beim Lernen?</div>
-                        <textarea class="answer-area" id="pinnwand-answer" placeholder="Teile deine Gedanken mit der Community..."></textarea>
-                        <button class="submit-btn" onclick="submitPinnwandAnswer()">Antwort teilen</button>
-                    </div>
-                    <div class="postits-grid" id="postits-container">
-                        <!-- Post-its werden hier angezeigt -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <div id="notification" class="notification"></div>
-
-    <script>
-        // Datenstrukturen
-        let groups = [
+# --- Initialize Session State ---
+def init_session_state():
+    if "groups" not in st.session_state:
+        st.session_state.groups = [
             {
-                id: 1,
-                topic: "Statistik Klausur",
-                time: "10:00",
-                room: "Raum A1",
-                max: 4,
-                members: ["Anna", "Ben"],
-                question: "Was ist deine größte Prokrastinationsgefahr?",
-                answers: {"Anna": "Netflix und Social Media", "Ben": "Perfektionismus bei Aufgaben"},
-                icon: "📊"
+                "id": "stats_001",
+                "topic": "Statistik Klausur",
+                "time": "10:00",
+                "room": "Raum A1",
+                "max": 4,
+                "members": ["Anna", "Ben"],
+                "question": "Was ist deine größte Prokrastinationsgefahr beim Lernen?",
+                "answers": {
+                    "Anna": "Netflix-Marathons und endloses Scrollen durch Social Media",
+                    "Ben": "Perfektionismus - ich bleibe zu lange an einzelnen Aufgaben hängen"
+                },
+                "icon": "📊",
+                "category": "stats"
             },
             {
-                id: 2,
-                topic: "Klinische Psychologie",
-                time: "14:30",
-                room: "Bibliothek Gruppenraum 2",
-                max: 3,
-                members: ["Chris"],
-                question: "Was motiviert dich heute zu lernen?",
-                answers: {"Chris": "Die Aussicht auf bessere Berufschancen"},
-                icon: "🧠"
+                "id": "psych_001", 
+                "topic": "Klinische Psychologie",
+                "time": "14:30",
+                "room": "Bibliothek Gruppenraum 2",
+                "max": 3,
+                "members": ["Chris"],
+                "question": "Was motiviert dich heute am meisten zum Lernen?",
+                "answers": {
+                    "Chris": "Die Vorstellung, später Menschen wirklich helfen zu können"
+                },
+                "icon": "🧠",
+                "category": "psychology"
             },
             {
-                id: 3,
-                topic: "Biopsychologie",
-                time: "09:00",
-                room: "Café Campus",
-                max: 5,
-                members: [],
-                question: "Wenn dein Gehirn eine Farbe hätte – welche?",
-                answers: {},
-                icon: "🔬"
+                "id": "bio_001",
+                "topic": "Biopsychologie",
+                "time": "09:00", 
+                "room": "Café Campus",
+                "max": 5,
+                "members": [],
+                "question": "Wenn dein Gehirn eine Farbe hätte – welche wäre es und warum?",
+                "answers": {},
+                "icon": "🔬",
+                "category": "bio"
             }
-        ];
+        ]
+    
+    if "joined_groups" not in st.session_state:
+        st.session_state.joined_groups = []
+    
+    if "pinnwand_entries" not in st.session_state:
+        st.session_state.pinnwand_entries = [
+            "Gute Musik und der Gedanke an die wohlverdienten Ferien danach",
+            "Lerngruppen wie diese - gemeinsam macht alles mehr Spaß!",
+            "Starker Kaffee und die Aussicht auf beruflichen Erfolg",
+            "Meine Katze, die immer neben mir sitzt während ich lerne",
+            "Die Vorstellung, dass ich bald Experte in meinem Fach bin"
+        ]
+    
+    if "current_question" not in st.session_state:
+        st.session_state.current_question = "Was gibt dir gerade Energie beim Lernen?"
 
-        let joinedGroups = [];
-        let pinnwandEntries = [
-            "Gute Musik und der Gedanke an die Ferien",
-            "Lerngruppen wie diese hier!",
-            "Kaffee und die Aussicht auf Erfolg"
-        ];
+# --- Helper Functions ---
+def get_group_card_class(category):
+    classes = {
+        "stats": "group-card-stats",
+        "psychology": "group-card-psychology", 
+        "bio": "group-card-bio",
+        "new": "group-card-new"
+    }
+    return classes.get(category, "group-card-stats")
 
-        // Tab-Switching
-        function switchTab(tabName) {
-            // Alle Tabs verstecken
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            // Alle Tab-Buttons deaktivieren
-            document.querySelectorAll('.nav-tab').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            // Gewählten Tab anzeigen
-            document.getElementById(tabName + '-tab').classList.add('active');
-            event.target.classList.add('active');
-            
-            // Content laden
-            if (tabName === 'find') renderGroups();
-            if (tabName === 'my') renderMyGroups();
-            if (tabName === 'pinnwand') renderPinnwand();
-        }
+def render_group_card(group):
+    """Render a single group card with modern styling"""
+    card_class = get_group_card_class(group.get("category", "new"))
+    free_spaces = group["max"] - len(group["members"])
+    is_joined = group["id"] in st.session_state.joined_groups
+    
+    st.markdown(f"""
+    <div class="group-card {card_class}">
+        <div class="group-header">
+            <div class="group-icon">{group["icon"]}</div>
+            <div style="flex: 1;">
+                <h3 class="group-title">{group["topic"]}</h3>
+                <span class="spaces-badge">{free_spaces} freie Plätze</span>
+            </div>
+        </div>
+        <div class="group-meta">
+            <div class="meta-item">🕐 {group["time"]}</div>
+            <div class="meta-item">📍 {group["room"]}</div>
+            <div class="meta-item">👥 {len(group["members"])}/{group["max"]}</div>
+        </div>
+        <div class="group-question">
+            <div class="question-label">Einstiegsfrage</div>
+            <div class="question-text">"{group["question"]}"</div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    return is_joined, free_spaces
 
-        // Gruppen rendern
-        function renderGroups() {
-            const container = document.getElementById('groups-container');
-            container.innerHTML = '';
-            
-            groups.forEach(group => {
-                const freeSpaces = group.max - group.members.length;
-                const isJoined = joinedGroups.includes(group.id);
-                
-                const groupCard = document.createElement('div');
-                groupCard.className = 'group-card';
-                groupCard.innerHTML = `
-                    <div class="group-header">
-                        <div class="group-icon">${group.icon}</div>
-                        <div>
-                            <div class="group-title">${group.topic}</div>
-                            <div class="spaces-indicator">${freeSpaces} freie Plätze</div>
-                        </div>
-                    </div>
-                    <div class="group-meta">
-                        <div class="meta-item">🕐 ${group.time}</div>
-                        <div class="meta-item">📍 ${group.room}</div>
-                        <div class="meta-item">👥 ${group.members.length}/${group.max}</div>
-                    </div>
-                    <div class="group-question">
-                        <div class="question-label">Einstiegsfrage</div>
-                        <div class="question-text">${group.question}</div>
-                    </div>
-                    ${!isJoined ? `
-                        <textarea class="answer-input" id="answer-${group.id}" placeholder="Deine Antwort auf die Einstiegsfrage..."></textarea>
-                        <button class="join-btn" onclick="joinGroup(${group.id})">🚀 Gruppe beitreten</button>
-                    ` : `
-                        <button class="join-btn joined">✓ Bereits beigetreten</button>
-                    `}
-                `;
-                container.appendChild(groupCard);
-            });
-        }
+def show_success_message(message):
+    st.success(f"✅ {message}")
 
-        // Gruppe beitreten
-        function joinGroup(groupId) {
-            const answerField = document.getElementById(`answer-${groupId}`);
-            const answer = answerField.value.trim();
-            
-            if (!answer) {
-                showNotification('Bitte beantworte die Einstiegsfrage.', 'warning');
-                return;
-            }
-            
-            const group = groups.find(g => g.id === groupId);
-            if (group && !joinedGroups.includes(groupId)) {
-                group.members.push('Du');
-                group.answers['Du'] = answer;
-                joinedGroups.push(groupId);
-                
-                showNotification('Erfolgreich der Gruppe beigetreten!', 'success');
-                renderGroups();
-            }
-        }
+def show_warning_message(message):
+    st.warning(f"⚠️ {message}")
 
-        // Neue Gruppe erstellen
-        function createGroup() {
-            const topic = document.getElementById('topic-input').value.trim();
-            const time = document.getElementById('time-input').value;
-            const room = document.getElementById('room-input').value;
-            const max = parseInt(document.getElementById('max-slider').value);
-            const question = document.getElementById('question-input').value.trim();
-            
-            if (!topic || !time || !question) {
-                showNotification('Bitte fülle alle Pflichtfelder aus.', 'warning');
-                return;
-            }
-            
-            const icons = ['📚', '🔬', '💡', '🎯', '🧮', '🎨', '🌟', '⚡'];
-            const newGroup = {
-                id: Date.now(),
-                topic,
-                time,
-                room,
-                max,
-                members: ['Du'],
-                question,
-                answers: {'Du': '(Gruppengründer)'},
-                icon: icons[Math.floor(Math.random() * icons.length)]
-            };
-            
-            groups.push(newGroup);
-            joinedGroups.push(newGroup.id);
-            
-            // Formular zurücksetzen
-            document.getElementById('topic-input').value = '';
-            document.getElementById('time-input').value = '';
-            document.getElementById('question-input').value = '';
-            
-            showNotification('Gruppe erfolgreich erstellt!', 'success');
-            switchTab('my');
-        }
+def show_info_message(message):
+    st.info(f"ℹ️ {message}")
 
-        // Meine Gruppen rendern
-        function renderMyGroups() {
-            const container = document.getElementById('my-groups-container');
-            container.innerHTML = '';
+# --- Main App ---
+def main():
+    init_session_state()
+    
+    # Title
+    st.markdown('<h1 class="main-title">WAITT</h1>', unsafe_allow_html=True)
+    st.markdown('<p style="text-align: center; color: white; font-size: 1.2rem; margin-bottom: 2rem; opacity: 0.9;">We\'re all in this together</p>', unsafe_allow_html=True)
+    
+    # Stats Dashboard
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        st.markdown(f"""
+        <div class="metric-container">
+            <div class="metric-value">{len(st.session_state.groups)}</div>
+            <div class="metric-label">Aktive Gruppen</div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        total_members = sum(len(group["members"]) for group in st.session_state.groups)
+        st.markdown(f"""
+        <div class="metric-container">
+            <div class="metric-value">{total_members}</div>
+            <div class="metric-label">Lernende</div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col3:
+        st.markdown(f"""
+        <div class="metric-container">
+            <div class="metric-value">{len(st.session_state.joined_groups)}</div>
+            <div class="metric-label">Deine Gruppen</div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col4:
+        st.markdown(f"""
+        <div class="metric-container">
+            <div class="metric-value">{len(st.session_state.pinnwand_entries)}</div>
+            <div class="metric-label">Pinnwand-Beiträge</div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # Main Navigation Tabs
+    tab1, tab2, tab3, tab4 = st.tabs(["🔍 Gruppen finden", "➕ Gruppe erstellen", "👥 Meine Gruppen", "📌 Pinnwand"])
+    
+    # Tab 1: Find Groups
+    with tab1:
+        st.markdown("## Offene Lerngruppen")
+        
+        # Filter options
+        col1, col2 = st.columns([3, 1])
+        with col1:
+            search_term = st.text_input("🔍 Suche nach Thema", placeholder="z.B. Statistik, Psychologie...")
+        with col2:
+            show_full_only = st.checkbox("Nur Gruppen mit freien Plätzen")
+        
+        # Filter groups
+        filtered_groups = st.session_state.groups
+        if search_term:
+            filtered_groups = [g for g in filtered_groups if search_term.lower() in g["topic"].lower()]
+        if show_full_only:
+            filtered_groups = [g for g in filtered_groups if len(g["members"]) < g["max"]]
+        
+        # Display groups
+        for group in filtered_groups:
+            is_joined, free_spaces = render_group_card(group)
             
-            const myGroups = groups.filter(group => joinedGroups.includes(group.id));
+            if not is_joined and free_spaces > 0:
+                with st.container():
+                    answer = st.text_area(
+                        "Deine Antwort auf die Einstiegsfrage:",
+                        key=f"answer_{group['id']}",
+                        height=100,
+                        placeholder="Teile deine Gedanken mit der Gruppe..."
+                    )
+                    
+                    col1, col2 = st.columns([2, 1])
+                    with col1:
+                        if st.button(f"🚀 Gruppe beitreten", key=f"join_{group['id']}", use_container_width=True):
+                            if answer.strip():
+                                group["members"].append("Du")
+                                group["answers"]["Du"] = answer.strip()
+                                st.session_state.joined_groups.append(group["id"])
+                                st.rerun()
+                            else:
+                                show_warning_message("Bitte beantworte zuerst die Einstiegsfrage.")
+                    
+                    with col2:
+                        if st.button("👁️ Vorschau", key=f"preview_{group['id']}", use_container_width=True):
+                            with st.expander("Bisherige Antworten", expanded=True):
+                                if group["answers"]:
+                                    for name, ans in group["answers"].items():
+                                        st.markdown(f"""
+                                        <div class="answer-item">
+                                            <div class="answer-author">{name}</div>
+                                            <div>"{ans}"</div>
+                                        </div>
+                                        """, unsafe_allow_html=True)
+                                else:
+                                    st.write("Noch keine Antworten vorhanden.")
             
-            if (myGroups.length === 0) {
-                container.innerHTML = `
-                    <div style="text-align: center; padding: 40px; color: white;">
-                        <h3>Du bist noch keiner Gruppe beigetreten</h3>
-                        <p>Schau doch mal bei "Gruppen finden" vorbei!</p>
-                    </div>
-                `;
-                return;
-            }
+            elif is_joined:
+                st.markdown("""
+                <div style="text-align: center; padding: 1rem; background: linear-gradient(135deg, #dcfce7, #bbf7d0); 
+                     border-radius: 10px; margin: 1rem 0; border: 1px solid #86efac;">
+                    <strong style="color: #166534;">✅ Du bist bereits Mitglied dieser Gruppe</strong>
+                </div>
+                """, unsafe_allow_html=True)
             
-            myGroups.forEach(group => {
-                const groupCard = document.createElement('div');
-                groupCard.className = 'my-group-card';
-                groupCard.innerHTML = `
-                    <div class="group-header">
-                        <div class="group-icon">${group.icon}</div>
-                        <div>
-                            <div class="group-title">${group.topic}</div>
-                            <div class="group-meta">
-                                <div class="meta-item">🕐 ${group.time}</div>
-                                <div class="meta-item">📍 ${group.room}</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="group-members">
-                        ${group.members.map(member => `<span class="member-tag">${member}</span>`).join('')}
-                    </div>
-                    <div class="answers-section">
-                        <h4>Antworten auf: "${group.question}"
+            else:
+                st.markdown("""
+                <div style="text-align: center; padding: 1rem; background: linear-gradient(135deg, #fef3c7, #fde68a); 
+                     border-radius: 10px; margin: 1rem 0; border: 1px solid #f59e0b;">
+                    <strong style="color: #92400e;">⚠️ Gruppe ist bereits voll</strong>
+                </div>
+                """, unsafe_allow_html=True)
+            
+            st.markdown("<hr style='margin: 2rem 0; border: none; height: 1px; background: rgba(255,255,255,0.2);'>", unsafe_allow_html=True)
+    
+    # Tab 2: Create Group
+    with tab2:
+        st.markdown('<div class="form-container">', unsafe_allow_html=True)
+        st.markdown('<h2 class="form-title">Neue Lerngruppe erstellen</h2>', unsafe_allow_html=True)
+        
+        with st.form("create_group_form"):
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                topic = st.text_input("📚 Thema", placeholder="z.B. Statistik Klausur, Organische Chemie...")
+                time_input = st.time_input("🕐 Uhrzeit", value=time(10, 0))
+                room = st.selectbox("📍 Ort", [
+                    "Raum A1", "Raum A2", "Raum B1", "Raum B2",
+                    "Bibliothek Gruppenraum 1", "Bibliothek Gruppenraum 2",
+                    "Café Campus", "Lernwiese", "Online (Zoom)", "Online (Teams)"
+                ])
+            
+            with col2:
+                max_members = st.slider("👥 Maximale Teilnehmerzahl", 2, 10, 4)
+                icon = st.selectbox("🎯 Icon für die Gruppe", [
+                    "📊", "🧠", "🔬", "📚", "💡", "🎯", "🧮", "🎨", "🌟", "⚡", "🚀", "💻"
+                ])
+                category = st.selectbox("📂 Kategorie", [
+                    "stats", "psychology", "bio", "math", "physics", "chemistry", "other"
+                ])
+            
+            question = st.text_area(
+                "❓ Einstiegsfrage für neue Mitglieder",
+                placeholder="Was möchtest du von deiner Lerngruppe wissen? z.B. 'Was ist deine größte Herausforderung bei diesem Thema?'",
+                height=100
+            )
+            
+            submitted = st.form_submit_button("🚀 Gruppe erstellen und beitreten", use_container_width=True)
+            
+            if submitted:
+                if topic.strip() and question.strip():
+                    new_group = {
+                        "id": str(uuid.uuid4()),
+                        "topic": topic.strip(),
+                        "time": time_input.strftime("%H:%M"),
+                        "room": room,
+                        "max": max_members,
+                        "members": ["Du"],
+                        "question": question.strip(),
+                        "answers": {"Du": "(Gruppengründer - noch keine Antwort)"},
+                        "icon": icon,
+                        "category": category
+                    }
+                    
+                    st.session_state.groups.append(new_group)
+                    st.session_state.joined_groups.append(new_group["id"])
+                    
+                    show_success_message(f"Gruppe '{topic}' erfolgreich erstellt!")
+                    st.balloons()
+                    st.rerun()
+                else:
+                    show_warning_message("Bitte fülle alle Pflichtfelder aus.")
+        
+        st.markdown('</div>', unsafe_allow_html=True)
+    
+    # Tab 3: My Groups
+    with tab3:
+        st.markdown("## Deine Lerngruppen")
+        
+        my_groups = [g for g in st.session_state.groups if g["id"] in st.session_state.joined_groups]
+        
+        if not my_groups:
+            st.markdown("""
+            <div style="text-align: center; padding: 3rem; background: rgba(255,255,255,0.1); 
+                 border-radius: 20px; margin: 2rem 0; backdrop-filter: blur(10px);">
+                <h3 style="color: white; margin-bottom: 1rem;">Du bist noch keiner Gruppe beigetreten</h3>
+                <p style="color: rgba(255,255,255,0.8); font-
