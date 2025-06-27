@@ -726,6 +726,128 @@ def main():
         
         my_groups = [g for g in st.session_state.groups if g["id"] in st.session_state.joined_groups]
         
+        if not my_groups:
+            st.markdown("""
+            <div style="text-align: center; padding: 3rem; background: rgba(255, 255, 255, 0.1); 
+                 border-radius: 20px; margin: 2rem 0; backdrop-filter: blur(10px);">
+                <h3 style="color: white; margin-bottom: 1rem;">Du bist noch keiner Gruppe beigetreten</h3>
+                <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 2rem;">
+                    Entdecke spannende Lerngruppen oder erstelle deine eigene!
+                </p>
+            </div>
+            """, unsafe_allow_html=True)
+        else:
+            for group in my_groups:
+                st.markdown(f"""
+                <div class="my-group-card">
+                    <div class="group-header">
+                        <div class="group-icon">{group["icon"]}</div>
+                        <div style="flex: 1;">
+                            <h3 class="group-title">{group["topic"]}</h3>
+                            <div class="group-meta">
+                                <div class="meta-item">🕐 {group["time"]}</div>
+                                <div class="meta-item">📍 {group["room"]}</div>
+                                <div class="meta-item">👥 {len(group["members"])}/{group["max"]}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="group-question">
+                        <div class="question-label">Einstiegsfrage</div>
+                        <div class="question-text">"{group["question"]}"</div>
+                    </div>
+                    
+                    <h4 style="margin: 1.5rem 0 1rem 0; color: #374151;">Mitglieder:</h4>
+                    <div class="member-tags">
+                """, unsafe_allow_html=True)
+                
+                for member in group["members"]:
+                    st.markdown(f'<span class="member-tag">{member}</span>', unsafe_allow_html=True)
+                
+                st.markdown('</div>', unsafe_allow_html=True)
+                
+                # Show answers from all members
+                if group["answers"]:
+                    st.markdown('<h4 style="margin: 1.5rem 0 1rem 0; color: #374151;">Antworten der Mitglieder:</h4>', unsafe_allow_html=True)
+                    for name, answer in group["answers"].items():
+                        st.markdown(f"""
+                        <div class="answer-item">
+                            <div class="answer-author">{name}</div>
+                            <div>"{answer}"</div>
+                        </div>
+                        """, unsafe_allow_html=True)
+                
+                # Option to leave group
+                if st.button(f"👋 Gruppe verlassen", key=f"leave_{group['id']}", use_container_width=True):
+                    if "Du" in group["members"]:
+                        group["members"].remove("Du")
+                    if "Du" in group["answers"]:
+                        del group["answers"]["Du"]
+                    if group["id"] in st.session_state.joined_groups:
+                        st.session_state.joined_groups.remove(group["id"])
+                    st.rerun()
+                
+                st.markdown('</div>', unsafe_allow_html=True)
+                st.markdown("<hr style='margin: 2rem 0; border: none; height: 1px; background: rgba(255,255,255,0.2);'>", unsafe_allow_html=True)
+    
+    # Tab 4: Pinnwand
+    with tab4:
+        st.markdown('<div class="pinnwand-container">', unsafe_allow_html=True)
+        st.markdown(f'<h2 class="week-question">Frage der Woche: {st.session_state.current_question}</h2>', unsafe_allow_html=True)
+        
+        # Add new entry form
+        with st.form("pinnwand_form"):
+            new_entry = st.text_area(
+                "Dein Beitrag:",
+                placeholder="Was gibt dir gerade Energie beim Lernen?",
+                height=100
+            )
+            
+            if st.form_submit_button("📌 Auf Pinnwand posten", use_container_width=True):
+                if new_entry.strip():
+                    st.session_state.pinnwand_entries.append(new_entry.strip())
+                    show_success_message("Dein Beitrag wurde zur Pinnwand hinzugefügt!")
+                    st.rerun()
+                else:
+                    show_warning_message("Bitte schreibe etwas, bevor du postest.")
+        
+        st.markdown("<hr style='margin: 2rem 0; border: none; height: 2px; background: rgba(102, 126, 234, 0.3);'>", unsafe_allow_html=True)
+        
+        # Display all pinnwand entries
+        st.markdown('<h3 style="margin-bottom: 2rem; color: #374151;">Antworten der Community:</h3>', unsafe_allow_html=True)
+        
+        for i, entry in enumerate(st.session_state.pinnwand_entries):
+            st.markdown(f"""
+            <div class="postit">
+                <p style="margin: 0; font-size: 1rem; line-height: 1.5; color: #374151;">
+                    "{entry}"
+                </p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        st.markdown('</div>', unsafe_allow_html=True)
+        
+        # Admin section to change question (hidden in expandier)
+        with st.expander("🔧 Admin: Frage der Woche ändern"):
+            new_question = st.text_input(
+                "Neue Frage:",
+                value=st.session_state.current_question,
+                placeholder="Neue inspirierende Frage eingeben..."
+            )
+            
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("🔄 Frage ändern", use_container_width=True):
+                    if new_question.strip():
+                        st.session_state.current_question = new_question.strip()
+                        show_success_message("Frage der Woche wurde aktualisiert!")
+                        st.rerun()
+            
+            with col2:
+                if st.button("🗑️ Pinnwand leeren", use_container_width=True):
+                    st.session_state.pinnwand_entries = []
+                    show_info_message("Pinnwand wurde geleert.")
+                    st.rerun()
+
 if __name__ == "__main__":
     main()
-                
