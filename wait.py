@@ -601,3 +601,379 @@ if __name__ == "__main__":
     # Title and subtitle
     st.markdown('<h1 class="main-title">WAITT</h1>', unsafe_allow_html=True)
     st.markdown('<p class="subtitle">We\'re all in this together - Uni Lübeck</p>', unsafe_allow_html=True)
+    # --- Fortsetzung von Teil 1 ---
+# Hier kommen die Hauptfunktionen hinzu
+
+def render_group_card(group):
+    """Render a single group card with modern styling and Lübeck locations"""
+    card_class = get_group_card_class(group.get("category", "new"))
+    free_spaces = group["max"] - len(group["members"])
+    is_joined = group["id"] in st.session_state.joined_groups
+    
+    st.markdown(f"""
+    <div class="group-card {card_class}">
+        <div class="group-header">
+            <div class="group-icon">{group["icon"]}</div>
+            <div style="flex: 1;">
+                <h3 class="group-title">{group["topic"]}</h3>
+                <span class="spaces-badge">{free_spaces} freie Plätze</span>
+            </div>
+        </div>
+        <div class="group-meta">
+            <div class="meta-item">🕐 {group["time"]}</div>
+            <div class="meta-item">📍 {group["room"]}</div>
+            <div class="meta-item">👥 {len(group["members"])}/{group["max"]}</div>
+        </div>
+        <div class="group-question">
+            <div class="question-label">Einstiegsfrage</div>
+            <div class="question-text">"{group["question"]}"</div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    return is_joined, free_spaces
+
+def render_reward_system():
+    """Render the reward stamp collection system"""
+    stamps = st.session_state.reward_stamps
+    
+    st.markdown("""
+    <div class="reward-container">
+        <h4 style="color: #92400e; margin-bottom: 1rem; text-align: center;">
+            🏆 Mensa-Belohnungssystem
+        </h4>
+        <p style="color: #78350f; text-align: center; margin-bottom: 1rem;">
+            Sammle 10 Stempel durch Lerngruppen-Aktivitäten und Pausen!<br>
+            <strong>Belohnung: Kostenloses Essen in der Mensa der Uni Lübeck! 🍽️</strong>
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Render stamp grid
+    cols = st.columns(5)
+    for i in range(10):
+        with cols[i % 5]:
+            if i < stamps:
+                st.markdown(f"""
+                <div class="stamp stamp-earned">⭐</div>
+                """, unsafe_allow_html=True)
+            else:
+                st.markdown(f"""
+                <div class="stamp stamp-empty">{i+1}</div>
+                """, unsafe_allow_html=True)
+    
+    # Show progress
+    progress = stamps / 10
+    st.progress(progress)
+    
+    if stamps >= 10 and not st.session_state.reward_claimed:
+        st.markdown("""
+        <div style="background: linear-gradient(135deg, #10B981, #059669); color: white; 
+             padding: 1rem; border-radius: 12px; text-align: center; margin: 1rem 0;">
+            <h4>🎉 BELOHNUNG BEREIT! 🎉</h4>
+            <p>Zeige diese App-Seite in der Mensa vor und erhalte dein kostenloses Essen!</p>
+            <p><strong>Mensa-Standort:</strong> Mönkhofer Weg 241, 23562 Lübeck</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        if st.button("✅ Belohnung eingelöst", use_container_width=True):
+            st.session_state.reward_claimed = True
+            st.session_state.reward_stamps = 0
+            show_success_message("Belohnung eingelöst! Du kannst wieder neue Stempel sammeln.")
+            st.rerun()
+    
+    elif stamps < 10:
+        remaining = 10 - stamps
+        st.write(f"**Noch {remaining} Stempel bis zur Belohnung!**")
+
+def render_countdown_timer():
+    """Render 2-minute 'do nothing' countdown timer"""
+    
+    if not st.session_state.countdown_active:
+        st.markdown("""
+        <div class="countdown-container">
+            <h3 style="color: #831843; margin-bottom: 1rem;">🧘 2-Minuten Nichtstun-Challenge</h3>
+            <p style="color: #6B2C3A; margin-bottom: 1.5rem;">
+                Manchmal ist das Beste, was wir tun können, einfach <strong>nichts zu tun</strong>.<br>
+                Diese 2 Minuten gehören nur dir - keine Aufgaben, kein Handy, nur du und der Moment.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        if st.button("🎯 2-Minuten Timer starten", use_container_width=True):
+            st.session_state.countdown_active = True
+            st.session_state.countdown_time = 120
+            st.rerun()
+    
+    else:
+        # Active countdown
+        if st.session_state.countdown_time > 0:
+            minutes = st.session_state.countdown_time // 60
+            seconds = st.session_state.countdown_time % 60
+            
+            st.markdown(f"""
+            <div class="countdown-container">
+                <div class="countdown-display">{minutes:02d}:{seconds:02d}</div>
+                <div class="countdown-text">
+                    Einfach dasitzen und atmen...<br>
+                    Du musst nichts tun. Du musst nichts erreichen.<br>
+                    Dieser Moment gehört nur dir. 🌸
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            # Auto-refresh every second
+            import time
+            time.sleep(1)
+            st.session_state.countdown_time -= 1
+            st.rerun()
+        
+        else:
+            # Timer finished
+            st.markdown("""
+            <div class="countdown-container">
+                <div style="font-size: 3rem; margin: 1rem 0;">🎉</div>
+                <h3 style="color: #831843;">Geschafft!</h3>
+                <p style="color: #6B2C3A;">
+                    Du hast dir 2 Minuten nur für dich genommen.<br>
+                    Das war ein Geschenk an dich selbst. 💚
+                </p>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("✅ Pause beendet", use_container_width=True):
+                    st.session_state.countdown_active = False
+                    st.session_state.pause_statistics["solo_pausen"] += 1
+                    st.session_state.pause_statistics["total_time"] += 2
+                    add_reward_stamp("countdown")
+                    st.rerun()
+            
+            with col2:
+                if st.button("🔄 Nochmal 2 Minuten", use_container_width=True):
+                    st.session_state.countdown_time = 120
+                    st.rerun()
+
+def main():
+    """Main application function"""
+    init_session_state()
+    
+    # Title and subtitle
+    st.markdown('<h1 class="main-title">WAITT</h1>', unsafe_allow_html=True)
+    st.markdown('<p class="subtitle">We\'re all in this together - Uni Lübeck</p>', unsafe_allow_html=True)
+    
+    # Stats Dashboard
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        st.markdown(f"""
+        <div class="metric-container">
+            <div class="metric-value">{len(st.session_state.groups)}</div>
+            <div class="metric-label">Aktive Gruppen</div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        total_members = sum(len(group["members"]) for group in st.session_state.groups)
+        st.markdown(f"""
+        <div class="metric-container">
+            <div class="metric-value">{total_members}</div>
+            <div class="metric-label">Lernende</div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col3:
+        total_pauses = st.session_state.pause_statistics["solo_pausen"] + st.session_state.pause_statistics["gruppen_pausen"]
+        st.markdown(f"""
+        <div class="metric-container">
+            <div class="metric-value">{total_pauses}</div>
+            <div class="metric-label">Pausen genommen</div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col4:
+        stamps = st.session_state.reward_stamps
+        stamp_emoji = "🏆" if stamps >= 10 else "⭐"
+        st.markdown(f"""
+        <div class="metric-container">
+            <div class="metric-value">{stamps}{stamp_emoji}</div>
+            <div class="metric-label">Mensa-Stempel</div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # Show reward system prominently if close to reward
+    if st.session_state.reward_stamps >= 7:
+        render_reward_system()
+    
+    # Main Navigation Tabs
+    tab1, tab2, tab3, tab4, tab5 = st.tabs([
+        "🔍 Gruppen finden", 
+        "➕ Gruppe erstellen", 
+        "👥 Meine Gruppen", 
+        "📌 Pinnwand", 
+        "🌿 Lernpausen"
+    ])
+    
+    # Tab 1: Find Groups
+    with tab1:
+        st.markdown("## 🎓 Lerngruppen an der Uni Lübeck")
+        
+        # Filter options
+        col1, col2 = st.columns([3, 1])
+        with col1:
+            search_term = st.text_input("🔍 Suche nach Thema", placeholder="z.B. Statistik, Psychologie...")
+        with col2:
+            show_full_only = st.checkbox("Nur freie Plätze", value=True)
+        
+        # Filter groups
+        filtered_groups = st.session_state.groups
+        if search_term:
+            filtered_groups = [g for g in filtered_groups if search_term.lower() in g["topic"].lower()]
+        if show_full_only:
+            filtered_groups = [g for g in filtered_groups if len(g["members"]) < g["max"]]
+        
+        # Display groups
+        for group in filtered_groups:
+            is_joined, free_spaces = render_group_card(group)
+            
+            if not is_joined and free_spaces > 0:
+                with st.container():
+                    answer = st.text_area(
+                        "💭 Deine Antwort auf die Einstiegsfrage:",
+                        key=f"answer_{group['id']}",
+                        height=100,
+                        placeholder="Teile deine Gedanken mit der Gruppe..."
+                    )
+                    
+                    col1, col2 = st.columns([2, 1])
+                    with col1:
+                        if st.button(f"🚀 Gruppe beitreten", key=f"join_{group['id']}", use_container_width=True):
+                            if answer.strip():
+                                group["members"].append("Du")
+                                group["answers"]["Du"] = answer.strip()
+                                st.session_state.joined_groups.append(group["id"])
+                                add_reward_stamp("group_join")
+                                st.rerun()
+                            else:
+                                show_warning_message("Bitte beantworte zuerst die Einstiegsfrage.")
+                    
+                    with col2:
+                        if st.button("👁️ Vorschau", key=f"preview_{group['id']}", use_container_width=True):
+                            with st.expander("Bisherige Antworten", expanded=True):
+                                if group["answers"]:
+                                    for name, ans in group["answers"].items():
+                                        st.markdown(f"""
+                                        <div class="answer-item">
+                                            <div class="answer-author">{name}</div>
+                                            <div>"{ans}"</div>
+                                        </div>
+                                        """, unsafe_allow_html=True)
+                                else:
+                                    st.write("Noch keine Antworten vorhanden.")
+            
+            elif is_joined:
+                st.markdown("""
+                <div style="text-align: center; padding: 1rem; background: linear-gradient(135deg, #dcfce7, #bbf7d0); 
+                     border-radius: 10px; margin: 1rem 0; border: 1px solid #86efac;">
+                    <strong style="color: #166534;">✅ Du bist bereits Mitglied dieser Gruppe</strong>
+                </div>
+                """, unsafe_allow_html=True)
+            
+            else:
+                st.markdown("""
+                <div style="text-align: center; padding: 1rem; background: linear-gradient(135deg, #fef3c7, #fde68a); 
+                     border-radius: 10px; margin: 1rem 0; border: 1px solid #f59e0b;">
+                    <strong style="color: #92400e;">⚠️ Gruppe ist bereits voll</strong>
+                </div>
+                """, unsafe_allow_html=True)
+            
+            st.markdown("<hr style='margin: 2rem 0; border: none; height: 1px; background: rgba(255,255,255,0.2);'>", unsafe_allow_html=True)
+    
+    # Tab 2: Create Group
+    with tab2:
+        st.markdown('<div class="form-container">', unsafe_allow_html=True)
+        st.markdown('<h2 class="form-title">🏗️ Neue Lerngruppe erstellen</h2>', unsafe_allow_html=True)
+        
+        # Lübeck-specific locations
+        luebeck_locations = [
+            "Bibliothek Gruppenraum 1", "Bibliothek Gruppenraum 2", 
+            "Mensa Terrasse", "Café Campus", "Lernwiese (bei schönem Wetter)",
+            "Wakenitz-Ufer", "Trave-Promenade", "St. Annen-Museum Café",
+            "Ratzeburger Allee Campus", "Online (Zoom)", "Online (Teams)"
+        ]
+        
+        with st.form("create_group_form"):
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                topic = st.text_input("📚 Thema", placeholder="z.B. Statistik Klausur, Klinische Psychologie...")
+                time_input = st.time_input("🕐 Uhrzeit", value=time(10, 0))
+                room = st.selectbox("📍 Treffpunkt in Lübeck", luebeck_locations)
+            
+            with col2:
+                max_members = st.slider("👥 Maximale Teilnehmerzahl", 2, 10, 4)
+                icon = st.selectbox("🎯 Icon für die Gruppe", [
+                    "📊", "🧠", "🔬", "📚", "💡", "🎯", "🧮", "🎨", "🌟", "⚡", "🚀", "💻", "⚕️", "🔬"
+                ])
+                category = st.selectbox("📂 Fachbereich", [
+                    "psychology", "medicine", "computer_science", "bio", "stats", "other"
+                ])
+            
+            question = st.text_area(
+                "❓ Einstiegsfrage für neue Mitglieder",
+                placeholder="Was möchtest du von deiner Lerngruppe wissen? z.B. 'Was ist deine größte Herausforderung bei diesem Thema?'",
+                height=100
+            )
+            
+            submitted = st.form_submit_button("🚀 Gruppe erstellen und beitreten", use_container_width=True)
+            
+            if submitted:
+                if topic.strip() and question.strip():
+                    new_group = {
+                        "id": str(uuid.uuid4()),
+                        "topic": topic.strip(),
+                        "time": time_input.strftime("%H:%M"),
+                        "room": room,
+                        "max": max_members,
+                        "members": ["Du"],
+                        "question": question.strip(),
+                        "answers": {"Du": "(Gruppengründer - noch keine Antwort)"},
+                        "icon": icon,
+                        "category": category
+                    }
+                    
+                    st.session_state.groups.append(new_group)
+                    st.session_state.joined_groups.append(new_group["id"])
+                    add_reward_stamp("group_create")
+                    
+                    show_success_message(f"Gruppe '{topic}' erfolgreich erstellt!")
+                    st.balloons()
+                    st.rerun()
+                else:
+                    show_warning_message("Bitte fülle alle Pflichtfelder aus.")
+        
+        st.markdown('</div>', unsafe_allow_html=True)
+        
+        # Lübeck specific tips for group creation
+        st.markdown("""
+        ### 💡 Tipps für Lerngruppen in Lübeck
+        
+        **🏛️ Campus-Tipps:**
+        - Die Bibliothek hat ruhige Gruppenräume - früh buchen!
+        - Mensa-Terrasse ist perfekt für entspannte Gespräche
+        - Bei schönem Wetter: Wakenitz-Ufer für Outdoor-Sessions
+        
+        **🚲 Mobilität:**
+        - Lübeck ist fahrradfreundlich - fast alles ist gut erreichbar
+        - Mit dem Semesterticket kommt ihr kostenfrei durch die Stadt
+        - Trave-Fähre für kreative Lernpausen nutzen
+        """)
+    
+    # Continue with other tabs...
+    # Tab 3: My Groups would be implemented here
+    # Tab 4: Pinnwand would be implemented here
+    # Tab 5: Lernpausen would be implemented here (Teil 3)
+
+if __name__ == "__main__":
+    main()
