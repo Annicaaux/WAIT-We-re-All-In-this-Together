@@ -492,3 +492,491 @@ st.markdown("""
     }
 </style>
 """, unsafe_allow_html=True)
+
+# --- Initialize Session State ---
+def init_session_state():
+    """Initialize all session state variables"""
+    
+    # Basic groups data with Lübeck locations
+    if "groups" not in st.session_state:
+        st.session_state.groups = [
+            {
+                "id": "stats_001",
+                "topic": "Statistik Klausur",
+                "time": "10:00",
+                "room": "Bibliothek Gruppenraum 1",
+                "max": 4,
+                "members": ["Anna", "Ben"],
+                "question": "Was ist deine größte Prokrastinationsgefahr beim Lernen?",
+                "answers": {
+                    "Anna": "Netflix-Marathons und endloses Scrollen durch Social Media",
+                    "Ben": "Perfektionismus - ich bleibe zu lange an einzelnen Aufgaben hängen"
+                },
+                "icon": "📊",
+                "category": "stats"
+            },
+            {
+                "id": "psych_001", 
+                "topic": "Klinische Psychologie",
+                "time": "14:30",
+                "room": "Mensa Terrasse",
+                "max": 3,
+                "members": ["Chris"],
+                "question": "Was motiviert dich heute am meisten zum Lernen?",
+                "answers": {
+                    "Chris": "Die Vorstellung, später Menschen wirklich helfen zu können"
+                },
+                "icon": "🧠",
+                "category": "psychology"
+            },
+            {
+                "id": "bio_001",
+                "topic": "Biopsychologie",
+                "time": "09:00", 
+                "room": "Wakenitz-Ufer",
+                "max": 5,
+                "members": [],
+                "question": "Wenn dein Gehirn eine Farbe hätte – welche wäre es und warum?",
+                "answers": {},
+                "icon": "🔬",
+                "category": "bio"
+            },
+            {
+                "id": "med_001",
+                "topic": "Anatomie Testat",
+                "time": "16:00",
+                "room": "Trave-Promenade",
+                "max": 6,
+                "members": ["Lisa", "Tom", "Sarah"],
+                "question": "Welche Lernmethode hilft dir am besten beim Auswendiglernen?",
+                "answers": {
+                    "Lisa": "Karteikarten und ständige Wiederholung",
+                    "Tom": "Zusammen mit anderen laut vorsagen",
+                    "Sarah": "Eselsbrücken und verrückte Geschichten erfinden"
+                },
+                "icon": "⚕️",
+                "category": "medicine"
+            }
+        ]
+    
+    # User's joined groups
+    if "joined_groups" not in st.session_state:
+        st.session_state.joined_groups = []
+    
+    # Pinnwand entries with Lübeck flavor
+    if "pinnwand_entries" not in st.session_state:
+        st.session_state.pinnwand_entries = [
+            "Gute Musik und der Gedanke an die wohlverdienten Ferien danach",
+            "Lerngruppen wie diese - gemeinsam macht alles mehr Spaß!",
+            "Starker Kaffee und die Aussicht auf beruflichen Erfolg",
+            "Die Wakenitz hilft mir beim Entspannen zwischen den Vorlesungen",
+            "Marzipan von Niederegger als kleine Belohnung nach dem Lernen",
+            "Ein Spaziergang zur Trave bringt mich immer auf andere Gedanken",
+            "Die Bibliothek mit Blick auf den Campus motiviert mich sehr"
+        ]
+    
+    # Current week question
+    if "current_question" not in st.session_state:
+        st.session_state.current_question = "Was gibt dir gerade Energie beim Lernen?"
+    
+    # Pause statistics with Lübeck integration
+    if "pause_statistics" not in st.session_state:
+        st.session_state.pause_statistics = {
+            "solo_pausen": 0,
+            "gruppen_pausen": 0,
+            "total_time": 0,
+            "trave_spaziergaenge": 0,
+            "wakenitz_besuche": 0,
+            "mensa_pausen": 0,
+            "altstadt_besuche": 0,
+            "ostsee_trips": 0
+        }
+    
+    # Reward system (Mensa stamps)
+    if "reward_stamps" not in st.session_state:
+        st.session_state.reward_stamps = 0
+    
+    if "reward_claimed" not in st.session_state:
+        st.session_state.reward_claimed = False
+    
+    # Countdown state
+    if "countdown_active" not in st.session_state:
+        st.session_state.countdown_active = False
+    
+    if "countdown_time" not in st.session_state:
+        st.session_state.countdown_time = 120  # 2 minutes in seconds
+    
+    # Activity states
+    if "current_solo_activity" not in st.session_state:
+        st.session_state.current_solo_activity = None
+    
+    if "current_group_activity" not in st.session_state:
+        st.session_state.current_group_activity = None
+
+# --- Helper Functions ---
+def get_group_card_class(category):
+    """Get CSS class for group card based on category"""
+    classes = {
+        "stats": "group-card-stats",
+        "psychology": "group-card-psychology", 
+        "bio": "group-card-bio",
+        "medicine": "group-card-psychology",
+        "computer_science": "group-card-stats",
+        "new": "group-card-new"
+    }
+    return classes.get(category, "group-card-stats")
+
+def show_success_message(message):
+    """Show success message with emoji"""
+    st.success(f"✅ {message}")
+
+def show_warning_message(message):
+    """Show warning message with emoji"""
+    st.warning(f"⚠️ {message}")
+
+def show_info_message(message):
+    """Show info message with emoji"""
+    st.info(f"ℹ️ {message}")
+
+def add_reward_stamp(activity_type="general"):
+    """Add a reward stamp and check for completion"""
+    if st.session_state.reward_stamps < 10:
+        st.session_state.reward_stamps += 1
+        
+        if st.session_state.reward_stamps >= 10 and not st.session_state.reward_claimed:
+            st.balloons()
+            show_success_message("🎉 Glückwunsch! Du hast 10 Stempel gesammelt! Zeige diese App in der Mensa vor und erhalte ein kostenloses Essen!")
+            st.session_state.reward_claimed = True
+        else:
+            remaining = 10 - st.session_state.reward_stamps
+            show_success_message(f"Stempel erhalten! Noch {remaining} bis zum kostenlosen Mensa-Essen! 🍽️")
+
+def render_group_card(group):
+    """Render a single group card with modern styling and Lübeck locations"""
+    card_class = get_group_card_class(group.get("category", "new"))
+    free_spaces = group["max"] - len(group["members"])
+    is_joined = group["id"] in st.session_state.joined_groups
+    
+    st.markdown(f"""
+    <div class="group-card {card_class}">
+        <div class="group-header">
+            <div class="group-icon">{group["icon"]}</div>
+            <div style="flex: 1;">
+                <h3 class="group-title">{group["topic"]}</h3>
+                <span class="spaces-badge">{free_spaces} freie Plätze</span>
+            </div>
+        </div>
+        <div class="group-meta">
+            <div class="meta-item">🕐 {group["time"]}</div>
+            <div class="meta-item">📍 {group["room"]}</div>
+            <div class="meta-item">👥 {len(group["members"])}/{group["max"]}</div>
+        </div>
+        <div class="group-question">
+            <div class="question-label">Einstiegsfrage</div>
+            <div class="question-text">"{group["question"]}"</div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    return is_joined, free_spaces
+
+def render_reward_system():
+    """Render the reward stamp collection system"""
+    stamps = st.session_state.reward_stamps
+    
+    st.markdown("""
+    <div class="reward-container">
+        <h4 style="color: #92400e; margin-bottom: 1rem; text-align: center;">
+            🏆 Mensa-Belohnungssystem
+        </h4>
+        <p style="color: #78350f; text-align: center; margin-bottom: 1rem; font-size: 0.9rem; line-height: 1.4;">
+            Sammle 10 Stempel durch Lerngruppen-Aktivitäten und Pausen!<br>
+            <strong>Belohnung: Kostenloses Essen in der Mensa der Uni Lübeck! 🍽️</strong>
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Render stamp grid
+    cols = st.columns(5)
+    for i in range(10):
+        with cols[i % 5]:
+            if i < stamps:
+                st.markdown('<div class="stamp stamp-earned">⭐</div>', unsafe_allow_html=True)
+            else:
+                st.markdown(f'<div class="stamp stamp-empty">{i+1}</div>', unsafe_allow_html=True)
+    
+    # Show progress
+    progress = stamps / 10
+    st.progress(progress)
+    
+    if stamps >= 10 and not st.session_state.reward_claimed:
+        st.markdown("""
+        <div style="background: linear-gradient(135deg, #10B981, #059669); color: white; 
+             padding: 1.5rem; border-radius: 12px; text-align: center; margin: 1rem 0;">
+            <h4 style="margin-bottom: 1rem;">🎉 BELOHNUNG BEREIT! 🎉</h4>
+            <p style="margin-bottom: 0.5rem;">Zeige diese App-Seite in der Mensa vor und erhalte dein kostenloses Essen!</p>
+            <p style="margin: 0; font-weight: 600;"><strong>Mensa-Standort:</strong> Mönkhofer Weg 241, 23562 Lübeck</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        if st.button("✅ Belohnung eingelöst", use_container_width=True, key="claim_reward"):
+            st.session_state.reward_claimed = True
+            st.session_state.reward_stamps = 0
+            show_success_message("Belohnung eingelöst! Du kannst wieder neue Stempel sammeln.")
+            st.rerun()
+    
+    elif stamps < 10:
+        remaining = 10 - stamps
+        st.write(f"**Noch {remaining} Stempel bis zur Belohnung!**")
+
+def render_countdown_timer():
+    """Render 2-minute 'do nothing' countdown timer"""
+    
+    if not st.session_state.countdown_active:
+        st.markdown("""
+        <div class="countdown-container">
+            <h3 style="color: #831843; margin-bottom: 1rem;">🧘 2-Minuten Nichtstun-Challenge</h3>
+            <p style="color: #6B2C3A; margin-bottom: 1.5rem; line-height: 1.5;">
+                Manchmal ist das Beste, was wir tun können, einfach <strong>nichts zu tun</strong>.<br>
+                Diese 2 Minuten gehören nur dir - keine Aufgaben, kein Handy, nur du und der Moment.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        if st.button("🎯 2-Minuten Timer starten", use_container_width=True, key="start_countdown"):
+            st.session_state.countdown_active = True
+            st.session_state.countdown_time = 120
+            st.rerun()
+    
+    else:
+        if st.session_state.countdown_time > 0:
+            minutes = st.session_state.countdown_time // 60
+            seconds = st.session_state.countdown_time % 60
+            
+            st.markdown(f"""
+            <div class="countdown-container">
+                <div class="countdown-display">{minutes:02d}:{seconds:02d}</div>
+                <div class="countdown-text">
+                    Einfach dasitzen und atmen...<br>
+                    Du musst nichts tun. Du musst nichts erreichen.<br>
+                    Dieser Moment gehört nur dir. 🌸
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            # Manual controls instead of auto-refresh
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                if st.button("⏸️ Pause", use_container_width=True, key="pause_countdown"):
+                    st.session_state.countdown_active = False
+                    st.rerun()
+            with col2:
+                if st.button("⬇️ -10 Sek", use_container_width=True, key="minus_10"):
+                    st.session_state.countdown_time = max(0, st.session_state.countdown_time - 10)
+                    st.rerun()
+            with col3:
+                if st.button("⏭️ Fertig", use_container_width=True, key="finish_countdown"):
+                    st.session_state.countdown_time = 0
+                    st.rerun()
+        
+        else:
+            # Timer finished
+            st.markdown("""
+            <div class="countdown-container">
+                <div style="font-size: 3rem; margin: 1rem 0;">🎉</div>
+                <h3 style="color: #831843; margin-bottom: 1rem;">Geschafft!</h3>
+                <p style="color: #6B2C3A; line-height: 1.5; margin-bottom: 1.5rem;">
+                    Du hast dir 2 Minuten nur für dich genommen.<br>
+                    Das war ein Geschenk an dich selbst. 💚
+                </p>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("✅ Pause beendet", use_container_width=True, key="end_countdown"):
+                    st.session_state.countdown_active = False
+                    st.session_state.pause_statistics["solo_pausen"] += 1
+                    st.session_state.pause_statistics["total_time"] += 2
+                    add_reward_stamp("countdown")
+                    st.rerun()
+            
+            with col2:
+                if st.button("🔄 Nochmal 2 Minuten", use_container_width=True, key="repeat_countdown"):
+                    st.session_state.countdown_time = 120
+                    st.rerun()
+
+def get_luebeck_activities():
+    """Return Lübeck-specific activity recommendations"""
+    return {
+        "solo": [
+            {
+                "name": "Wakenitz-Meditation",
+                "duration": "10-15 min",
+                "type": "Natur & Achtsamkeit",
+                "location": "Wakenitz-Ufer",
+                "description": "Entspannung am 'Amazonas des Nordens'",
+                "instructions": "Gehe zum Wakenitz-Ufer (5 Min. vom Campus). Setze dich ans Wasser, beobachte die Enten und höre dem Plätschern zu. Atme bewusst die frische Luft ein.",
+                "stamps": 1
+            },
+            {
+                "name": "Trave-Spaziergang",
+                "duration": "15-20 min",
+                "type": "Bewegung & Frischluft",
+                "location": "Trave-Promenade",
+                "description": "Entspannter Gang entlang Lübecks Lebensader",
+                "instructions": "Starte an der Uni Richtung Trave. Gehe langsam entlang des Wassers bis zur Hubbrücke. Genieße den Blick auf die Boote und die historische Altstadt.",
+                "stamps": 1
+            },
+            {
+                "name": "Holstentor-Pause",
+                "duration": "5-10 min",
+                "type": "Kultur & Entspannung",
+                "location": "Holstentor",
+                "description": "Kurze Auszeit am Wahrzeichen",
+                "instructions": "Fahre mit dem Rad zum Holstentor. Setze dich auf eine Bank davor und betrachte die imposante Backsteingotik. Denke daran: Du studierst in einer UNESCO-Welterbestadt!",
+                "stamps": 1
+            },
+            {
+                "name": "Mensa-Dachterrasse Atempause",
+                "duration": "5 min",
+                "type": "Schnelle Erholung",
+                "location": "Mensa",
+                "description": "Frischluft zwischen den Vorlesungen",
+                "instructions": "Gehe auf die Mensa-Terrasse. Mache 5 tiefe Atemzüge und strecke dich. Schaue über den Campus und erinnere dich: Du schaffst das!",
+                "stamps": 1
+            },
+            {
+                "name": "Niederegger-Entspannung",
+                "duration": "10 min",
+                "type": "Genuss & Pause",
+                "location": "Niederegger Café",
+                "description": "Lübecker Marzipan-Meditation",
+                "instructions": "Gönne dir ein kleines Stück Marzipan bei Niederegger. Esse es ganz langsam und bewusst. Genieße diesen typisch Lübecker Moment der Süße.",
+                "stamps": 1
+            },
+            {
+                "name": "Bibliotheks-Zenmoment",
+                "duration": "3-5 min",
+                "type": "Schnelle Entspannung",
+                "location": "Universitätsbibliothek",
+                "description": "Ruhe zwischen den Büchern finden",
+                "instructions": "Suche dir einen ruhigen Platz in der Bibliothek. Schließe die Augen und höre 2 Minuten nur auf die Stille und das leise Rascheln der Seiten.",
+                "stamps": 1
+            }
+        ],
+        "gruppe": [
+            {
+                "name": "Trave-Rundgang mit Lerngruppe",
+                "duration": "30-45 min",
+                "type": "Bewegung & Soziales",
+                "location": "Trave-Ufer",
+                "description": "Gemeinsamer Spaziergang entlang der Trave",
+                "instructions": "Trefft euch am Campus und geht gemeinsam zur Trave. Spaziert entspannt bis zur Fähre und zurück. Regel: Erste 15 Min. kein Uni-Talk!",
+                "stamps": 2
+            },
+            {
+                "name": "Wakenitz-Picknick",
+                "duration": "45-60 min",
+                "type": "Natur & Gemeinschaft",
+                "location": "Wakenitz-Wiesen",
+                "description": "Entspanntes Gruppenpicknick am Wasser",
+                "instructions": "Bringt Snacks mit und setzt euch an die Wakenitz. Spielt einfache Spiele, redet über Nicht-Uni-Themen und genießt die Natur.",
+                "stamps": 2
+            },
+            {
+                "name": "Altstadt-Entdeckertour",
+                "duration": "60 min",
+                "type": "Kultur & Erkundung",
+                "location": "Lübecker Altstadt",
+                "description": "Gemeinsame Erkundung der Hansestadt",
+                "instructions": "Startet am Holstentor und erkundet zusammen die Gänge und Höfe der Altstadt. Macht Fotos, entdeckt versteckte Ecken und genießt das Welterbe.",
+                "stamps": 2
+            },
+            {
+                "name": "Mensa-Socializing",
+                "duration": "25-30 min",
+                "type": "Entspannung & Gespräch",
+                "location": "Mensa oder Café Campus",
+                "description": "Entspannte Café-Zeit auf dem Campus",
+                "instructions": "Trefft euch in der Mensa oder im Café Campus. Holt euch Getränke und redet über Hobbys, Träume und lustige Erlebnisse. Kein Uni-Stress!",
+                "stamps": 2
+            },
+            {
+                "name": "Ostsee-Ausflug",
+                "duration": "2-3 Stunden",
+                "type": "Abenteuer & Entspannung",
+                "location": "Travemünde/Timmendorfer Strand",
+                "description": "Großer Entspannungsausflug ans Meer",
+                "instructions": "Fahrt mit dem Semesterticket nach Travemünde oder Timmendorfer Strand. Spaziert am Strand, atmet Meeresluft und genießt eine große Auszeit vom Lernstress.",
+                "stamps": 3
+            },
+            {
+                "name": "Gemeinsames Kochen",
+                "duration": "90 min",
+                "type": "Kreativität & Teamwork",
+                "location": "WG-Küche oder Gemeinschaftsküche",
+                "description": "Zusammen kochen und genießen",
+                "instructions": "Plant ein einfaches Gericht und kocht gemeinsam. Jeder bringt eine Zutat mit. Beim Essen wird nur über schöne Dinge geredet!",
+                "stamps": 2
+            }
+        ]
+    }
+
+def get_luebeck_locations():
+    """Return Lübeck-specific meeting locations"""
+    return [
+        "Bibliothek Gruppenraum 1", "Bibliothek Gruppenraum 2", 
+        "Mensa Terrasse", "Café Campus", "Lernwiese (bei schönem Wetter)",
+        "Wakenitz-Ufer", "Trave-Promenade", "St. Annen-Museum Café",
+        "Holstentor-Platz", "Ratzeburger Allee Campus", 
+        "Studentenwohnheim Anschützstraße", "Stadtbibliothek Lübeck",
+        "Online (Zoom)", "Online (Teams)", "Online (Discord)"
+    ]
+
+def render_luebeck_help_resources():
+    """Render Lübeck-specific help and support resources"""
+    st.markdown("""
+    ### 🆘 Hilfe & Beratung an der Uni Lübeck
+    
+    **📞 Psychologische Beratung:**
+    - **Studentenwerk S-H** - Mönkhofer Weg 241 (Mensagebäude), Raum 44
+    - **Tel:** 0451/29220-908 | **Email:** psychologen.hl@studentenwerk.sh
+    - **Kostenlos und vertraulich** für alle Studierenden
+    - **Sprechzeiten:** Mo, Di, Fr 10-13 Uhr, Do 8-12 & 13-15 Uhr
+    
+    **🏥 Krisenhilfe:**
+    - **Zentrum für Integrative Psychiatrie (ZiP)**
+    - **Dr. Bartosz Zurowski** - Tel: 0451/500-98831
+    - **Für akute Krisen und psychiatrische Hilfe**
+    
+    **💬 Online-Unterstützung:**
+    - **StudiCare** - Online-Trainings für Studierende in Krisen
+    - **Chat-Beratung** der psychologischen Studierendenberatung
+    - **Offene Beratung:** Mittwochs 12:30-13:30 Uhr (ohne Voranmeldung)
+    
+    **🏫 Campus-Angebote:**
+    - **Studierenden-Service-Center** - Ratzeburger Allee 160
+    - **Allgemeine Studienberatung** - studium@uni-luebeck.de
+    - **AG Studierendengesundheit** - Gesunde Hochschule Lübeck
+    - **Sozialberatung** - Mensa, Mönkhofer Weg 241, Tel: 0451/500-3301
+    
+    **🚨 Notfall:**
+    - **Krisendienst Schleswig-Holstein:** 0800 / 655 3000 (24/7 kostenlos)
+    - **Telefonseelsorge:** 0800 / 111 0 111 oder 0800 / 111 0 222
+    """)
+
+def get_category_emoji(category):
+    """Get emoji for category"""
+    emojis = {
+        "stats": "📊",
+        "psychology": "🧠", 
+        "bio": "🔬",
+        "medicine": "⚕️",
+        "computer_science": "💻",
+        "math": "🧮",
+        "physics": "⚛️",
+        "chemistry": "🧪",
+        "other": "📚"
+    }
+    return emojis.get(category, "📚")
