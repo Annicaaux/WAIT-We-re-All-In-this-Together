@@ -980,3 +980,601 @@ def get_category_emoji(category):
         "other": "📚"
     }
     return emojis.get(category, "📚")
+
+# --- Main App Function ---
+def main():
+    """Main application function"""
+    init_session_state()
+    
+    # Title and subtitle
+    st.markdown('<h1 class="main-title">WAITT</h1>', unsafe_allow_html=True)
+    st.markdown('<p class="subtitle">We\'re all in this together - Uni Lübeck</p>', unsafe_allow_html=True)
+    
+    # Stats Dashboard
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        st.markdown(f"""
+        <div class="metric-container">
+            <div class="metric-value">{len(st.session_state.groups)}</div>
+            <div class="metric-label">Aktive Gruppen</div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        total_members = sum(len(group["members"]) for group in st.session_state.groups)
+        st.markdown(f"""
+        <div class="metric-container">
+            <div class="metric-value">{total_members}</div>
+            <div class="metric-label">Lernende</div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col3:
+        total_pauses = st.session_state.pause_statistics["solo_pausen"] + st.session_state.pause_statistics["gruppen_pausen"]
+        st.markdown(f"""
+        <div class="metric-container">
+            <div class="metric-value">{total_pauses}</div>
+            <div class="metric-label">Pausen genommen</div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col4:
+        stamps = st.session_state.reward_stamps
+        stamp_emoji = "🏆" if stamps >= 10 else "⭐"
+        st.markdown(f"""
+        <div class="metric-container">
+            <div class="metric-value">{stamps}{stamp_emoji}</div>
+            <div class="metric-label">Mensa-Stempel</div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # Show reward system prominently if close to reward
+    if st.session_state.reward_stamps >= 7:
+        render_reward_system()
+    
+    # Main Navigation Tabs
+    tab1, tab2, tab3, tab4, tab5 = st.tabs([
+        "🔍 Gruppen finden", 
+        "➕ Gruppe erstellen", 
+        "👥 Meine Gruppen", 
+        "📌 Pinnwand", 
+        "🌿 Lernpausen"
+    ])
+    
+    # ========================================
+    # TAB 1: GRUPPEN FINDEN
+    # ========================================
+    with tab1:
+        st.markdown("## 🎓 Lerngruppen an der Uni Lübeck")
+        st.markdown("*Finde die perfekte Lerngruppe für dein Studium in der Hansestadt!*")
+        
+        # Filter options
+        col1, col2 = st.columns([3, 1])
+        with col1:
+            search_term = st.text_input(
+                "🔍 Suche nach Thema", 
+                placeholder="z.B. Statistik, Psychologie, Anatomie...",
+                help="Durchsuche alle verfügbaren Lerngruppen"
+            )
+        with col2:
+            show_full_only = st.checkbox("Nur freie Plätze", value=True)
+        
+        # Additional filters
+        col1, col2 = st.columns(2)
+        with col1:
+            category_filter = st.selectbox(
+                "📂 Fachbereich", 
+                ["Alle", "Psychologie", "Medizin", "Statistik", "Biologie", "Informatik", "Sonstige"],
+                help="Filtere nach Fachbereich"
+            )
+        with col2:
+            time_filter = st.selectbox(
+                "🕐 Tageszeit",
+                ["Alle", "Vormittag (8-12)", "Mittag (12-16)", "Nachmittag (16-20)", "Abend (20-22)"],
+                help="Filtere nach bevorzugter Lernzeit"
+            )
+        
+        # Filter groups
+        filtered_groups = st.session_state.groups
+        
+        if search_term:
+            filtered_groups = [g for g in filtered_groups if search_term.lower() in g["topic"].lower()]
+        
+        if show_full_only:
+            filtered_groups = [g for g in filtered_groups if len(g["members"]) < g["max"]]
+        
+        if category_filter != "Alle":
+            category_map = {
+                "Psychologie": "psychology",
+                "Medizin": "medicine", 
+                "Statistik": "stats",
+                "Biologie": "bio",
+                "Informatik": "computer_science"
+            }
+            if category_filter in category_map:
+                filtered_groups = [g for g in filtered_groups if g.get("category") == category_map[category_filter]]
+        
+        if time_filter != "Alle":
+            time_ranges = {
+                "Vormittag (8-12)": (8, 12),
+                "Mittag (12-16)": (12, 16),
+                "Nachmittag (16-20)": (16, 20),
+                "Abend (20-22)": (20, 22)
+            }
+            if time_filter in time_ranges:
+                start_time, end_time = time_ranges[time_filter]
+                filtered_groups = [g for g in filtered_groups 
+                                 if start_time <= int(g["time"].split(":")[0]) < end_time]
+        
+        # Display results info
+        if len(filtered_groups) != len(st.session_state.groups):
+            st.info(f"📊 {len(filtered_groups)} von {len(st.session_state.groups)} Gruppen entsprechen deinen Filterkriterien")
+        
+        # Display groups
+        if not filtered_groups:
+            st.warning("😔 Keine Gruppen gefunden, die deinen Kriterien entsprechen. Probiere andere Filter oder erstelle eine neue Gruppe!")
+        else:
+            for i, group in enumerate(filtered_groups):
+                is_joined, free_spaces = render_group_card(group)
+                
+                if not is_joined and free_spaces > 0:
+                    # Answer input
+                    answer = st.text_area(
+                        "💭 Deine Antwort auf die Einstiegsfrage:",
+                        key=f"answer_{group['id']}",
+                        height=100,
+                        placeholder="Teile deine Gedanken mit der Gruppe...",
+                        help="Diese Antwort hilft der Gruppe, dich kennenzulernen"
+                    )
+                    
+                    col1, col2 = st.columns([2, 1])
+                    with col1:
+                        if st.button(
+                            f"🚀 Gruppe beitreten", 
+                            key=f"join_{group['id']}", 
+                            use_container_width=True,
+                            help="Klicke hier, um der Lerngruppe beizutreten"
+                        ):
+                            if answer.strip():
+                                group["members"].append("Du")
+                                group["answers"]["Du"] = answer.strip()
+                                st.session_state.joined_groups.append(group["id"])
+                                add_reward_stamp("group_join")
+                                show_success_message(f"Willkommen in der Gruppe '{group['topic']}'! 🎉")
+                                st.balloons()
+                                st.rerun()
+                            else:
+                                show_warning_message("Bitte beantworte zuerst die Einstiegsfrage.")
+                    
+                    with col2:
+                        if st.button("👁️ Vorschau", key=f"preview_{group['id']}", use_container_width=True):
+                            with st.expander("👥 Bisherige Antworten", expanded=True):
+                                if group["answers"]:
+                                    for name, ans in group["answers"].items():
+                                        st.markdown(f"""
+                                        <div class="answer-item">
+                                            <div class="answer-author">{name}</div>
+                                            <div>"{ans}"</div>
+                                        </div>
+                                        """, unsafe_allow_html=True)
+                                else:
+                                    st.write("🤔 Noch keine Antworten vorhanden. Sei der Erste!")
+                
+                elif is_joined:
+                    st.success("✅ Du bist bereits Mitglied dieser Gruppe")
+                
+                else:
+                    st.warning("⚠️ Gruppe ist bereits voll")
+                
+                # Add separator except for last item
+                if i < len(filtered_groups) - 1:
+                    st.markdown("---")
+        
+        # Tips for new users
+        with st.expander("💡 Tipps für neue Nutzer"):
+            st.markdown("""
+            **🎯 So findest du die perfekte Lerngruppe:**
+            - Nutze die **Suchfunktion** für spezifische Themen
+            - **Filtere nach Fachbereich** für relevante Gruppen
+            - Schau dir die **Treffpunkte** an - Lübeck ist klein, alles ist gut erreichbar!
+            - Lies die **Einstiegsfragen** - sie zeigen die Gruppenkultur
+            
+            **🌟 Für jede Aktivität sammelst du Stempel:**
+            - Gruppe beitreten: +1 Stempel
+            - Gruppenpausen machen: +2 Stempel  
+            - Bei 10 Stempeln: Kostenloses Mensa-Essen! 🍽️
+            """)
+    
+    # ========================================
+    # TAB 2: GRUPPE ERSTELLEN
+    # ========================================
+    with tab2:
+        st.markdown('<div class="form-container">', unsafe_allow_html=True)
+        st.markdown('<h2 class="form-title">🏗️ Neue Lerngruppe erstellen</h2>', unsafe_allow_html=True)
+        st.markdown("*Bringe Studierende zusammen und gestalte das Campusleben mit!*")
+        
+        with st.form("create_group_form"):
+            # Row 1: Basic info
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                topic = st.text_input(
+                    "📚 Thema/Fach", 
+                    placeholder="z.B. Statistik Klausur, Klinische Psychologie...",
+                    help="Beschreibe kurz, worum es in eurer Lerngruppe geht"
+                )
+                time_input = st.time_input(
+                    "🕐 Uhrzeit", 
+                    value=time(10, 0),
+                    help="Wann möchtet ihr euch treffen?"
+                )
+                
+            with col2:
+                max_members = st.slider(
+                    "👥 Maximale Teilnehmerzahl", 
+                    2, 10, 4,
+                    help="Wie viele Personen sollen maximal teilnehmen?"
+                )
+                icon = st.selectbox(
+                    "🎯 Icon für die Gruppe", 
+                    ["📊", "🧠", "🔬", "📚", "💡", "🎯", "🧮", "🎨", "🌟", "⚡", "🚀", "💻", "⚕️", "🧪"],
+                    help="Wähle ein passendes Icon für deine Gruppe"
+                )
+            
+            # Row 2: Location and category
+            room = st.selectbox(
+                "📍 Treffpunkt in Lübeck", 
+                get_luebeck_locations(),
+                help="Wo möchtet ihr euch treffen? Alle Orte sind gut mit dem Fahrrad oder ÖPNV erreichbar!"
+            )
+            
+            category = st.selectbox(
+                "📂 Fachbereich", 
+                ["psychology", "medicine", "computer_science", "bio", "stats", "math", "physics", "chemistry", "other"],
+                format_func=lambda x: {
+                    "psychology": "🧠 Psychologie",
+                    "medicine": "⚕️ Medizin", 
+                    "computer_science": "💻 Informatik",
+                    "bio": "🔬 Biologie",
+                    "stats": "📊 Statistik",
+                    "math": "🧮 Mathematik",
+                    "physics": "⚛️ Physik",
+                    "chemistry": "🧪 Chemie",
+                    "other": "📚 Sonstiges"
+                }[x],
+                help="Ordne deine Gruppe einem Fachbereich zu"
+            )
+            
+            # Question for new members
+            question = st.text_area(
+                "❓ Einstiegsfrage für neue Mitglieder",
+                placeholder="Was möchtest du von deiner Lerngruppe wissen? z.B. 'Was ist deine größte Herausforderung bei diesem Thema?' oder 'Wie lernst du am liebsten?'",
+                height=100,
+                help="Diese Frage hilft neuen Mitgliedern, sich vorzustellen und zeigt die Gruppenkultur"
+            )
+            
+            # Additional settings
+            with st.expander("⚙️ Erweiterte Einstellungen"):
+                st.markdown("**🎯 Gruppentyp:**")
+                group_type = st.radio(
+                    "Wähle den Fokus deiner Gruppe:",
+                    ["📖 Intensive Lerngruppe", "🤝 Entspannte Lerngruppe", "🎯 Prüfungsvorbereitung", "💡 Projektgruppe"],
+                    help="Das hilft anderen zu verstehen, was sie erwartet"
+                )
+                
+                recurring = st.checkbox(
+                    "🔄 Regelmäßige Treffen",
+                    help="Hacke das an, wenn ihr euch regelmäßig treffen wollt"
+                )
+                
+                if recurring:
+                    frequency = st.selectbox(
+                        "Wie oft?",
+                        ["Wöchentlich", "Alle 2 Wochen", "Monatlich"]
+                    )
+            
+            # Submit button
+            submitted = st.form_submit_button(
+                "🚀 Gruppe erstellen und beitreten", 
+                use_container_width=True,
+                help="Erstelle deine Lerngruppe und tritt ihr automatisch bei!"
+            )
+            
+            if submitted:
+                if topic.strip() and question.strip():
+                    new_group = {
+                        "id": str(uuid.uuid4()),
+                        "topic": topic.strip(),
+                        "time": time_input.strftime("%H:%M"),
+                        "room": room,
+                        "max": max_members,
+                        "members": ["Du"],
+                        "question": question.strip(),
+                        "answers": {"Du": f"(Gruppengründer - {group_type})"},
+                        "icon": icon,
+                        "category": category,
+                        "group_type": group_type,
+                        "recurring": recurring,
+                        "frequency": frequency if recurring else None,
+                        "created": datetime.now().strftime("%d.%m.%Y")
+                    }
+                    
+                    st.session_state.groups.append(new_group)
+                    st.session_state.joined_groups.append(new_group["id"])
+                    add_reward_stamp("group_create")
+                    
+                    show_success_message(f"Gruppe '{topic}' erfolgreich erstellt! 🎉")
+                    st.balloons()
+                    
+                    # Show next steps
+                    st.info("""
+                    🎯 **Nächste Schritte:**
+                    - Teile deine Gruppe mit Kommilitonen
+                    - Plane eure erste Sitzung
+                    - Nutze die Lernpausen-Features für Gruppenpausen
+                    """)
+                    st.rerun()
+                else:
+                    show_warning_message("Bitte fülle mindestens das Thema und die Einstiegsfrage aus.")
+        
+        st.markdown('</div>', unsafe_allow_html=True)
+        
+        # Lübeck specific tips for group creation
+        st.markdown("### 💡 Tipps für Lerngruppen in Lübeck")
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            st.markdown("""
+            **🏛️ Campus-Tipps:**
+            - **Bibliothek**: Ruhige Gruppenräume - früh buchen!
+            - **Mensa-Terrasse**: Perfekt für entspannte Gespräche
+            - **Wakenitz-Ufer**: Outdoor-Sessions bei schönem Wetter
+            - **Trave-Promenade**: Lernpausen mit Wasserblick
+            """)
+        
+        with col2:
+            st.markdown("""
+            **🚲 Mobilität in Lübeck:**
+            - Fast alles mit dem Fahrrad erreichbar (10-15 Min.)
+            - Semesterticket für kostenlosen ÖPNV
+            - Gute Anbindung zwischen Campus und Altstadt
+            - Parkplätze an der Uni meist kostenfrei
+            """)
+        
+        st.markdown("""
+        **🌟 Erfolgreiche Lerngruppen in Lübeck:**
+        - Nutzt die einzigartige Lage am Wasser für Pausen
+        - Plant auch mal Gruppenpausen in der Altstadt
+        - Trefft euch auch außerhalb der Lernzeiten
+        - Nutzt das Belohnungssystem - gemeinsam Stempel sammeln macht Spaß!
+        """)
+    
+    # ========================================
+    # TAB 3: MEINE GRUPPEN
+    # ========================================
+    with tab3:
+        st.markdown("## 👥 Deine Lerngruppen")
+        
+        my_groups = [g for g in st.session_state.groups if g["id"] in st.session_state.joined_groups]
+        
+        if not my_groups:
+            st.markdown("""
+            <div style="text-align: center; padding: 3rem; background: rgba(255, 255, 255, 0.1); 
+                 border-radius: 20px; margin: 2rem 0; backdrop-filter: blur(10px);">
+                <h3 style="color: white; margin-bottom: 1rem;">🎓 Du bist noch keiner Gruppe beigetreten</h3>
+                <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 2rem; line-height: 1.5;">
+                    Entdecke spannende Lerngruppen oder erstelle deine eigene!<br>
+                    <strong>💡 Tipp:</strong> Jede Gruppenaktivität bringt dir Stempel für das Mensa-Belohnungssystem! 🏆
+                </p>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("🔍 Gruppen entdecken", use_container_width=True):
+                    st.switch_page("Tab 1")  # This won't work in Streamlit, but shows intent
+            with col2:
+                if st.button("➕ Gruppe erstellen", use_container_width=True):
+                    st.switch_page("Tab 2")  # This won't work in Streamlit, but shows intent
+        
+        else:
+            st.success(f"🎉 Du bist Mitglied in {len(my_groups)} Gruppe(n)!")
+            
+            for i, group in enumerate(my_groups):
+                st.markdown(f"""
+                <div class="my-group-card">
+                    <div class="group-header">
+                        <div class="group-icon">{group["icon"]}</div>
+                        <div style="flex: 1;">
+                            <h3 class="group-title">{group["topic"]}</h3>
+                            <div class="group-meta">
+                                <div class="meta-item">🕐 {group["time"]}</div>
+                                <div class="meta-item">📍 {group["room"]}</div>
+                                <div class="meta-item">👥 {len(group["members"])}/{group["max"]}</div>
+                                <div class="meta-item">📅 Seit {group.get('created', 'Unbekannt')}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="group-question">
+                        <div class="question-label">Einstiegsfrage</div>
+                        <div class="question-text">"{group["question"]}"</div>
+                    </div>
+                    
+                    <h4 style="margin: 1.5rem 0 1rem 0; color: #374151;">👥 Mitglieder ({len(group["members"])}):</h4>
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1rem 0;">
+                """, unsafe_allow_html=True)
+                
+                for member in group["members"]:
+                    st.markdown(f'<span class="member-tag">{member}</span>', unsafe_allow_html=True)
+                
+                st.markdown('</div>', unsafe_allow_html=True)
+                
+                # Show answers from all members
+                if group["answers"]:
+                    st.markdown('<h4 style="margin: 1.5rem 0 1rem 0; color: #374151;">💬 Antworten der Mitglieder:</h4>', unsafe_allow_html=True)
+                    for name, answer in group["answers"].items():
+                        st.markdown(f"""
+                        <div class="answer-item">
+                            <div class="answer-author">{name}</div>
+                            <div>"{answer}"</div>
+                        </div>
+                        """, unsafe_allow_html=True)
+                
+                # Group action buttons
+                st.markdown('<h4 style="margin: 1.5rem 0 1rem 0; color: #374151;">🎯 Gruppenaktionen:</h4>', unsafe_allow_html=True)
+                
+                col1, col2, col3 = st.columns(3)
+                with col1:
+                    if st.button(f"🌿 Gruppenpause planen", key=f"pause_{group['id']}", use_container_width=True):
+                        # Toggle pause planning state
+                        planning_key = f"planning_pause_{group['id']}"
+                        st.session_state[planning_key] = not st.session_state.get(planning_key, False)
+                        st.rerun()
+                
+                with col2:
+                    if st.button(f"💬 Neue Antwort", key=f"update_{group['id']}", use_container_width=True):
+                        # Toggle answer update state
+                        update_key = f"updating_answer_{group['id']}"
+                        st.session_state[update_key] = not st.session_state.get(update_key, False)
+                        st.rerun()
+                
+                with col3:
+                    if st.button(f"👋 Gruppe verlassen", key=f"leave_{group['id']}", use_container_width=True):
+                        if "Du" in group["members"]:
+                            group["members"].remove("Du")
+                        if "Du" in group["answers"]:
+                            del group["answers"]["Du"]
+                        if group["id"] in st.session_state.joined_groups:
+                            st.session_state.joined_groups.remove(group["id"])
+                        show_info_message(f"Du hast die Gruppe '{group['topic']}' verlassen.")
+                        st.rerun()
+                
+                # Pause planning interface
+                if st.session_state.get(f"planning_pause_{group['id']}", False):
+                    st.markdown("#### 🌿 Gruppenpause in Lübeck planen")
+                    activities = get_luebeck_activities()["gruppe"]
+                    
+                    activity_names = [f"{act['name']} ({act['duration']}) - {act['location']}" for act in activities]
+                    selected_activity = st.selectbox(
+                        "Aktivität auswählen:",
+                        activity_names,
+                        key=f"activity_select_{group['id']}",
+                        help="Wähle eine Aktivität für eure Gruppenpause"
+                    )
+                    
+                    activity_idx = activity_names.index(selected_activity)
+                    activity = activities[activity_idx]
+                    
+                    st.markdown(f"""
+                    <div style="background: #F9FAFB; padding: 1rem; border-radius: 10px; margin: 1rem 0; border-left: 4px solid #A0616A;">
+                        <h4 style="color: #374151; margin-bottom: 0.5rem;">📍 {activity['name']}</h4>
+                        <p style="margin: 0.5rem 0;"><strong>Ort:</strong> {activity['location']}</p>
+                        <p style="margin: 0.5rem 0;"><strong>Dauer:</strong> {activity['duration']}</p>
+                        <p style="margin: 0.5rem 0;"><strong>Typ:</strong> {activity['type']}</p>
+                        <p style="margin: 0.5rem 0;"><strong>Beschreibung:</strong> {activity['description']}</p>
+                        <p style="margin: 0.5rem 0;"><strong>So geht's:</strong> {activity['instructions']}</p>
+                        <p style="margin: 0.5rem 0; color: #A0616A;"><strong>Belohnung:</strong> +{activity['stamps']} Stempel pro Person!</p>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    
+                    col1, col2, col3 = st.columns(3)
+                    with col1:
+                        if st.button("✅ Pause gemacht!", key=f"done_pause_{group['id']}", use_container_width=True):
+                            st.session_state.pause_statistics["gruppen_pausen"] += 1
+                            duration = int(activity['duration'].split('-')[0]) if '-' in activity['duration'] else 30
+                            st.session_state.pause_statistics["total_time"] += duration
+                            
+                            # Add location-specific stats
+                            if "trave" in activity['name'].lower():
+                                st.session_state.pause_statistics["trave_spaziergaenge"] += 1
+                            elif "wakenitz" in activity['name'].lower():
+                                st.session_state.pause_statistics["wakenitz_besuche"] += 1
+                            elif "mensa" in activity['name'].lower():
+                                st.session_state.pause_statistics["mensa_pausen"] += 1
+                            elif "altstadt" in activity['name'].lower():
+                                st.session_state.pause_statistics["altstadt_besuche"] += 1
+                            elif "ostsee" in activity['name'].lower():
+                                st.session_state.pause_statistics["ostsee_trips"] += 1
+                            
+                            # Add stamps
+                            for _ in range(activity['stamps']):
+                                add_reward_stamp("group_activity")
+                            
+                            st.session_state[f"planning_pause_{group['id']}"] = False
+                            show_success_message(f"Tolle Gruppenpause! +{activity['stamps']} Stempel erhalten! 🌟")
+                            st.balloons()
+                            st.rerun()
+                    
+                    with col2:
+                        if st.button("🔄 Andere Aktivität", key=f"change_pause_{group['id']}", use_container_width=True):
+                            st.rerun()
+                    
+                    with col3:
+                        if st.button("❌ Abbrechen", key=f"cancel_pause_{group['id']}", use_container_width=True):
+                            st.session_state[f"planning_pause_{group['id']}"] = False
+                            st.rerun()
+                
+                # Answer update interface
+                if st.session_state.get(f"updating_answer_{group['id']}", False):
+                    st.markdown("#### 💬 Deine Antwort aktualisieren")
+                    current_answer = group["answers"].get("Du", "")
+                    new_answer = st.text_area(
+                        "Neue Antwort:",
+                        value=current_answer,
+                        key=f"new_answer_{group['id']}",
+                        height=100,
+                        help="Aktualisiere deine Antwort auf die Einstiegsfrage"
+                    )
+                    
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        if st.button("✅ Antwort speichern", key=f"save_answer_{group['id']}", use_container_width=True):
+                            if new_answer.strip():
+                                group["answers"]["Du"] = new_answer.strip()
+                                st.session_state[f"updating_answer_{group['id']}"] = False
+                                show_success_message("Deine Antwort wurde aktualisiert!")
+                                st.rerun()
+                            else:
+                                show_warning_message("Die Antwort darf nicht leer sein.")
+                    
+                    with col2:
+                        if st.button("❌ Abbrechen", key=f"cancel_answer_{group['id']}", use_container_width=True):
+                            st.session_state[f"updating_answer_{group['id']}"] = False
+                            st.rerun()
+                
+                st.markdown('</div>', unsafe_allow_html=True)
+                
+                # Add separator except for last item
+                if i < len(my_groups) - 1:
+                    st.markdown("---")
+        
+        # Quick stats for user's groups
+        if my_groups:
+            st.markdown("### 📊 Deine Gruppenstatistiken")
+            col1, col2, col3 = st.columns(3)
+            
+            with col1:
+                total_members_my_groups = sum(len(group["members"]) for group in my_groups)
+                st.metric("👥 Gesamt-Mitglieder", total_members_my_groups, help="Anzahl aller Mitglieder in deinen Gruppen")
+            
+            with col2:
+                avg_group_size = round(total_members_my_groups / len(my_groups), 1) if my_groups else 0
+                st.metric("📈 Ø Gruppengröße", f"{avg_group_size}", help="Durchschnittliche Größe deiner Gruppen")
+            
+            with col3:
+                categories = [g.get("category", "other") for g in my_groups]
+                most_common = max(set(categories), key=categories.count) if categories else "Keine"
+                category_names = {
+                    "psychology": "Psychologie",
+                    "medicine": "Medizin",
+                    "stats": "Statistik",
+                    "bio": "Biologie",
+                    "computer_science": "Informatik",
+                    "other": "Sonstiges"
+                }
+                st.metric("🎯 Haupt-Fachbereich", category_names.get(most_common, most_common), help="Dein häufigster Fachbereich")
+
+if __name__ == "__main__":
+    main()
