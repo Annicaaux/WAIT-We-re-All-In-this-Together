@@ -2,6 +2,7 @@ import streamlit as st
 from datetime import datetime, time
 import random
 import uuid
+import time as time_module
 
 # --- Page Config ---
 st.set_page_config(
@@ -11,7 +12,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# --- Custom CSS - Optimiert für Mobile ---
+# --- Custom CSS - Mobile Optimized ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -29,7 +30,7 @@ st.markdown("""
     
     /* Container spacing fixes */
     .element-container {
-        margin-bottom: 1rem !important;
+        margin-bottom: 0.8rem !important;
     }
     
     .stMarkdown {
@@ -46,15 +47,16 @@ st.markdown("""
         -webkit-text-fill-color: transparent;
         background-clip: text;
         margin-bottom: 1rem;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        padding: 0;
     }
     
     .subtitle {
         text-align: center;
         color: white;
         font-size: clamp(1rem, 3vw, 1.2rem);
-        margin-bottom: 2rem;
+        margin-bottom: 1.5rem;
         opacity: 0.9;
+        padding: 0;
     }
     
     /* Tab styling - Mobile optimized */
@@ -65,21 +67,21 @@ st.markdown("""
         border-radius: 25px;
         backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.2);
+        margin-bottom: 1rem;
         overflow-x: auto;
-        flex-wrap: nowrap;
     }
     
     .stTabs [data-baseweb="tab"] {
         height: auto;
         min-height: 40px;
-        padding: 8px 16px;
+        padding: 8px 12px;
         background: transparent;
         border-radius: 20px;
         color: rgba(255, 255, 255, 0.8);
         font-weight: 500;
         border: none;
         transition: all 0.3s ease;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         white-space: nowrap;
         flex-shrink: 0;
     }
@@ -95,7 +97,7 @@ st.markdown("""
         background: rgba(255, 255, 255, 0.95);
         border-radius: 16px;
         padding: clamp(1rem, 4vw, 2rem);
-        margin: 1rem auto;
+        margin: 1rem auto 1.5rem auto;
         max-width: 100%;
         border: 1px solid rgba(255, 255, 255, 0.2);
         backdrop-filter: blur(20px);
@@ -107,6 +109,7 @@ st.markdown("""
     .group-card {
         border-top: 4px solid;
         transition: all 0.3s ease;
+        margin-bottom: 2rem;
     }
     
     .group-card:hover {
@@ -122,9 +125,9 @@ st.markdown("""
     /* Group header - Mobile responsive */
     .group-header {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         gap: 1rem;
-        margin-bottom: 1rem;
+        margin-bottom: 1.2rem;
         flex-wrap: wrap;
     }
     
@@ -146,7 +149,7 @@ st.markdown("""
         font-size: clamp(1.1rem, 4vw, 1.4rem);
         font-weight: 600;
         color: #1f2937 !important;
-        margin: 0;
+        margin: 0 0 0.5rem 0;
         line-height: 1.3;
     }
     
@@ -155,7 +158,7 @@ st.markdown("""
         display: flex;
         gap: 0.5rem;
         margin: 1rem 0;
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         color: #6b7280;
         flex-wrap: wrap;
     }
@@ -168,7 +171,7 @@ st.markdown("""
         padding: 0.4rem 0.8rem;
         border-radius: 15px;
         font-weight: 500;
-        font-size: 0.8rem;
+        font-size: 0.75rem;
         flex-shrink: 0;
     }
     
@@ -182,7 +185,7 @@ st.markdown("""
     }
     
     .question-label {
-        font-size: 0.75rem;
+        font-size: 0.7rem;
         font-weight: 600;
         color: #831843;
         margin-bottom: 0.5rem;
@@ -193,8 +196,9 @@ st.markdown("""
     .question-text {
         font-style: italic;
         color: #374151;
-        font-size: clamp(0.9rem, 3vw, 1.1rem);
+        font-size: clamp(0.9rem, 3vw, 1rem);
         line-height: 1.5;
+        margin: 0;
     }
     
     .spaces-badge {
@@ -202,10 +206,11 @@ st.markdown("""
         color: #831843;
         padding: 0.4rem 0.8rem;
         border-radius: 15px;
-        font-size: 0.8rem;
+        font-size: 0.75rem;
         font-weight: 600;
         border: 1px solid #F9A8D4;
         display: inline-block;
+        margin-top: 0.3rem;
     }
     
     /* Form improvements */
@@ -228,9 +233,10 @@ st.markdown("""
         font-weight: 600;
         transition: all 0.3s ease;
         box-shadow: 0 4px 15px rgba(160, 97, 106, 0.4);
-        min-height: 44px; /* Touch target size */
+        min-height: 44px;
         font-size: 0.9rem;
         width: 100%;
+        margin: 0.3rem 0;
     }
     
     .stButton > button:hover {
@@ -249,7 +255,7 @@ st.markdown("""
         padding: 0.8rem;
         font-size: 1rem;
         transition: all 0.3s ease;
-        min-height: 44px; /* Touch target */
+        min-height: 44px;
     }
     
     .stTextInput > div > div > input:focus,
@@ -280,7 +286,7 @@ st.markdown("""
     }
     
     .metric-label {
-        font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+        font-size: clamp(0.7rem, 2.5vw, 0.85rem);
         color: rgba(255, 255, 255, 0.8);
         margin-top: 0.5rem;
         line-height: 1.2;
@@ -292,7 +298,7 @@ st.markdown("""
         color: #831843;
         padding: 0.4rem 0.8rem;
         border-radius: 15px;
-        font-size: 0.8rem;
+        font-size: 0.75rem;
         font-weight: 500;
         border: 1px solid #F9A8D4;
         margin: 0.2rem;
@@ -315,11 +321,72 @@ st.markdown("""
         font-size: 0.9rem;
     }
     
+    /* Countdown specific styles */
+    .countdown-container {
+        background: linear-gradient(135deg, #FDF2F8, #FCE7F3);
+        border-radius: 20px;
+        padding: 2rem;
+        text-align: center;
+        border: 2px solid #F9A8D4;
+        margin: 1rem 0;
+    }
+    
+    .countdown-display {
+        font-size: clamp(3rem, 10vw, 6rem);
+        font-weight: bold;
+        color: #831843;
+        margin: 1rem 0;
+        font-family: 'Courier New', monospace;
+        line-height: 1;
+    }
+    
+    .countdown-text {
+        font-size: clamp(0.9rem, 3vw, 1.1rem);
+        color: #6B2C3A;
+        margin: 1rem 0;
+        font-style: italic;
+        line-height: 1.4;
+    }
+    
+    /* Reward system styles */
+    .reward-container {
+        background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+        border-radius: 16px;
+        padding: 1.5rem;
+        border: 2px solid #F59E0B;
+        margin: 1rem 0;
+    }
+    
+    .stamp {
+        width: clamp(35px, 8vw, 45px);
+        height: clamp(35px, 8vw, 45px);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: clamp(1rem, 3vw, 1.3rem);
+        margin: 0.2rem;
+        transition: all 0.3s ease;
+    }
+    
+    .stamp-earned {
+        background: linear-gradient(135deg, #10B981, #059669);
+        color: white;
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+    }
+    
+    .stamp-empty {
+        background: #E5E7EB;
+        color: #9CA3AF;
+        border: 2px dashed #D1D5DB;
+        font-size: clamp(0.7rem, 2vw, 0.9rem);
+    }
+    
     /* Mobile specific adjustments */
     @media (max-width: 768px) {
         .stTabs [data-baseweb="tab"] {
-            font-size: 0.8rem;
-            padding: 6px 12px;
+            font-size: 0.75rem;
+            padding: 6px 10px;
         }
         
         .group-header {
@@ -337,101 +404,38 @@ st.markdown("""
             width: fit-content;
         }
         
-        /* Smaller padding on mobile */
         .group-card, .form-container, .my-group-card, .pinnwand-container {
             padding: 1rem;
-            margin: 0.5rem auto;
+            margin: 0.5rem auto 1rem auto;
         }
         
-        /* Stack columns on mobile */
         .stColumns {
-            flex-direction: column !important;
+            gap: 0.5rem;
         }
         
-        .stColumn {
-            width: 100% !important;
-            margin-bottom: 1rem;
+        .countdown-container {
+            padding: 1.5rem;
         }
     }
     
     @media (max-width: 480px) {
         .stTabs [data-baseweb="tab"] {
             font-size: 0.7rem;
-            padding: 4px 8px;
+            padding: 5px 8px;
         }
         
         .group-card, .form-container, .my-group-card, .pinnwand-container {
             padding: 0.8rem;
-            margin: 0.3rem auto;
+            margin: 0.3rem auto 0.8rem auto;
         }
         
         .group-question {
             padding: 0.8rem;
         }
-    }
-    
-    /* Countdown specific styles */
-    .countdown-container {
-        background: linear-gradient(135deg, #FDF2F8, #FCE7F3);
-        border-radius: 20px;
-        padding: 2rem;
-        text-align: center;
-        border: 2px solid #F9A8D4;
-        margin: 1rem 0;
-    }
-    
-    .countdown-display {
-        font-size: clamp(3rem, 10vw, 6rem);
-        font-weight: bold;
-        color: #831843;
-        margin: 1rem 0;
-        font-family: 'Courier New', monospace;
-    }
-    
-    .countdown-text {
-        font-size: clamp(1rem, 3vw, 1.2rem);
-        color: #6B2C3A;
-        margin: 1rem 0;
-        font-style: italic;
-    }
-    
-    /* Reward system styles */
-    .reward-container {
-        background: linear-gradient(135deg, #FEF3C7, #FDE68A);
-        border-radius: 16px;
-        padding: 1.5rem;
-        border: 2px solid #F59E0B;
-        margin: 1rem 0;
-    }
-    
-    .stamp-grid {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        gap: 0.5rem;
-        margin: 1rem 0;
-    }
-    
-    .stamp {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.2rem;
-        transition: all 0.3s ease;
-    }
-    
-    .stamp-earned {
-        background: linear-gradient(135deg, #10B981, #059669);
-        color: white;
-        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
-    }
-    
-    .stamp-empty {
-        background: #E5E7EB;
-        color: #9CA3AF;
-        border: 2px dashed #D1D5DB;
+        
+        .countdown-container {
+            padding: 1rem;
+        }
     }
     
     /* Text color fixes for all containers */
@@ -441,13 +445,37 @@ st.markdown("""
         color: #374151 !important;
     }
     
-    /* Alert styling */
+    /* Success/Warning/Info styling */
     .stSuccess, .stWarning, .stInfo, .stError {
         border-radius: 12px;
-        margin: 1rem 0;
+        margin: 0.8rem 0;
+        border: none;
     }
     
-    /* Loading and interaction states */
+    .stSuccess {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
+        border-left: 4px solid #10B981;
+    }
+    
+    .stWarning {
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.1));
+        border-left: 4px solid #F59E0B;
+    }
+    
+    .stInfo {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.1));
+        border-left: 4px solid #3B82F6;
+    }
+    
+    /* Divider styling */
+    hr {
+        margin: 2rem 0 !important;
+        border: none !important;
+        height: 1px !important;
+        background: rgba(255, 255, 255, 0.2) !important;
+    }
+    
+    /* Loading states */
     .loading-spinner {
         display: inline-block;
         width: 20px;
@@ -464,140 +492,3 @@ st.markdown("""
     }
 </style>
 """, unsafe_allow_html=True)
-
-# --- Initialize Session State ---
-def init_session_state():
-    """Initialize all session state variables"""
-    
-    # Basic groups data
-    if "groups" not in st.session_state:
-        st.session_state.groups = [
-            {
-                "id": "stats_001",
-                "topic": "Statistik Klausur",
-                "time": "10:00",
-                "room": "Bibliothek Gruppenraum 1",
-                "max": 4,
-                "members": ["Anna", "Ben"],
-                "question": "Was ist deine größte Prokrastinationsgefahr beim Lernen?",
-                "answers": {
-                    "Anna": "Netflix-Marathons und endloses Scrollen durch Social Media",
-                    "Ben": "Perfektionismus - ich bleibe zu lange an einzelnen Aufgaben hängen"
-                },
-                "icon": "📊",
-                "category": "stats"
-            },
-            {
-                "id": "psych_001", 
-                "topic": "Klinische Psychologie",
-                "time": "14:30",
-                "room": "Mensa Terrasse",
-                "max": 3,
-                "members": ["Chris"],
-                "question": "Was motiviert dich heute am meisten zum Lernen?",
-                "answers": {
-                    "Chris": "Die Vorstellung, später Menschen wirklich helfen zu können"
-                },
-                "icon": "🧠",
-                "category": "psychology"
-            },
-            {
-                "id": "bio_001",
-                "topic": "Biopsychologie",
-                "time": "09:00", 
-                "room": "Café Campus",
-                "max": 5,
-                "members": [],
-                "question": "Wenn dein Gehirn eine Farbe hätte – welche wäre es und warum?",
-                "answers": {},
-                "icon": "🔬",
-                "category": "bio"
-            }
-        ]
-    
-    # User's joined groups
-    if "joined_groups" not in st.session_state:
-        st.session_state.joined_groups = []
-    
-    # Pinnwand entries
-    if "pinnwand_entries" not in st.session_state:
-        st.session_state.pinnwand_entries = [
-            "Gute Musik und der Gedanke an die wohlverdienten Ferien danach",
-            "Lerngruppen wie diese - gemeinsam macht alles mehr Spaß!",
-            "Starker Kaffee und die Aussicht auf beruflichen Erfolg",
-            "Meine Katze, die immer neben mir sitzt während ich lerne",
-            "Die Vorstellung, dass ich bald Experte in meinem Fach bin"
-        ]
-    
-    # Current week question
-    if "current_question" not in st.session_state:
-        st.session_state.current_question = "Was gibt dir gerade Energie beim Lernen?"
-    
-    # Pause statistics with Lübeck integration
-    if "pause_statistics" not in st.session_state:
-        st.session_state.pause_statistics = {
-            "solo_pausen": 0,
-            "gruppen_pausen": 0,
-            "total_time": 0,
-            "trave_spaziergaenge": 0,
-            "wakenitz_besuche": 0,
-            "mensa_pausen": 0
-        }
-    
-    # Reward system (Mensa stamps)
-    if "reward_stamps" not in st.session_state:
-        st.session_state.reward_stamps = 0
-    
-    if "reward_claimed" not in st.session_state:
-        st.session_state.reward_claimed = False
-    
-    # Countdown state
-    if "countdown_active" not in st.session_state:
-        st.session_state.countdown_active = False
-    
-    if "countdown_time" not in st.session_state:
-        st.session_state.countdown_time = 120  # 2 minutes in seconds
-
-# --- Helper Functions ---
-def get_group_card_class(category):
-    """Get CSS class for group card based on category"""
-    classes = {
-        "stats": "group-card-stats",
-        "psychology": "group-card-psychology", 
-        "bio": "group-card-bio",
-        "new": "group-card-new"
-    }
-    return classes.get(category, "group-card-stats")
-
-def show_success_message(message):
-    """Show success message with emoji"""
-    st.success(f"✅ {message}")
-
-def show_warning_message(message):
-    """Show warning message with emoji"""
-    st.warning(f"⚠️ {message}")
-
-def show_info_message(message):
-    """Show info message with emoji"""
-    st.info(f"ℹ️ {message}")
-
-def add_reward_stamp(activity_type="general"):
-    """Add a reward stamp and check for completion"""
-    if st.session_state.reward_stamps < 10:
-        st.session_state.reward_stamps += 1
-        
-        if st.session_state.reward_stamps >= 10 and not st.session_state.reward_claimed:
-            st.balloons()
-            show_success_message("🎉 Glückwunsch! Du hast 10 Stempel gesammelt! Zeige diese App in der Mensa vor und erhalte ein kostenloses Essen!")
-            st.session_state.reward_claimed = True
-        else:
-            remaining = 10 - st.session_state.reward_stamps
-            show_success_message(f"Stempel erhalten! Noch {remaining} bis zum kostenlosen Mensa-Essen! 🍽️")
-
-if __name__ == "__main__":
-    # Initialize session state
-    init_session_state()
-    
-    # Title and subtitle
-    st.markdown('<h1 class="main-title">WAITT</h1>', unsafe_allow_html=True)
-    st.markdown('<p class="subtitle">We\'re all in this together - Uni Lübeck</p>', unsafe_allow_html=True)
