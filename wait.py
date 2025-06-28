@@ -1,3 +1,18 @@
+# WAITT - Komplettfunktionierende Streamlit App
+
+import streamlit as st
+from datetime import datetime, time
+import random
+import uuid
+import time as pytime
+
+# --- Streamlit Page Config ---
+st.set_page_config(
+    page_title="WAITT - Uni Lübeck",
+    page_icon="🎓",
+    layout="wide",
+    initial_sidebar_state="collapsed"
+)
 # Main Navigation Tabs
     tabs = st.tabs([
         "🌿 Pausengestaltung",
