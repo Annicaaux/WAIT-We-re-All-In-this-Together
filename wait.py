@@ -2360,4 +2360,6 @@ def main():
         "📌 Community-Pinnwand"
     ])
     
-    # Tab
+ if __name__ == "__main__":
+    main()
+
