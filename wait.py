@@ -233,21 +233,24 @@ with tab1:
     
     st.markdown("---")
     
-    # 2-Minuten Countdown (vereinfachte Version)
-    st.subheader("⏱️ Die 2-Minuten-Nichtstun-Challenge")
-    
-    col1, col2 = st.columns([3, 1])
-    with col1:
-        st.write("Nimm dir 2 Minuten nur für dich. Kein Handy, keine Ablenkung, nur atmen.")
-    with col2:
-        if st.button("▶️ Start", key="timer_btn"):
-            st.session_state.pause_statistics["meditation_minuten"] += 2
-            st.session_state.pause_statistics["solo_pausen"] += 1
-            st.session_state.reward_stamps += 1
-            st.success("✅ Super! 2 Minuten Ruhe - das hast du dir verdient! +1 Stempel")
-            st.balloons()
-    
-    st.info("💡 Tipp: Stelle dir einen Timer auf deinem Handy und lege es dann weg. Schaue aus dem Fenster oder schließe die Augen.")
+    # 2-Minuten Countdown (einfache Version)
+st.subheader("⏱️ Die 2-Minuten-Nichtstun-Challenge")
+
+col1, col2, col3 = st.columns([2, 1, 1])
+with col1:
+    st.write("Nimm dir 2 Minuten nur für dich. Kein Handy, keine Ablenkung.")
+with col2:
+    # Externe Timer-Links
+    st.link_button("⏰ Online Timer", "https://www.online-stopwatch.com/timer/2minutes/")
+with col3:
+    if st.button("✅ Fertig", key="timer_done"):
+        st.session_state.pause_statistics["meditation_minuten"] += 2
+        st.session_state.pause_statistics["solo_pausen"] += 1
+        st.session_state.reward_stamps += 1
+        st.success("✅ Super! 2 Minuten Ruhe - das hast du dir verdient! +1 Stempel")
+        st.balloons()
+
+st.info("💡 Starte den Timer, lege dein Handy weg und konzentriere dich nur auf deine Atmung.")
     
     st.markdown("---")
     
@@ -378,7 +381,7 @@ with tab1:
             """, unsafe_allow_html=True)
             
             with st.expander("📝 Anleitung"):
-                st.write(activity['anleitung'])
+                st.write(activity.get('anleitung', 'Keine Anleitung verfügbar'))
             
             col1, col2 = st.columns(2)
             with col1:
@@ -401,6 +404,7 @@ with tab1:
             
             with col2:
                 if st.button("🔄 Andere Aktivität", key="other_activity"):
+                    st.session_state.current_solo_activity = None
                     st.session_state.current_solo_activity = None
                     st.rerun()
     
