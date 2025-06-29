@@ -234,31 +234,31 @@ with tab1:
     st.markdown("---")
     
     # 2-Minuten Countdown (einfache Version)
-st.subheader("⏱️ Die 2-Minuten-Nichtstun-Challenge")
+    st.subheader("⏱️ Die 2-Minuten-Nichtstun-Challenge")
 
-col1, col2, col3 = st.columns([2, 1, 1])
-with col1:
-    st.write("Nimm dir 2 Minuten nur für dich. Kein Handy, keine Ablenkung.")
-with col2:
-    # Externe Timer-Links
-    st.link_button("⏰ Online Timer", "https://www.online-stopwatch.com/timer/2minutes/")
-with col3:
-    if st.button("✅ Fertig", key="timer_done"):
-        st.session_state.pause_statistics["meditation_minuten"] += 2
-        st.session_state.pause_statistics["solo_pausen"] += 1
-        st.session_state.reward_stamps += 1
-        st.success("✅ Super! 2 Minuten Ruhe - das hast du dir verdient! +1 Stempel")
-        st.balloons()
+    col1, col2, col3 = st.columns([2, 1, 1])
+    with col1:
+        st.write("Nimm dir 2 Minuten nur für dich. Kein Handy, keine Ablenkung.")
+    with col2:
+        # Externe Timer-Links
+        st.link_button("⏰ Online Timer", "https://www.online-stopwatch.com/timer/2minutes/")
+    with col3:
+        if st.button("✅ Fertig", key="timer_done"):
+            st.session_state.pause_statistics["meditation_minuten"] += 2
+            st.session_state.pause_statistics["solo_pausen"] += 1
+            st.session_state.reward_stamps += 1
+            st.success("✅ Super! 2 Minuten Ruhe - das hast du dir verdient! +1 Stempel")
+            st.balloons()
 
-st.info("💡 Starte den Timer, lege dein Handy weg und konzentriere dich nur auf deine Atmung.")
+    st.info("💡 Starte den Timer, lege dein Handy weg und konzentriere dich nur auf deine Atmung.")
 
-  st.markdown("---")
+    st.markdown("---")
     
     # Aktivitäten
-    if "Solo-Pause" in pause_type:
-        st.subheader("🌊 Solo-Aktivitäten")
+        if "Solo-Pause" in pause_type:
+            st.subheader("🌊 Solo-Aktivitäten")
         
-        # Aktivitätskategorie wählen
+    # Aktivitätskategorie wählen
         activity_cat = st.selectbox(
             "Was brauchst du gerade?",
             ["🏠 Vor Ort (Zimmer/Bibliothek)", "🚶 Bewegung (Rausgehen)", "🌿 Natur (Lübeck erkunden)"]
