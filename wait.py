@@ -556,8 +556,65 @@ with tab2:
            
 
 with tab3:
-    st.header("➕ Gruppe erstellen")
-    st.write("Hier kannst du eine neue Lerngruppe gründen.")
+    st.header("➕ Neue Lerngruppe gründen")
+    
+    st.markdown("""
+    <div class="custom-card">
+        <p style="text-align: center; color: #6B7280;">
+            Keine passende Gruppe gefunden? Starte deine eigene und finde Gleichgesinnte!
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    with st.form("create_group"):
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            topic = st.text_input("📚 Thema", placeholder="z.B. Statistik II - Gemeinsam schaffen")
+            time_str = st.time_input("🕐 Treffzeit", value=time(14, 0))
+            icon = st.selectbox("🎯 Icon", ["📊", "🧠", "⚕️", "💻", "🔬", "📚", "🎨"])
+        
+        with col2:
+            room = st.selectbox("📍 Ort", [
+                "Bibliothek Gruppenraum 1",
+                "Bibliothek Gruppenraum 2",
+                "Mensa Terrasse",
+                "Wakenitz-Ufer",
+                "Online (Discord/Zoom)",
+                "Café Campus"
+            ])
+            max_members = st.slider("👥 Max. Teilnehmer", 2, 8, 4)
+        
+        question = st.text_area(
+            "❓ Einstiegsfrage",
+            placeholder="Eine Frage, die neue Mitglieder beantworten müssen...",
+            help="Z.B. 'Was ist deine größte Herausforderung beim Lernen?'"
+        )
+        
+        submitted = st.form_submit_button("🚀 Gruppe erstellen", type="primary")
+        
+        if submitted:
+            if topic and question:
+                new_group = {
+                    "id": str(len(st.session_state.groups) + 1),
+                    "topic": topic,
+                    "time": time_str.strftime("%H:%M"),
+                    "room": room,
+                    "max": max_members,
+                    "members": ["Du (Gründer:in)"],
+                    "question": question,
+                    "icon": icon
+                }
+                
+                st.session_state.groups.append(new_group)
+                st.session_state.joined_groups.append(new_group["id"])
+                st.session_state.reward_stamps += 2
+                
+                st.success("🎉 Gruppe erfolgreich erstellt! +2 Stempel")
+                st.balloons()
+                st.rerun()
+            else:
+                st.error("Bitte fülle alle Felder aus!")
 
 with tab4:
     st.header("👥 Meine Gruppen")
