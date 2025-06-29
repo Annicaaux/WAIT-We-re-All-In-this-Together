@@ -18,7 +18,7 @@ st.markdown("""
 <style>
     /* Basis-Styles */
     .stApp {
-        background: linear-gradient(135deg, #A0616A 0%, #6B2C3A 100%);
+        background: linear-gradient(135deg, #fdf5e6 0%, #ffebcd 100%);
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     }
     
