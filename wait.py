@@ -246,7 +246,7 @@ with tab1:
         st.write("Nimm dir 2 Minuten nur für dich. Kein Handy, keine Ablenkung. Nur du und eine Gedanken (spooky)")
     with col2:
         # Externe Timer-Links
-        st.link_button("⏰ Online Timer", "https://www.online-stopwatch.com/timer/2minutes/")
+        st.link_button("⏰ Online Timer", "https://donothingfor2minutes.org")
     with col3:
         if st.button("✅ Fertig", key="timer_done"):
             st.session_state.pause_statistics["meditation_minuten"] += 2
