@@ -217,6 +217,7 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs([
 with tab1:
     st.header("🌿 Gesunde Pausen für Körper & Geist")
     <p style="color: #8b3a3a;"</p>
+    
     st.markdown("""
     <div class="custom-card" style="background: #ffe4e1; border-left: 4px solid #8b3a3a;">
         <p style="margin: 0; color: #8b3a3a;">
