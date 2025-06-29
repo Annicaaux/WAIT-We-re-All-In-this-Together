@@ -218,8 +218,10 @@ with tab1:
     <div class="custom-card" style="background: #E0F2FE; border-left: 4px solid #0284C7;">
         <p style="margin: 0; color: #075985;">
             <strong>Du bist nicht allein!</strong> Viele Studierende kämpfen mit dem Gefühl, 
-            nie genug zu tun. Diese Pausen helfen dir, aus dem Hamsterrad auszusteigen 
-            und wieder Freude am Studium zu finden. 💙
+            nie genug zu tun. Doch oftmals sind Pausen gerade das, was am wichtigsten ist 
+            und dennoch stets zukurz kommt. Doch egal was du heute geschafft hast, du hast 
+            dir eine Pause verdient. Wer nur 10% hat und 10% gibt hat am Ende trotzdem 100%
+            gegeben💙
         </p>
     </div>
     """, unsafe_allow_html=True)
@@ -238,7 +240,7 @@ with tab1:
 
     col1, col2, col3 = st.columns([2, 1, 1])
     with col1:
-        st.write("Nimm dir 2 Minuten nur für dich. Kein Handy, keine Ablenkung.")
+        st.write("Nimm dir 2 Minuten nur für dich. Kein Handy, keine Ablenkung. Nur du und eine Gedanken (spooky)")
     with col2:
         # Externe Timer-Links
         st.link_button("⏰ Online Timer", "https://www.online-stopwatch.com/timer/2minutes/")
@@ -250,7 +252,7 @@ with tab1:
             st.success("✅ Super! 2 Minuten Ruhe - das hast du dir verdient! +1 Stempel")
             st.balloons()
 
-    st.info("💡 Starte den Timer, lege dein Handy weg und konzentriere dich nur auf deine Atmung.")
+    st.info("💡 Starte den Timer, lege dein Handy weg und konzentriere dich nur auf deine Atmung und Umgebung.")
 
     st.markdown("---")
     
@@ -296,7 +298,7 @@ with tab1:
                     "duration": "10 Min",
                     "location": "Ruhige Ecke",
                     "description": "Kurzer Powernap für neue Energie (Timer stellen!)",
-                    "anleitung": "1. Timer auf 10 Min stellen\n2. Augen schließen\n3. An nichts denken\n4. Wenn Gedanken kommen: 'Später'\n5. Nach Timer: Strecken!",
+                    "anleitung": "1. Timer auf 10 Min stellen\n2. Augen schließen\n3. An nichts denken\n4. Wenn Gedanken kommen: 'lass sie rein und wieder weiterziehen, wie die Wolken, werte sie nicht'\n5. Nach Timer: Strecken!",
                     "stamps": 1
                 }
             ],
