@@ -138,6 +138,9 @@ if "initialized" not in st.session_state:
     ]
     st.session_state.joined_groups = []
     st.session_state.pinnwand_entries = []
+    st.session_state.pinnwand_entries = []  # Ändere das zu einer Liste mit Dictionaries für mehr Info
+    st.session_state.pinnwand_archiv = {}  # NEU
+    st.session_state.current_week = datetime.now().strftime("%Y-KW%U")  # NEU
     st.session_state.current_question = "Was hilft dir, beim Lernen nicht die Lebensfreude zu verlieren?"
     st.session_state.pause_statistics = {
         "solo_pausen": 0,
@@ -623,4 +626,198 @@ with tab4:
 
 with tab5:
     st.header("📌 Community-Pinnwand")
-    st.write(f"**Frage der Woche:** {st.session_state.current_question}")
+    
+    # Pinnwand-Hintergrund
+    st.markdown("""
+    <style>
+    .pinnwand {
+        background: linear-gradient(135deg, #D2691E 0%, #A0522D 100%);
+        border: 15px solid #8B4513;
+        border-radius: 10px;
+        padding: 2rem;
+        box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+        min-height: 400px;
+        position: relative;
+    }
+    
+    .postit {
+        background: #FFEB3B;
+        padding: 1.5rem;
+        margin: 0.5rem;
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+        transform: rotate(-2deg);
+        position: relative;
+        font-family: 'Comic Sans MS', cursive;
+        transition: all 0.3s ease;
+    }
+    
+    .postit:hover {
+        transform: rotate(0deg) scale(1.05);
+        z-index: 10;
+    }
+    
+    .postit-pink { background: #FF69B4; transform: rotate(2deg); }
+    .postit-green { background: #90EE90; transform: rotate(-1deg); }
+    .postit-blue { background: #87CEEB; transform: rotate(1deg); }
+    .postit-orange { background: #FFB347; transform: rotate(-3deg); }
+    
+    .pin {
+        position: absolute;
+        top: -10px;
+        right: 20px;
+        font-size: 2rem;
+        filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
+    # Initialisiere Archiv wenn nicht vorhanden
+    if "pinnwand_archiv" not in st.session_state:
+        st.session_state.pinnwand_archiv = {}
+    
+    if "current_week" not in st.session_state:
+        st.session_state.current_week = datetime.now().strftime("%Y-KW%U")
+    
+    # Aktuelle Frage anzeigen
+    st.markdown(f"""
+    <div class="custom-card" style="background: linear-gradient(135deg, #FDF2F8, #FCE7F3); border: 3px solid #F9A8D4;">
+        <h2 style="text-align: center; color: #831843; margin: 0;">
+            🌟 Frage der Woche 🌟
+        </h2>
+        <h3 style="text-align: center; color: #BE185D; margin: 1rem 0;">
+            "{st.session_state.current_question}"
+        </h3>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Archiv-Navigation
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        if st.session_state.pinnwand_archiv:
+            selected_week = st.selectbox(
+                "📅 Woche anzeigen:",
+                options=[st.session_state.current_week] + list(st.session_state.pinnwand_archiv.keys()),
+                format_func=lambda x: "Aktuelle Woche" if x == st.session_state.current_week else x
+            )
+        else:
+            selected_week = st.session_state.current_week
+    
+    # Neue Antwort hinzufügen (nur für aktuelle Woche)
+    if selected_week == st.session_state.current_week:
+        with st.form("neue_antwort"):
+            antwort = st.text_area(
+                "✍️ Deine Antwort:",
+                placeholder="Teile deine Gedanken mit der Community...",
+                max_chars=200
+            )
+            
+            col1, col2 = st.columns([3, 1])
+            with col1:
+                submitted = st.form_submit_button("📌 An Pinnwand heften", type="primary")
+            with col2:
+                anonym = st.checkbox("Anonym")
+            
+            if submitted and antwort.strip():
+                entry = {
+                    "text": antwort.strip(),
+                    "author": "Anonym" if anonym else f"Student:in #{len(st.session_state.pinnwand_entries)+1}",
+                    "timestamp": datetime.now().strftime("%d.%m. %H:%M")
+                }
+                st.session_state.pinnwand_entries.append(entry)
+                st.session_state.reward_stamps += 1
+                st.success("📌 Angepinnt! +1 Stempel")
+                st.rerun()
+    
+    # Pinnwand anzeigen
+    st.markdown('<div class="pinnwand">', unsafe_allow_html=True)
+    
+    # Einträge als Post-its
+    if selected_week == st.session_state.current_week:
+        entries = st.session_state.pinnwand_entries
+    else:
+        entries = st.session_state.pinnwand_archiv.get(selected_week, {}).get("entries", [])
+    
+    if entries:
+        # Post-its in Reihen anordnen
+        cols = st.columns(3)
+        colors = ["postit", "postit-pink", "postit-green", "postit-blue", "postit-orange"]
+        
+        for idx, entry in enumerate(entries):
+            with cols[idx % 3]:
+                color = colors[idx % len(colors)]
+                
+                # Einfache Version für Streamlit
+                st.markdown(f"""
+                <div class="{color}" style="margin-bottom: 1rem;">
+                    <div class="pin">📌</div>
+                    <p style="margin: 0; color: #333; font-size: 0.9rem;">
+                        "{entry.get('text', entry)}"
+                    </p>
+                    <p style="text-align: right; margin-top: 1rem; font-size: 0.8rem; color: #666;">
+                        - {entry.get('author', 'Anonym')}<br>
+                        <small>{entry.get('timestamp', '')}</small>
+                    </p>
+                </div>
+                """, unsafe_allow_html=True)
+    else:
+        st.info("🤔 Noch keine Einträge. Sei der/die Erste!")
+    
+    st.markdown('</div>', unsafe_allow_html=True)
+    
+    # Admin-Bereich
+    st.markdown("---")
+    
+    with st.expander("🔧 Admin-Bereich"):
+        password = st.text_input("Passwort:", type="password")
+        
+        if password == "wearethepower":
+            st.success("✅ Admin-Zugang gewährt")
+            
+            new_question = st.text_input(
+                "Neue Frage der Woche:",
+                value=st.session_state.current_question
+            )
+            
+            if st.button("🔄 Frage ändern & Archivieren", type="primary"):
+                if new_question.strip() and new_question != st.session_state.current_question:
+                    # Aktuelle Einträge archivieren
+                    if st.session_state.pinnwand_entries:
+                        st.session_state.pinnwand_archiv[st.session_state.current_week] = {
+                            "question": st.session_state.current_question,
+                            "entries": st.session_state.pinnwand_entries.copy()
+                        }
+                    
+                    # Neue Woche beginnen
+                    st.session_state.current_question = new_question.strip()
+                    st.session_state.pinnwand_entries = []
+                    st.session_state.current_week = datetime.now().strftime("%Y-KW%U")
+                    
+                    st.success("✅ Neue Frage gesetzt! Alte Einträge wurden archiviert.")
+                    st.rerun()
+            
+            # Archiv-Verwaltung
+            if st.session_state.pinnwand_archiv:
+                st.write("**📚 Archivierte Wochen:**")
+                for week, data in st.session_state.pinnwand_archiv.items():
+                    st.write(f"- {week}: '{data['question']}' ({len(data['entries'])} Einträge)")
+        
+        elif password and password != "wearethepower":
+            st.error("❌ Falsches Passwort")
+    
+    # Motivations-Bereich
+    st.markdown("---")
+    st.subheader("💪 Motivation der Woche")
+    
+    motivations = [
+        "Jeder Schritt zählt - auch der kleinste!",
+        "Pausen machen dich produktiver, nicht fauler.",
+        "Du bist genug, so wie du bist.",
+        "Fehler sind Lernchancen in Verkleidung.",
+        "Gemeinsam schaffen wir das!"
+    ]
+    
+    st.markdown(f"""
+    <div class="custom-card" style="background: linear-gradient(135deg, #E0F2FE, #DBEAFE); text-align: center;">
+        <h3 style="color: #0369A1; margin: 0;">✨ {random.choice(motivations)} ✨</h3>
+    </div>
+    """, unsafe_allow_html=True)
