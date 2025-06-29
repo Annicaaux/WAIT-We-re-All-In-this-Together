@@ -620,9 +620,242 @@ with tab3:
                 st.error("Bitte fülle alle Felder aus!")
 
 with tab4:
-    st.header("👥 Meine Gruppen")
-    if not st.session_state.joined_groups:
-        st.info("Du bist noch in keiner Gruppe. Finde eine passende Gruppe oder gründe deine eigene!")
+    st.header("👥 Meine Lerngruppen")
+    
+    # Filtere nur die Gruppen, in denen der User Mitglied ist
+    my_groups = [g for g in st.session_state.groups if g['id'] in st.session_state.joined_groups]
+    
+    if not my_groups:
+        # Keine Gruppen - Motivierende Nachricht
+        st.markdown("""
+        <div class="custom-card" style="text-align: center; padding: 3rem;">
+            <h2 style="color: #6B7280;">Du bist noch in keiner Gruppe 😔</h2>
+            <p style="color: #9CA3AF; font-size: 1.1rem; margin: 1rem 0;">
+                Lerngruppen helfen nicht nur beim Studium - sie sind auch ein Schutz gegen Einsamkeit!
+            </p>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem;">
+                <span style="background: #E0E7FF; color: #4338CA; padding: 0.5rem 1.5rem; border-radius: 25px; font-weight: 600;">
+                    🤝 Gemeinsam stärker
+                </span>
+                <span style="background: #FEE2E2; color: #DC2626; padding: 0.5rem 1.5rem; border-radius: 25px; font-weight: 600;">
+                    ❤️ Weniger allein
+                </span>
+                <span style="background: #D1FAE5; color: #059669; padding: 0.5rem 1.5rem; border-radius: 25px; font-weight: 600;">
+                    🎯 Mehr Motivation
+                </span>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("🔍 Gruppe finden", type="primary", use_container_width=True):
+                st.info("Wechsle zum Tab 'Gruppen finden'!")
+        with col2:
+            if st.button("➕ Gruppe gründen", type="secondary", use_container_width=True):
+                st.info("Wechsle zum Tab 'Gruppe erstellen'!")
+    
+    else:
+        # Übersicht
+        st.markdown(f"""
+        <div class="custom-card" style="background: linear-gradient(135deg, #EDE9FE, #DDD6FE); margin-bottom: 1rem;">
+            <p style="margin: 0; color: #5B21B6; text-align: center; font-size: 1.1rem;">
+                <strong>Du bist in {len(my_groups)} Gruppe{'n' if len(my_groups) > 1 else ''}!</strong> 
+                Das sind etwa {sum(len(g['members']) for g in my_groups)} Studierende, die dich unterstützen. 💜
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Gruppen anzeigen
+        for idx, group in enumerate(my_groups):
+            st.markdown(f"""
+            <div class="custom-card" style="border-left: 5px solid #A0616A;">
+                <div style="display: flex; align-items: start; gap: 1rem;">
+                    <div style="font-size: 3rem;">{group['icon']}</div>
+                    <div style="flex: 1;">
+                        <h3 style="margin: 0; color: #1F2937;">{group['topic']}</h3>
+                        <div style="display: flex; gap: 1rem; margin: 0.5rem 0; flex-wrap: wrap;">
+                            <span style="color: #6B7280;">🕐 {group['time']}</span>
+                            <span style="color: #6B7280;">📍 {group['room']}</span>
+                            <span style="color: #6B7280;">👥 {len(group['members'])}/{group['max']}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            # Tabs für verschiedene Funktionen
+            tab_a, tab_b, tab_c, tab_d = st.tabs(["👥 Mitglieder", "🌿 Gruppenpause", "💬 Chat", "⚙️ Aktionen"])
+            
+            with tab_a:
+                # Mitglieder anzeigen
+                st.write("**Gruppenmitglieder:**")
+                member_cols = st.columns(4)
+                for i, member in enumerate(group['members']):
+                    with member_cols[i % 4]:
+                        if member == "Du" or member == "Du (Gründer:in)":
+                            st.markdown(f"""
+                            <div style="background: #10B981; color: white; padding: 0.5rem; 
+                                        border-radius: 20px; text-align: center; margin: 0.2rem;">
+                                {member} ⭐
+                            </div>
+                            """, unsafe_allow_html=True)
+                        else:
+                            st.markdown(f"""
+                            <div style="background: #E5E7EB; color: #374151; padding: 0.5rem; 
+                                        border-radius: 20px; text-align: center; margin: 0.2rem;">
+                                {member}
+                            </div>
+                            """, unsafe_allow_html=True)
+                
+                # Einladen
+                if len(group['members']) < group['max']:
+                    st.write("")
+                    invite_text = f"Hey! Wir haben noch {group['max'] - len(group['members'])} Plätze frei in unserer {group['topic']}-Gruppe. Komm dazu! 🎓"
+                    if st.button(f"📤 Einladungstext kopieren", key=f"invite_{idx}"):
+                        st.code(invite_text, language=None)
+                        st.info("Text markieren und kopieren!")
+            
+            with tab_b:
+                # Gruppenpause planen
+                st.write("**🌿 Gemeinsame Pause planen**")
+                
+                pause_activities = [
+                    {
+                        "name": "Wakenitz-Gruppenpicknick",
+                        "duration": "45 Min",
+                        "description": "Gemeinsam am Wasser entspannen",
+                        "location": "Wakenitz-Wiesen"
+                    },
+                    {
+                        "name": "Mensa-Kaffeepause",
+                        "duration": "20 Min", 
+                        "description": "Quatschen bei Kaffee & Snacks",
+                        "location": "Mensa Café"
+                    },
+                    {
+                        "name": "Altstadt-Spaziergang",
+                        "duration": "30 Min",
+                        "description": "Bewegung & frische Luft",
+                        "location": "Holstentor Treffpunkt"
+                    }
+                ]
+                
+                if st.button("🎲 Pausenvorschlag", key=f"pause_{idx}"):
+                    activity = random.choice(pause_activities)
+                    st.session_state[f"group_pause_{idx}"] = activity
+                
+                if f"group_pause_{idx}" in st.session_state:
+                    activity = st.session_state[f"group_pause_{idx}"]
+                    st.markdown(f"""
+                    <div style="background: #D1FAE5; padding: 1rem; border-radius: 10px;">
+                        <h4 style="color: #065F46; margin: 0;">{activity['name']}</h4>
+                        <p style="color: #047857; margin: 0.5rem 0;">{activity['description']}</p>
+                        <p style="color: #059669; margin: 0;">📍 {activity['location']} | ⏱️ {activity['duration']}</p>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        if st.button("✅ Pause gemacht!", key=f"pause_done_{idx}"):
+                            st.session_state.pause_statistics["gruppen_pausen"] += 1
+                            st.session_state.reward_stamps += 2
+                            st.success("Super! Gruppenpause = doppelte Stempel! +2 ⭐")
+                            del st.session_state[f"group_pause_{idx}"]
+                            st.balloons()
+                            st.rerun()
+                    with col2:
+                        if st.button("🔄 Andere Aktivität", key=f"pause_other_{idx}"):
+                            del st.session_state[f"group_pause_{idx}"]
+                            st.rerun()
+            
+            with tab_c:
+                # Gruppen-Chat (vereinfacht)
+                st.write("**💬 Gruppen-Nachrichten**")
+                
+                # Chat-Key für diese Gruppe
+                chat_key = f"chat_{group['id']}"
+                if chat_key not in st.session_state:
+                    st.session_state[chat_key] = []
+                
+                # Nachricht senden
+                with st.form(f"chat_form_{idx}"):
+                    message = st.text_input("Nachricht:", placeholder="Schreibe etwas Nettes...")
+                    if st.form_submit_button("📤 Senden"):
+                        if message.strip():
+                            st.session_state[chat_key].append({
+                                "author": "Du",
+                                "message": message.strip(),
+                                "time": datetime.now().strftime("%H:%M")
+                            })
+                            st.rerun()
+                
+                # Nachrichten anzeigen
+                if st.session_state[chat_key]:
+                    for msg in st.session_state[chat_key][-5:]:  # Nur letzte 5
+                        if msg["author"] == "Du":
+                            st.markdown(f"""
+                            <div style="background: #DBEAFE; padding: 0.5rem 1rem; border-radius: 15px; 
+                                        margin: 0.5rem 0; margin-left: 20%;">
+                                <strong>{msg["author"]}</strong> <small>{msg["time"]}</small><br>
+                                {msg["message"]}
+                            </div>
+                            """, unsafe_allow_html=True)
+                        else:
+                            st.markdown(f"""
+                            <div style="background: #F3F4F6; padding: 0.5rem 1rem; border-radius: 15px; 
+                                        margin: 0.5rem 0; margin-right: 20%;">
+                                <strong>{msg["author"]}</strong> <small>{msg["time"]}</small><br>
+                                {msg["message"]}
+                            </div>
+                            """, unsafe_allow_html=True)
+                else:
+                    st.info("Noch keine Nachrichten. Sei der/die Erste!")
+            
+            with tab_d:
+                # Aktionen
+                st.write("**⚙️ Gruppenaktionen**")
+                
+                # Nächstes Treffen
+                next_meeting = st.date_input(
+                    "📅 Nächstes Treffen:",
+                    key=f"meeting_{idx}",
+                    min_value=datetime.now().date()
+                )
+                
+                # Gruppe verlassen
+                st.write("")
+                st.warning("⚠️ Gruppe verlassen?")
+                if st.button("🚪 Gruppe verlassen", key=f"leave_{idx}"):
+                    st.session_state[f"confirm_leave_{idx}"] = True
+                
+                if st.session_state.get(f"confirm_leave_{idx}", False):
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        if st.button("✅ Ja, verlassen", key=f"confirm_{idx}"):
+                            # Aus Gruppe entfernen
+                            group['members'] = [m for m in group['members'] if m not in ["Du", "Du (Gründer:in)"]]
+                            st.session_state.joined_groups.remove(group['id'])
+                            st.info("Du hast die Gruppe verlassen.")
+                            st.rerun()
+                    with col2:
+                        if st.button("❌ Abbrechen", key=f"cancel_{idx}"):
+                            st.session_state[f"confirm_leave_{idx}"] = False
+                            st.rerun()
+            
+            st.markdown("---")
+        
+        # Zusammenfassung
+        st.markdown("### 📊 Deine Lerngruppen-Statistik")
+        
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric("Aktive Gruppen", len(my_groups))
+        with col2:
+            total_members = sum(len(g['members']) for g in my_groups)
+            st.metric("Lernpartner:innen", total_members)
+        with col3:
+            st.metric("Gruppenpausen", st.session_state.pause_statistics["gruppen_pausen"])
 
 with tab5:
     st.header("📌 Community-Pinnwand")
