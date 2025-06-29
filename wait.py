@@ -215,8 +215,10 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs([
 ])
 
 with tab1:
-    st.header ("Gesunde Pausen für Körper & Geist")
-    <h1 style="color: #8b3a3a; ">Gesunde Pausen für Körper & Geist"</h1>
+    st.markdown(
+        '<h1 style="color: #8b3a3a;">Gesunde Pausen für Körper & Geist</h1>',
+        unsafe_allow_html=True
+    )
    
     
     st.markdown("""
