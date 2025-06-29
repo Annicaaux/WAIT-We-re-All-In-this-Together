@@ -219,12 +219,12 @@ with tab1:
     
     st.markdown("""
     <div class="custom-card" style="background: #ffe4e1; border-left: 4px solid #0284C7;">
-        <p style="margin: 0; color: #075985;">
+        <p style="margin: 0; color: #8b3a3a;">
             <strong>Du bist nicht allein!</strong> Viele Studierende kämpfen mit dem Gefühl, 
             nie genug zu tun. Doch oftmals sind Pausen gerade das, was am wichtigsten ist 
             und dennoch stets zukurz kommt. Doch egal was du heute geschafft hast, du hast 
             dir eine Pause verdient. Wer nur 10% hat und 10% gibt hat am Ende trotzdem 100%
-            gegeben💙
+            gegeben❤️
         </p>
     </div>
     """, unsafe_allow_html=True)
