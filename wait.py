@@ -109,8 +109,6 @@ st.markdown("""
     }
 </style>
 """, unsafe_allow_html=True)
-</style>
-""", unsafe_allow_html=True)
 
 # --- Session State Initialisierung ---
 if "initialized" not in st.session_state:
