@@ -218,7 +218,7 @@ with tab1:
     st.header("🌿 Gesunde Pausen für Körper & Geist")
     
     st.markdown("""
-    <div class="custom-card" style="background: #E0F2FE; border-left: 4px solid #0284C7;">
+    <div class="custom-card" style="background: #ffe4e1; border-left: 4px solid #0284C7;">
         <p style="margin: 0; color: #075985;">
             <strong>Du bist nicht allein!</strong> Viele Studierende kämpfen mit dem Gefühl, 
             nie genug zu tun. Doch oftmals sind Pausen gerade das, was am wichtigsten ist 
