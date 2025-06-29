@@ -92,7 +92,7 @@ st.markdown("""
     /* Buttons mobil-optimiert */
     .stButton > button {
         width: 100%;
-        background: linear-gradient(135deg, #A0616A, #6B2C3A);
+        background: linear-gradient(135deg, #ffe4e1, #eed5d2);
         color: #8b3a3a;
         border: none;
         padding: 0.75rem;
