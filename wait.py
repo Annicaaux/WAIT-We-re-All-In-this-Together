@@ -114,6 +114,28 @@ st.markdown("""
 if "initialized" not in st.session_state:
     st.session_state.initialized = True
     st.session_state.groups = []
+    st.session_state.groups = [
+        {
+            "id": "1",
+            "topic": "Statistik Klausur - Gemeinsam schaffen",
+            "time": "14:00",
+            "room": "Bibliothek Gruppenraum 1",
+            "max": 4,
+            "members": ["Anna", "Ben"],
+            "question": "Was ist deine größte Herausforderung beim Lernen?",
+            "icon": "📊"
+        },
+        {
+            "id": "2",
+            "topic": "Anatomie Lerngruppe",
+            "time": "16:00",
+            "room": "Mensa Terrasse",
+            "max": 6,
+            "members": ["Lisa", "Tom", "Sarah"],
+            "question": "Welche Lernmethode funktioniert bei dir am besten?",
+            "icon": "🏥"
+        }
+    ]
     st.session_state.joined_groups = []
     st.session_state.pinnwand_entries = []
     st.session_state.current_question = "Was hilft dir, beim Lernen nicht die Lebensfreude zu verlieren?"
