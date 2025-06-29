@@ -49,7 +49,7 @@ st.markdown("""
         padding: 1rem;
         text-align: center;
         backdrop-filter: blur(10px);
-        color: white;
+        color: #8b3a3a;
     }
     
     .metric-value {
@@ -93,7 +93,7 @@ st.markdown("""
     .stButton > button {
         width: 100%;
         background: linear-gradient(135deg, #A0616A, #6B2C3A);
-        color: white;
+        color: #8b3a3a;
         border: none;
         padding: 0.75rem;
         border-radius: 25px;
