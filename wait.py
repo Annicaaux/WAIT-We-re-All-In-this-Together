@@ -553,7 +553,7 @@ with tab2:
                 st.warning("⚠️ Diese Gruppe ist voll")
             
             st.markdown("---")
-            """, unsafe_allow_html=True)
+           
 
 with tab3:
     st.header("➕ Gruppe erstellen")
