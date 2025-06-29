@@ -138,6 +138,45 @@ if "initialized" not in st.session_state:
 st.title("WAITT - We're All In This Together")
 st.write("Uni Lübeck")
 
+# --- Header mit Metriken ---
+col1, col2, col3, col4 = st.columns(4)
+
+with col1:
+    st.markdown(f"""
+    <div class="metric-card">
+        <p class="metric-value">{len(st.session_state.groups)}</p>
+        <p class="metric-label">Aktive Gruppen</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col2:
+    total_members = sum(len(group.get("members", [])) for group in st.session_state.groups)
+    st.markdown(f"""
+    <div class="metric-card">
+        <p class="metric-value">{total_members}</p>
+        <p class="metric-label">Studierende</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col3:
+    total_pauses = st.session_state.pause_statistics["solo_pausen"] + st.session_state.pause_statistics["gruppen_pausen"]
+    st.markdown(f"""
+    <div class="metric-card">
+        <p class="metric-value">{total_pauses}</p>
+        <p class="metric-label">Pausen</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col4:
+    stamps = st.session_state.reward_stamps
+    st.markdown(f"""
+    <div class="metric-card">
+        <p class="metric-value">{stamps}⭐</p>
+        <p class="metric-label">Stempel</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+st.markdown("---")
 # Tabs
 tab1, tab2, tab3, tab4, tab5 = st.tabs([
     "🌿 Pausengestaltung",
