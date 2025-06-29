@@ -255,10 +255,10 @@ with tab1:
     st.markdown("---")
     
     # Aktivitäten
-        if "Solo-Pause" in pause_type:
-            st.subheader("🌊 Solo-Aktivitäten")
+    if "Solo-Pause" in pause_type:
+        st.subheader("🌊 Solo-Aktivitäten")
         
-    # Aktivitätskategorie wählen
+        # Aktivitätskategorie wählen
         activity_cat = st.selectbox(
             "Was brauchst du gerade?",
             ["🏠 Vor Ort (Zimmer/Bibliothek)", "🚶 Bewegung (Rausgehen)", "🌿 Natur (Lübeck erkunden)"]
