@@ -372,7 +372,7 @@ with tab1:
         }
         
         # Zufällige Aktivität aus gewählter Kategorie
-        if st.button("🎲 Zufällige Aktivität", key="random_activity"):
+        if st.button("Zufällige Aktivität", key="random_activity"):
             available_activities = activities.get(activity_cat, [])
             if available_activities:
                 st.session_state.current_solo_activity = random.choice(available_activities)
