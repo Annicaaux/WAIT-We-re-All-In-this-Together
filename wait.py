@@ -252,7 +252,6 @@ with col3:
 
 st.info("💡 Starte den Timer, lege dein Handy weg und konzentriere dich nur auf deine Atmung.")
     
-    st.markdown("---")
     
     # Aktivitäten
     if "Solo-Pause" in pause_type:
