@@ -13,26 +13,102 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# --- Custom CSS (vereinfacht für bessere Mobile-Darstellung) ---
+# --- Custom CSS ---
 st.markdown("""
 <style>
     /* Basis-Styles */
     .stApp {
         background: linear-gradient(135deg, #A0616A 0%, #6B2C3A 100%);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     }
     
-    /* Hauptcontainer mit max-width für Desktop */
+    /* Hide Streamlit Branding */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    
+    /* Container-Anpassungen */
     .main .block-container {
         max-width: 1200px;
         padding: 1rem;
+        margin: 0 auto;
     }
     
-    /* Mobile-first approach */
+    /* Karten-Design */
+    .custom-card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Metric Cards */
+    .metric-card {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 1rem;
+        text-align: center;
+        backdrop-filter: blur(10px);
+        color: white;
+    }
+    
+    .metric-value {
+        font-size: 2rem;
+        font-weight: bold;
+        margin: 0;
+    }
+    
+    .metric-label {
+        font-size: 0.8rem;
+        opacity: 0.9;
+        margin-top: 0.5rem;
+    }
+    
+    /* Mobile Anpassungen */
     @media (max-width: 768px) {
         .main .block-container {
             padding: 0.5rem;
         }
+        
+        .custom-card {
+            padding: 1rem;
+        }
+        
+        .metric-value {
+            font-size: 1.5rem;
+        }
+        
+        /* Tabs mobil-freundlicher */
+        .stTabs [data-baseweb="tab-list"] {
+            gap: 0.25rem;
+        }
+        
+        .stTabs [data-baseweb="tab"] {
+            padding: 0.5rem;
+            font-size: 0.8rem;
+        }
     }
+    
+    /* Buttons mobil-optimiert */
+    .stButton > button {
+        width: 100%;
+        background: linear-gradient(135deg, #A0616A, #6B2C3A);
+        color: white;
+        border: none;
+        padding: 0.75rem;
+        border-radius: 25px;
+        font-weight: 600;
+        min-height: 44px; /* Touch-friendly */
+    }
+    
+    /* Success/Warning/Info Messages */
+    .stSuccess, .stWarning, .stInfo {
+        border-radius: 10px;
+        padding: 1rem;
+        margin: 0.5rem 0;
+    }
+</style>
+""", unsafe_allow_html=True)
 </style>
 """, unsafe_allow_html=True)
 
