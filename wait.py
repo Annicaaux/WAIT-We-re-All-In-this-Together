@@ -161,8 +161,8 @@ if "initialized" not in st.session_state:
 
 # --- Haupttitel ---
 st.markdown("""
-<h1 style="text-align: center; color: #8b3a3a; font-size: 3rem; margin-bottom: 0;">WAITT</h1>
-<p style="text-align: center; color: #8b3a3a; font-size: 1.2rem; margin-bottom: 2rem;">We're All In This Together - Uni Lübeck</p>
+<h1 style="text-align: center; color: #faf0e6; font-size: 3rem; margin-bottom: 0;">WAITT</h1>
+<p style="text-align: center; color: #faf0e6; font-size: 1.2rem; margin-bottom: 2rem;">We're All In This Together - Uni Lübeck</p>
 """, unsafe_allow_html=True)
 
 # --- Header mit Metriken ---
