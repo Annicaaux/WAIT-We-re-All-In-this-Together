@@ -460,18 +460,99 @@ with tab1:
                 st.rerun()
 
 with tab2:
-    st.header("🔍 Gruppen finden")
+    st.header("🔍 Lerngruppen finden & vernetzen")
     
-    # Zeige die Beispielgruppen
-    for group in st.session_state.groups:
-        with st.container():
+    st.markdown("""
+    <div class="custom-card" style="background: #FEE2E2; border-left: 4px solid #DC2626;">
+        <p style="margin: 0; color: #991B1B;">
+            <strong>Du fühlst dich allein mit dem Lernstress?</strong> 
+            Hier findest du Menschen, die das gleiche durchmachen. 
+            Gemeinsam ist man weniger einsam und erfolgreicher! ❤️
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Filter
+    col1, col2 = st.columns([2, 1])
+    with col1:
+        search = st.text_input("🔍 Suche nach Thema", placeholder="z.B. Statistik, Anatomie...")
+    with col2:
+        only_free = st.checkbox("Nur freie Plätze", value=True)
+    
+    # Gruppen filtern
+    filtered_groups = st.session_state.groups
+    if search:
+        filtered_groups = [g for g in filtered_groups if search.lower() in g['topic'].lower()]
+    if only_free:
+        filtered_groups = [g for g in filtered_groups if len(g['members']) < g['max']]
+    
+    # Gruppen anzeigen
+    if not filtered_groups:
+        st.info("Keine passenden Gruppen gefunden. Erstelle deine eigene!")
+    else:
+        for idx, group in enumerate(filtered_groups):
+            free_spaces = group['max'] - len(group['members'])
+            is_member = group['id'] in st.session_state.joined_groups
+            
+            # Gruppe anzeigen
             st.markdown(f"""
-            <div class="custom-card">
+            <div class="custom-card" style="border-top: 4px solid #A0616A;">
                 <h3>{group['icon']} {group['topic']}</h3>
-                <p>🕐 {group['time']} | 📍 {group['room']}</p>
-                <p>👥 {len(group['members'])}/{group['max']} Mitglieder</p>
-                <p><strong>Einstiegsfrage:</strong> {group['question']}</p>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin: 1rem 0;">
+                    <span style="background: #F3F4F6; padding: 0.5rem 1rem; border-radius: 20px;">
+                        🕐 {group['time']}
+                    </span>
+                    <span style="background: #F3F4F6; padding: 0.5rem 1rem; border-radius: 20px;">
+                        📍 {group['room']}
+                    </span>
+                    <span style="background: #F3F4F6; padding: 0.5rem 1rem; border-radius: 20px;">
+                        👥 {len(group['members'])}/{group['max']}
+                    </span>
+                </div>
+                <div style="background: #FDF2F8; padding: 1rem; border-radius: 10px; margin: 1rem 0;">
+                    <strong style="color: #831843;">Einstiegsfrage:</strong><br>
+                    <em>"{group['question']}"</em>
+                </div>
             </div>
+            """, unsafe_allow_html=True)
+            
+            # Mitglieder anzeigen
+            if group['members']:
+                st.write("**Mitglieder:**", ", ".join(group['members']))
+            
+            # Beitritts-Interface
+            if not is_member and free_spaces > 0:
+                with st.form(f"join_form_{idx}"):
+                    answer = st.text_area(
+                        "Beantworte die Einstiegsfrage:",
+                        placeholder="Deine ehrliche Antwort hilft der Gruppe, dich kennenzulernen...",
+                        key=f"answer_{idx}"
+                    )
+                    
+                    col1, col2 = st.columns([2, 1])
+                    with col1:
+                        submitted = st.form_submit_button("🚀 Gruppe beitreten", type="primary")
+                    with col2:
+                        st.write(f"**{free_spaces}** freie Plätze")
+                    
+                    if submitted:
+                        if answer.strip():
+                            # Zur Gruppe hinzufügen
+                            group['members'].append("Du")
+                            st.session_state.joined_groups.append(group['id'])
+                            st.session_state.reward_stamps += 1
+                            st.success("🎉 Willkommen in der Gruppe! +1 Stempel")
+                            st.balloons()
+                            st.rerun()
+                        else:
+                            st.error("Bitte beantworte die Einstiegsfrage!")
+            
+            elif is_member:
+                st.success("✅ Du bist Mitglied dieser Gruppe")
+            else:
+                st.warning("⚠️ Diese Gruppe ist voll")
+            
+            st.markdown("---")
             """, unsafe_allow_html=True)
 
 with tab3:
