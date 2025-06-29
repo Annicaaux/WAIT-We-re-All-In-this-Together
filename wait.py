@@ -156,9 +156,11 @@ if "initialized" not in st.session_state:
     st.session_state.current_solo_activity = None
     st.session_state.current_group_activity = None
 
-# Test ob alles läuft
-st.title("WAITT - We're All In This Together")
-st.write("Uni Lübeck")
+# --- Haupttitel ---
+st.markdown("""
+<h1 style="text-align: center; color: white; font-size: 3rem; margin-bottom: 0;">WAITT</h1>
+<p style="text-align: center; color: white; font-size: 1.2rem; margin-bottom: 2rem;">We're All In This Together - Uni Lübeck</p>
+""", unsafe_allow_html=True)
 
 # --- Header mit Metriken ---
 col1, col2, col3, col4 = st.columns(4)
@@ -199,6 +201,7 @@ with col4:
     """, unsafe_allow_html=True)
 
 st.markdown("---")
+
 # Tabs
 tab1, tab2, tab3, tab4, tab5 = st.tabs([
     "🌿 Pausengestaltung",
@@ -209,21 +212,39 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs([
 ])
 
 with tab1:
-    st.header("Pausengestaltung")
-    st.write("Hier kommen die Pausen-Features")
+    st.header("🌿 Pausengestaltung")
+    st.info("Hier kannst du gesunde Pausen planen und durchführen.")
+    
+    # Test-Button für Stempel
+    if st.button("Test: Stempel hinzufügen"):
+        st.session_state.reward_stamps += 1
+        st.success("Stempel hinzugefügt!")
+        st.rerun()
 
 with tab2:
-    st.header("Gruppen finden")
-    st.write("Hier kommen die Gruppen")
+    st.header("🔍 Gruppen finden")
+    
+    # Zeige die Beispielgruppen
+    for group in st.session_state.groups:
+        with st.container():
+            st.markdown(f"""
+            <div class="custom-card">
+                <h3>{group['icon']} {group['topic']}</h3>
+                <p>🕐 {group['time']} | 📍 {group['room']}</p>
+                <p>👥 {len(group['members'])}/{group['max']} Mitglieder</p>
+                <p><strong>Einstiegsfrage:</strong> {group['question']}</p>
+            </div>
+            """, unsafe_allow_html=True)
 
 with tab3:
-    st.header("Gruppe erstellen")
-    st.write("Hier kann man Gruppen erstellen")
+    st.header("➕ Gruppe erstellen")
+    st.write("Hier kannst du eine neue Lerngruppe gründen.")
 
 with tab4:
-    st.header("Meine Gruppen")
-    st.write("Hier sieht man seine Gruppen")
+    st.header("👥 Meine Gruppen")
+    if not st.session_state.joined_groups:
+        st.info("Du bist noch in keiner Gruppe. Finde eine passende Gruppe oder gründe deine eigene!")
 
 with tab5:
-    st.header("Community-Pinnwand")
-    st.write("Hier ist die Pinnwand")
+    st.header("📌 Community-Pinnwand")
+    st.write(f"**Frage der Woche:** {st.session_state.current_question}")
