@@ -467,10 +467,13 @@ with tab1:
                 st.rerun()
 
 with tab2:
-    st.header("🔍 Lerngruppen finden & vernetzen")
+    st.markdown(
+        '<h1 style="color: #8b3a3a;">Lerngruppen finden & vernetzen</h1>',
+        unsafe_allow_html=True
+    )
     
     st.markdown("""
-    <div class="custom-card" style="background: #FEE2E2; border-left: 4px solid #DC2626;">
+    <div class="custom-card" style="background: #FEE2E2; border-left: 4px solid #cd9b9b;">
         <p style="margin: 0; color: #991B1B;">
             <strong>Du fühlst dich allein mit dem Lernstress?</strong> 
             Hier findest du Menschen, die das gleiche durchmachen. 
