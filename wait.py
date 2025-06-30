@@ -501,27 +501,27 @@ with tab2:
             free_spaces = group['max'] - len(group['members'])
             is_member = group['id'] in st.session_state.joined_groups
             
-     # Gruppe anzeigen
-        st.markdown(f"""
-        <div class="custom-card" style="border-top: 4px solid #A0616A;">
-            <h3>{group['icon']} {group['topic']}</h3>
-            <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin: 1rem 0;">
-                 <span style="background: #F3F4F6; padding: 0.5rem 1rem; border-radius: 20px;">
-                    🕐 {group['time']}
-                </span>
-                <span style="background: #F3F4F6; padding: 0.5rem 1rem; border-radius: 20px;">
-                    📍 {group['room']}
-                </span>
-                <span style="background: #F3F4F6; padding: 0.5rem 1rem; border-radius: 20px;">
-                    👥 {len(group['members'])}/{group['max']}
-                </span>
-            </div>
+            # Gruppe anzeigen
+            st.markdown(f"""
+            <div class="custom-card" style="border-top: 4px solid #A0616A;">
+                <h3>{group['icon']} {group['topic']}</h3>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin: 1rem 0;">
+                     <span style="background: #F3F4F6; padding: 0.5rem 1rem; border-radius: 20px;">
+                        🕐 {group['time']}
+                    </span>
+                    <span style="background: #F3F4F6; padding: 0.5rem 1rem; border-radius: 20px;">
+                        📍 {group['room']}
+                    </span>
+                    <span style="background: #F3F4F6; padding: 0.5rem 1rem; border-radius: 20px;">
+                        👥 {len(group['members'])}/{group['max']}
+                    </span>
+                </div>
                 <div style="background: #FDF2F8; padding: 1rem; border-radius: 10px; margin: 1rem 0;">
-                <strong style="color: #831843;">Einstiegsfrage:</strong><br>
-                <em>"{group['question']}"</em>
+                    <strong style="color: #831843;">Einstiegsfrage:</strong><br>
+                    <em>"{group['question']}"</em>
                 </div>
             </div>    
-        """, unsafe_allow_html=True)
+            """, unsafe_allow_html=True)
             
      # Mitglieder anzeigen
         if group['members']:
