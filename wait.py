@@ -523,8 +523,8 @@ with tab2:
             </div>    
             """, unsafe_allow_html=True)
             
-     # Mitglieder anzeigen
-        if group['members']:
+            # Mitglieder anzeigen
+            if group['members']:
                 st.write("**Mitglieder:**", ", ".join(group['members']))
             
             # Beitritts-Interface
