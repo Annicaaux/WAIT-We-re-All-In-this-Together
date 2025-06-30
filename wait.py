@@ -134,7 +134,6 @@ if "initialized" not in st.session_state:
             "members": ["Lisa", "Tom", "Sarah"],
             "question": "Welche Lernmethode funktioniert bei dir am besten?",
             "icon": "🏥"
-            "style": color: "#bc8f8f"
         }
     ]
     st.session_state.joined_groups = []
