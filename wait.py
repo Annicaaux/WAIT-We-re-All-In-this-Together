@@ -860,6 +860,28 @@ with tab4:
             st.metric("Lernpartner:innen", total_members)
         with col3:
             st.metric("Gruppenpausen", st.session_state.pause_statistics["gruppen_pausen"])
+        
+        # Motivations-Tipps
+        st.markdown("---")
+        st.markdown("### 💡 Tipps für erfolgreiche Lerngruppen")
+        
+        tips = [
+            "🕐 **Regelmäßige Treffen**: Feste Termine schaffen Verbindlichkeit",
+            "🎯 **Klare Ziele**: Definiert, was ihr in jeder Session erreichen wollt",
+            "⏰ **Pausen einplanen**: 50 Min lernen, 10 Min Pause - gemeinsam!",
+            "🤝 **Alle einbeziehen**: Jeder hat Stärken - nutzt sie!",
+            "🌿 **Gemeinsame Pausen**: Stärken den Zusammenhalt",
+            "📱 **Erreichbar bleiben**: Tauscht Kontaktdaten aus"
+        ]
+        
+        tip_cols = st.columns(2)
+        for i, tip in enumerate(tips):
+            with tip_cols[i % 2]:
+                st.markdown(f"""
+                <div style="background: #F3F4F6; padding: 1rem; border-radius: 10px; margin: 0.5rem 0;">
+                    {tip}
+                </div>
+                """, unsafe_allow_html=True)
 
 with tab5:
     st.header("📌 Community-Pinnwand")
