@@ -516,15 +516,15 @@ with tab2:
                     👥 {len(group['members'])}/{group['max']}
                 </span>
             </div>
-            <div style="background: #FDF2F8; padding: 1rem; border-radius: 10px; margin: 1rem 0;">
+                <div style="background: #FDF2F8; padding: 1rem; border-radius: 10px; margin: 1rem 0;">
                 <strong style="color: #831843;">Einstiegsfrage:</strong><br>
                 <em>"{group['question']}"</em>
-            </div>
-        </div>
+                </div>
+            </div>    
         """, unsafe_allow_html=True)
             
-        # Mitglieder anzeigen
-            if group['members']:
+     # Mitglieder anzeigen
+        if group['members']:
                 st.write("**Mitglieder:**", ", ".join(group['members']))
             
             # Beitritts-Interface
