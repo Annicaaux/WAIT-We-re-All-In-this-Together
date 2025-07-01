@@ -38,6 +38,7 @@ st.markdown("""
         background: rgba(255, 255, 255, 0.95);
         border-radius: 15px;
         padding: 1.5rem;
+        color: black !important;
         margin-bottom: 1rem;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     }
@@ -94,6 +95,7 @@ st.markdown("""
         width: 100%;
         background: linear-gradient(135deg, #ffe4e1, #eed5d2);
         color: #8b3a3a;
+        color: black !important;
         border: none;
         padding: 0.75rem;
         border-radius: 25px;
@@ -106,6 +108,20 @@ st.markdown("""
         border-radius: 10px;
         padding: 1rem;
         margin: 0.5rem 0;
+    }
+
+    .anleitung-box {
+        background: #F5E6D3 !important;
+        color: black !important;
+        padding: 1rem;
+        border-radius: 10px;
+        border: 1px solid #D4B5A0;
+    }
+
+    .anleitung-button {
+        background: #F5E6D3 !important;
+        color: black !important;
+        border: 2px solid #D4B5A0 !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -390,8 +406,9 @@ with tab1:
             """, unsafe_allow_html=True)
             
             with st.expander("📝 Anleitung"):
-                st.write(activity.get('anleitung', 'Keine Anleitung verfügbar'))
-            
+                st.markdown(f'<div class="anleitung-box">{activity.get("anleitung", "Keine Anleitung verfügbar")}</div>', unsafe_allow_html=True)
+                st.markdown('<style>div.row-widget.stButton:nth-of-type(1) > button {background: #F5E6D3 !important; color: black !important;}</style>', unsafe_allow_html=True)
+           
             col1, col2 = st.columns(2)
             with col1:
                 if st.button("✅ Pause gemacht!", key="done_activity", type="primary"):
