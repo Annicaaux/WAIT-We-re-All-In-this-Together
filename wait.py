@@ -213,11 +213,64 @@ if "initialized" not in st.session_state:
         "bewegung_minuten": 0
     }
     st.session_state.reward_stamps = 0
+    st.session_state.user_level = "Neuling"
+    st.session_state.user_avatar = "🌱"
     st.session_state.reward_claimed = False
     st.session_state.countdown_active = False
     st.session_state.countdown_time = 120
     st.session_state.current_solo_activity = None
     st.session_state.current_group_activity = None
+
+def calculate_user_level():
+    """Berechnet das lustige User-Level basierend auf Aktivitäten"""
+    stats = st.session_state.pause_statistics
+    stamps = st.session_state.reward_stamps
+    
+    # Level basierend auf verschiedenen Aktivitäten
+    levels = []
+    
+    # Pausen-basierte Level
+    if stats["solo_pausen"] >= 10:
+        levels.append(("Pausen-Profi", "🛋️", "Du gönnst dir regelmäßig Auszeiten!"))
+    elif stats["solo_pausen"] >= 5:
+        levels.append(("Entspannungs-Entdecker", "😌", "Du lernst, dir Pausen zu gönnen!"))
+    
+    # Meditation/Nichtstun Level
+    if stats["meditation_minuten"] >= 20:
+        levels.append(("Achtsamkeits-Guru", "🧘", "Du bist ein Meister der Stille!"))
+    elif stats["meditation_minuten"] >= 10:
+        levels.append(("Zen-Schüler", "🕉️", "Du findest deine innere Ruhe!"))
+    
+    # Natur-Level
+    if stats["wakenitz_besuche"] >= 5:
+        levels.append(("Wakenitz-Wanderer", "🦆", "Die Natur ist dein zweites Zuhause!"))
+    if stats["trave_spaziergaenge"] >= 3:
+        levels.append(("Trave-Tourist", "⛵", "Du kennst jeden Winkel am Wasser!"))
+    
+    # Gruppen-Level
+    if stats["gruppen_pausen"] >= 5:
+        levels.append(("Social Butterfly", "🦋", "Gemeinsam macht alles mehr Spaß!"))
+    elif len(st.session_state.joined_groups) >= 2:
+        levels.append(("Gruppen-Liebhaber", "👥", "Du weißt: Zusammen ist man weniger allein!"))
+    
+    # Stempel-Level
+    if stamps >= 10:
+        levels.append(("Stempel-König", "👑", "Du hast das System gemeistert!"))
+    elif stamps >= 5:
+        levels.append(("Stempel-Sammler", "⭐", "Auf dem besten Weg zur Belohnung!"))
+    
+    # Bewegungs-Level
+    if stats["bewegung_minuten"] >= 60:
+        levels.append(("Bewegungs-Champion", "🏃", "Sitzen war gestern!"))
+    elif stats["bewegung_minuten"] >= 30:
+        levels.append(("Aktiv-Student", "🚶", "Du bringst Schwung ins Studium!"))
+    
+    # Standard-Level wenn nichts zutrifft
+    if not levels:
+        return "Neuling", "🌱", "Starte deine WAITT-Reise!"
+    
+    # Wähle das höchste erreichte Level
+    return levels[-1]
 
 # --- Helper Funktion für kleine Metriken ---
 def show_mini_metrics():
@@ -260,12 +313,46 @@ def show_mini_metrics():
         </div>
         """, unsafe_allow_html=True)
 
-# --- Haupttitel ---
-st.markdown("""
-<h1 style="text-align: center; color: #faf0e6; font-size: 3rem; margin-bottom: 0;">WAITT</h1>
-<p style="text-align: center; color: #faf0e6; font-size: 1.2rem; margin-bottom: 2rem;">We're All In This Together - Uni Lübeck</p>
-""", unsafe_allow_html=True)
+# --- Haupttitel mit Level ---
+st.markdown('<h1 style="text-align: center; color: #faf0e6; font-size: 3rem; margin-bottom: 0;">WAITT</h1>', unsafe_allow_html=True)
+st.markdown('<p style="text-align: center; color: #faf0e6; font-size: 1.2rem; margin-bottom: 1rem;">We\'re All In This Together - Uni Lübeck</p>', unsafe_allow_html=True)
 
+# User Level anzeigen
+level_name, avatar, description = calculate_user_level()
+st.session_state.user_level = level_name
+st.session_state.user_avatar = avatar
+
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+    st.markdown(f"""
+    <div style="background: rgba(255,255,255,0.1); border-radius: 25px; padding: 1rem; text-align: center; backdrop-filter: blur(10px);">
+        <div style="font-size: 3rem;">{avatar}</div>
+        <h3 style="color: white; margin: 0.5rem 0;">{level_name}</h3>
+        <p style="color: rgba(255,255,255,0.8); margin: 0; font-size: 0.9rem;">{description}</p>
+        <div style="margin-top: 0.5rem;">
+            <span style="background: rgba(255,255,255,0.2); padding: 0.3rem 1rem; border-radius: 15px; color: white;">
+                🏆 {st.session_state.reward_stamps} Stempel
+            </span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+# Optionale Mini-Stats
+with col1:
+    st.markdown(f"""
+    <div style="text-align: center; color: white; opacity: 0.8;">
+        <small>👥 {len(st.session_state.groups)} Gruppen online</small>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col3:
+    total_users = sum(len(g.get("members", [])) for g in st.session_state.groups)
+    st.markdown(f"""
+    <div style="text-align: center; color: white; opacity: 0.8;">
+        <small>🌟 {total_users} Aktive User</small>
+    </div>
+    """, unsafe_allow_html=True)
+    
 # Tabs
 tab1, tab2, tab3, tab4, tab5 = st.tabs([
     "🌿 Pausengestaltung",
@@ -568,8 +655,6 @@ with tab1:
                 st.success("Glückwunsch! Sammle wieder neue Stempel!")
                 st.rerun()
 
-    show_mini_metrics()
-
 with tab2:
     st.markdown(
         '<h1 style="color: #8b3a3a;">Lerngruppen finden & vernetzen</h1>',
@@ -667,8 +752,7 @@ with tab2:
                 st.warning("⚠️ Diese Gruppe ist voll")
           
             st.markdown("---")
-        
-    show_mini_metrics()           
+               
 
 with tab3:
     st.header("➕ Neue Lerngruppe gründen")
@@ -730,8 +814,6 @@ with tab3:
                 st.rerun()
             else:
                 st.error("Bitte fülle alle Felder aus!")
-
-    show_mini_metrics()
 
 with tab4:
     st.header("👥 Meine Lerngruppen")
@@ -993,7 +1075,6 @@ with tab4:
                 </div>
        """, unsafe_allow_html=True)
     
-    show_mini_metrics()
 
 with tab5:
     st.header("📌 Community-Pinnwand")
@@ -1192,4 +1273,4 @@ with tab5:
         <h3 style="color: #0369A1; margin: 0;">✨ {random.choice(motivations)} ✨</h3>
     </div>
     """, unsafe_allow_html=True)
-    show_mini_metrics()
+    
