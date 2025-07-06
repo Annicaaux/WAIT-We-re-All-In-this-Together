@@ -958,7 +958,6 @@ with tab4:
                             st.rerun()
         
             st.markdown("---")
-    show_mini_metrics()
            
         # Zusammenfassung
         st.markdown("### 📊 Deine Lerngruppen-Statistik")
@@ -992,7 +991,9 @@ with tab4:
                 <div style="background: #F3F4F6; padding: 1rem; border-radius: 10px; margin: 0.5rem 0;">
                     {tip}
                 </div>
-                """, unsafe_allow_html=True)
+       """, unsafe_allow_html=True)
+    
+    show_mini_metrics()
 
 with tab5:
     st.header("📌 Community-Pinnwand")
@@ -1191,3 +1192,4 @@ with tab5:
         <h3 style="color: #0369A1; margin: 0;">✨ {random.choice(motivations)} ✨</h3>
     </div>
     """, unsafe_allow_html=True)
+    show_mini_metrics()
