@@ -594,10 +594,14 @@ with tab1:
                         st.session_state.pause_statistics["trave_spaziergaenge"] += 1
                     if "Bewegung" in activity_cat:
                         st.session_state.pause_statistics["bewegung_minuten"] += int(activity['duration'].split()[0])
-                    
+                   
+                old_level = st.session_state.user_level
+                new_level, new_avatar, _ = calculate_user_level()
+                if new_level != old_level:
+                    st.balloons()
+                    st.success(f"🎉 Level Up! Du bist jetzt: {new_avatar} {new_level}!")
                     st.success(f"Super! +{activity['stamps']} Stempel für deine Pause! 🌟")
                     st.session_state.current_solo_activity = None
-                    st.balloons()
                     st.rerun()
             
             with col2:
