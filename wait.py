@@ -1042,7 +1042,7 @@ with tab4:
                 <div style="background: #F3F4F6; padding: 1rem; border-radius: 10px; margin: 0.5rem 0;">
                     {tip}
                 </div>
-       """, unsafe_allow_html=True)
+                """, unsafe_allow_html=True)
     
 
 with tab5:
@@ -1277,7 +1277,7 @@ with col2:
             </span>
         </div>
     </div>
-    """, unsafe_allow_html=True)
+     """, unsafe_allow_html=True)
 
 # Fortschritts-Hinweise
 st.markdown("### 🎯 Nächste Level-Ziele:")
