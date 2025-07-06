@@ -1300,12 +1300,5 @@ if next_goals:
 else:
     st.success("🌟 Wow! Du hast schon viele Level erreicht! Weiter so!")
 
-# Online-Statistik
-st.markdown("---")
-col1, col2 = st.columns(2)
-with col1:
-    st.metric("👥 Gruppen online", len(st.session_state.groups))
-with col2:
-    total_users = sum(len(g.get("members", [])) for g in st.session_state.groups)
-    st.metric("🌟 Aktive Nutzer", total_users)
+
     
