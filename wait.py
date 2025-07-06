@@ -366,11 +366,11 @@ with tab1:
         # Externe Timer-Links
         st.link_button("⏰ Online Timer", "https://donothingfor2minutes.org")
     with col3:
-        if st.button("✅ Fertig", key="timer_done"):
+        if st.button("Fertig", key="timer_done"):
             st.session_state.pause_statistics["meditation_minuten"] += 2
             st.session_state.pause_statistics["solo_pausen"] += 1
             st.session_state.reward_stamps += 1
-            st.success("✅ Super! 2 Minuten Ruhe - das hast du dir verdient! +1 Stempel")
+            st.success("Super! 2 Minuten Ruhe - das hast du dir verdient! +1 Stempel")
             st.balloons()
 
     st.info("💡 Starte den Timer, lege dein Handy weg und konzentriere dich nur auf deine Atmung und Umgebung.")
@@ -503,13 +503,13 @@ with tab1:
             </div>
             """, unsafe_allow_html=True)
             
-            with st.expander("📝 Anleitung"):
+            with st.expander("Anleitung"):
                 st.markdown(f'<div class="anleitung-box">{activity.get("anleitung", "Keine Anleitung verfügbar")}</div>', unsafe_allow_html=True)
                 st.markdown('<style>div.row-widget.stButton:nth-of-type(1) > button {background: #F5E6D3 !important; color: black !important;}</style>', unsafe_allow_html=True)
            
             col1, col2 = st.columns(2)
             with col1:
-                if st.button("✅ Pause gemacht!", key="done_activity", type="primary"):
+                if st.button("Pause gemacht!", key="done_activity", type="primary"):
                     st.session_state.pause_statistics["solo_pausen"] += 1
                     st.session_state.reward_stamps += activity['stamps']
                     
@@ -525,8 +525,8 @@ with tab1:
                 new_level, new_avatar, _ = calculate_user_level()
                 if new_level != old_level:
                     st.balloons()
-                    st.success(f"🎉 Level Up! Du bist jetzt: {new_avatar} {new_level}!")
-                    st.success(f"Super! +{activity['stamps']} Stempel für deine Pause! 🌟")
+                    st.success(f"Level Up! Du bist jetzt: {new_avatar} {new_level}!")
+                    st.success(f"Super! +{activity['stamps']} Stempel für deine Pause!")
                     st.session_state.current_solo_activity = None
                     st.rerun()
             
@@ -548,7 +548,7 @@ with tab1:
     # Belohnungssystem
     if st.session_state.reward_stamps > 0:
         st.markdown("---")
-        st.subheader("🏆 Deine Stempel-Sammlung")
+        st.subheader("Deine Stempel-Sammlung")
         
         col1, col2 = st.columns([3, 1])
         with col1:
@@ -570,7 +570,7 @@ with tab1:
         if st.session_state.reward_stamps >= 10:
             st.markdown("""
             <div class="custom-card" style="background: linear-gradient(135deg, #10B981, #059669); color: white; text-align: center;">
-                <h2 style="margin: 0;">🎉 BELOHNUNG FREIGESCHALTET!</h2>
+                <h2 style="margin: 0;">BELOHNUNG FREIGESCHALTET!</h2>
                 <p style="font-size: 1.2rem; margin: 1rem 0;">Kostenloses Essen in der Mensa!</p>
                 <p><strong>So geht's:</strong><br>
                 1. Screenshot machen<br>
@@ -720,7 +720,7 @@ with tab3:
             help="Z.B. 'Was ist deine größte Herausforderung beim Lernen?'"
         )
         
-        submitted = st.form_submit_button("🚀 Gruppe erstellen", type="primary")
+        submitted = st.form_submit_button("Gruppe erstellen", type="primary")
         
         if submitted:
             if topic and question:
@@ -755,7 +755,7 @@ with tab4:
         # Keine Gruppen - Motivierende Nachricht
         st.markdown("""
         <div class="custom-card" style="text-align: center; padding: 3rem;">
-            <h2 style="color: #6B7280;">Du bist noch in keiner Gruppe 😔</h2>
+            <h2 style="color: #6B7280;">Du bist noch in keiner Gruppe</h2>
             <p style="color: #9CA3AF; font-size: 1.1rem; margin: 1rem 0;">
                 Lerngruppen helfen nicht nur beim Studium - sie sind auch ein Schutz gegen Einsamkeit!
             </p>
@@ -883,7 +883,7 @@ with tab4:
                     
                     col1, col2 = st.columns(2)
                     with col1:
-                        if st.button("✅ Pause gemacht!", key=f"pause_done_{idx}"):
+                        if st.button("Pause gemacht!", key=f"pause_done_{idx}"):
                             st.session_state.pause_statistics["gruppen_pausen"] += 1
                             st.session_state.reward_stamps += 2
                             st.success("Super! Gruppenpause = doppelte Stempel! +2 ⭐")
@@ -952,7 +952,7 @@ with tab4:
                 # Gruppe verlassen
                 st.write("")
                 st.warning("⚠️ Gruppe verlassen?")
-                if st.button("🚪 Gruppe verlassen", key=f"leave_{idx}"):
+                if st.button("Gruppe verlassen", key=f"leave_{idx}"):
                     st.session_state[f"confirm_leave_{idx}"] = True
                 
                 if st.session_state.get(f"confirm_leave_{idx}", False):
@@ -1064,7 +1064,7 @@ with tab5:
     st.markdown(f"""
     <div class="custom-card" style="background: linear-gradient(135deg, #FDF2F8, #FCE7F3); border: 3px solid #F9A8D4;">
         <h2 style="text-align: center; color: #831843; margin: 0;">
-            🌟 Frage der Woche 🌟
+             Frage der Woche 
         </h2>
         <h3 style="text-align: center; color: #BE185D; margin: 1rem 0;">
             "{st.session_state.current_question}"
@@ -1077,7 +1077,7 @@ with tab5:
     with col2:
         if st.session_state.pinnwand_archiv:
             selected_week = st.selectbox(
-                "📅 Woche anzeigen:",
+                "Woche anzeigen:",
                 options=[st.session_state.current_week] + list(st.session_state.pinnwand_archiv.keys()),
                 format_func=lambda x: "Aktuelle Woche" if x == st.session_state.current_week else x
             )
@@ -1088,14 +1088,14 @@ with tab5:
     if selected_week == st.session_state.current_week:
         with st.form("neue_antwort"):
             antwort = st.text_area(
-                "✍️ Deine Antwort:",
+                "Deine Antwort:",
                 placeholder="Teile deine Gedanken mit der Community...",
                 max_chars=200
             )
             
             col1, col2 = st.columns([3, 1])
             with col1:
-                submitted = st.form_submit_button("📌 An Pinnwand heften", type="primary")
+                submitted = st.form_submit_button("An Pinnwand heften", type="primary")
             with col2:
                 anonym = st.checkbox("Anonym")
             
@@ -1107,7 +1107,7 @@ with tab5:
                 }
                 st.session_state.pinnwand_entries.append(entry)
                 st.session_state.reward_stamps += 1
-                st.success("📌 Angepinnt! +1 Stempel")
+                st.success("Angepinnt! +1 Stempel")
                 st.rerun()
     
     # Pinnwand anzeigen
@@ -1142,7 +1142,7 @@ with tab5:
                 </div>
                 """, unsafe_allow_html=True)
     else:
-        st.info("🤔 Noch keine Einträge. Sei der/die Erste!")
+        st.info("Noch keine Einträge. Sei der/die Erste!")
     
     st.markdown('</div>', unsafe_allow_html=True)
     
@@ -1188,7 +1188,7 @@ with tab5:
     
     # Motivations-Bereich
     st.markdown("---")
-    st.subheader("💪 Motivation der Woche")
+    st.subheader("Motivation der Woche")
     
     motivations = [
         "Jeder Schritt zählt - auch der kleinste!",
@@ -1200,14 +1200,14 @@ with tab5:
     
     st.markdown(f"""
     <div class="custom-card" style="background: linear-gradient(135deg, #E0F2FE, #DBEAFE); text-align: center;">
-        <h3 style="color: #0369A1; margin: 0;">✨ {random.choice(motivations)} ✨</h3>
+        <h3 style="color: #0369A1; margin: 0;"> {random.choice(motivations)} </h3>
     </div>
     """, unsafe_allow_html=True)
 
 # --- Level-System am Ende der Seite ---
 
 st.markdown("---")
-st.markdown("## 🏆 Dein WAITT-Level")
+st.markdown("## Dein WAITT-Level")
 
 level_name, avatar, description = calculate_user_level()
 st.session_state.user_level = level_name
@@ -1259,7 +1259,7 @@ if next_goals:
     for goal in next_goals[:3]:  # Zeige max. 3 Ziele
         st.info(goal)
 else:
-    st.success("🌟 Wow! Du hast schon viele Level erreicht! Weiter so!")
+    st.success("Wow! Du hast schon viele Level erreicht! Weiter so!")
 
 
     
