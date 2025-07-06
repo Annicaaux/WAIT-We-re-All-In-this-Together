@@ -32,6 +32,45 @@ st.markdown("""
         padding: 1rem;
         margin: 0 auto;
     }
+
+    /* Tabs größer und präsenter */
+    .stTabs [data-baseweb="tab-list"] {
+        background: rgba(255, 255, 255, 0.2) !important;
+        padding: 0.5rem !important;
+        border-radius: 15px !important;
+        margin-bottom: 1.5rem !important;
+    }
+
+    .stTabs [data-baseweb="tab"] {
+        font-size: 1.1rem !important;
+        font-weight: 600 !important;
+        padding: 0.8rem 1.5rem !important;
+        min-height: 50px !important;
+        background: rgba(255, 255, 255, 0.1) !important;
+        color: white !important;
+        border-radius: 12px !important;
+        margin: 0 0.2rem !important;
+    }
+
+    .stTabs [aria-selected="true"] {
+        background: white !important;
+        color: #831843 !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+    }
+
+    /* Metriken kleiner */
+    .metric-card {
+        padding: 0.5rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+
+    .metric-value {
+        font-size: 1.2rem !important;
+    }
+
+    .metric-label {
+        font-size: 0.7rem !important;
+    }
     
     /* Karten-Design */
     .custom-card {
@@ -67,6 +106,11 @@ st.markdown("""
     
     /* Mobile Anpassungen */
     @media (max-width: 768px) {
+    .stTabs [data-baseweb="tab"] {
+        font-size: 0.9rem !important;
+        padding: 0.6rem 0.8rem !important;
+        min-height: 40px !important;
+    }
         .main .block-container {
             padding: 0.5rem;
         }
@@ -175,11 +219,61 @@ if "initialized" not in st.session_state:
     st.session_state.current_solo_activity = None
     st.session_state.current_group_activity = None
 
+# --- Helper Funktion für kleine Metriken ---
+def show_mini_metrics():
+    """Zeigt kleine Metriken am unteren Rand"""
+    st.markdown("---")
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        st.markdown(f"""
+        <div class="metric-card" style="background: rgba(255,255,255,0.05);">
+            <p class="metric-value">{len(st.session_state.groups)}</p>
+            <p class="metric-label">Gruppen</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        total_members = sum(len(group.get("members", [])) for group in st.session_state.groups)
+        st.markdown(f"""
+        <div class="metric-card" style="background: rgba(255,255,255,0.05);">
+            <p class="metric-value">{total_members}</p>
+            <p class="metric-label">Studierende</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col3:
+        total_pauses = st.session_state.pause_statistics["solo_pausen"] + st.session_state.pause_statistics["gruppen_pausen"]
+        st.markdown(f"""
+        <div class="metric-card" style="background: rgba(255,255,255,0.05);">
+            <p class="metric-value">{total_pauses}</p>
+            <p class="metric-label">Pausen</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col4:
+        stamps = st.session_state.reward_stamps
+        st.markdown(f"""
+        <div class="metric-card" style="background: rgba(255,255,255,0.05);">
+            <p class="metric-value">{stamps}⭐</p>
+            <p class="metric-label">Stempel</p>
+        </div>
+        """, unsafe_allow_html=True)
+
 # --- Haupttitel ---
 st.markdown("""
 <h1 style="text-align: center; color: #faf0e6; font-size: 3rem; margin-bottom: 0;">WAITT</h1>
 <p style="text-align: center; color: #faf0e6; font-size: 1.2rem; margin-bottom: 2rem;">We're All In This Together - Uni Lübeck</p>
 """, unsafe_allow_html=True)
+
+# Tabs
+tab1, tab2, tab3, tab4, tab5 = st.tabs([
+    "🌿 Pausengestaltung",
+    "🔍 Gruppen finden", 
+    "➕ Gruppe erstellen", 
+    "👥 Meine Gruppen", 
+    "📌 Community"
+])
 
 # --- Header mit Metriken ---
 col1, col2, col3, col4 = st.columns(4)
@@ -220,15 +314,6 @@ with col4:
     """, unsafe_allow_html=True)
 
 st.markdown("---")
-
-# Tabs
-tab1, tab2, tab3, tab4, tab5 = st.tabs([
-    "🌿 Pausengestaltung",
-    "🔍 Gruppen finden", 
-    "➕ Gruppe erstellen", 
-    "👥 Meine Gruppen", 
-    "📌 Community"
-])
 
 with tab1:
     st.markdown(
@@ -483,6 +568,8 @@ with tab1:
                 st.success("Glückwunsch! Sammle wieder neue Stempel!")
                 st.rerun()
 
+    show_mini_metrics()
+
 with tab2:
     st.markdown(
         '<h1 style="color: #8b3a3a;">Lerngruppen finden & vernetzen</h1>',
@@ -578,9 +665,10 @@ with tab2:
                 st.success("✅ Du bist Mitglied dieser Gruppe")
             else:
                 st.warning("⚠️ Diese Gruppe ist voll")
-            
+          
             st.markdown("---")
-           
+        
+        show_mini_metrics()           
 
 with tab3:
     st.header("➕ Neue Lerngruppe gründen")
@@ -642,6 +730,8 @@ with tab3:
                 st.rerun()
             else:
                 st.error("Bitte fülle alle Felder aus!")
+
+         show_mini_metrics()
 
 with tab4:
     st.header("👥 Meine Lerngruppen")
@@ -866,9 +956,10 @@ with tab4:
                         if st.button("❌ Abbrechen", key=f"cancel_{idx}"):
                             st.session_state[f"confirm_leave_{idx}"] = False
                             st.rerun()
-            
-            st.markdown("---")
         
+            st.markdown("---")
+        show_mini_metrics()
+       
         # Zusammenfassung
         st.markdown("### 📊 Deine Lerngruppen-Statistik")
         
