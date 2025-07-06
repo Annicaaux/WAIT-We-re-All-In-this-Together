@@ -21,6 +21,28 @@ st.markdown("""
         background: linear-gradient(135deg, #cd9b9b 0%, #bc8f8f 100%);
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     }
+    /* Zentriertes Layout */
+    .main .block-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1rem 2rem;
+    }    
+
+    /* Streamlit Standard-Container überschreiben */
+    .st-emotion-cache-1y4p8pa {
+        max-width: 1200px;
+        padding: 2rem 1rem;
+    }
+
+    section[data-testid="stSidebar"] {
+        display: none;
+    }
+
+    /* Hauptinhalt zentrieren */
+    .main {
+        display: flex;
+        justify-content: center;
+    }
     
     /* Hide Streamlit Branding */
     #MainMenu {visibility: hidden;}
@@ -112,7 +134,9 @@ st.markdown("""
         min-height: 40px !important;
     }
         .main .block-container {
+            max-width: 100%;
             padding: 0.5rem;
+            margin: 0 auto;
         }
         
         .custom-card {
