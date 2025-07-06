@@ -1276,7 +1276,7 @@ with col2:
                 👥 {len(st.session_state.joined_groups)} Gruppen
             </span>
         </div>
-    </div>
+     </div>
      """, unsafe_allow_html=True)
 
 # Fortschritts-Hinweise
