@@ -16,10 +16,29 @@ st.set_page_config(
 # --- Custom CSS ---
 st.markdown("""
 <style>
-    /* Basis-Styles */
+    /* Root Variables */
+    :root {
+        --primary-gradient: linear-gradient(135deg, #E8B4B8 0%, #D4A5A5 100%);
+        --secondary-gradient: linear-gradient(135deg, #F5D5D8, #E8B4B8);
+        --card-bg: rgba(255, 255, 255, 0.95);
+        --text-primary: #000000;
+        --text-secondary: #333333;
+        --accent-pink: #C89FA3;
+        --accent-light: #F8E8E8;
+        --color-1: #E8B4B8;  /* Haupt-Pastellrosa */
+        --color-2: #F5D5D8;  /* Sehr helles Rosa */
+        --color-3: #D4A5A5;  /* Gedämpftes Altrosa */
+        --color-4: #C89FA3;  /* Mittleres Pastellrosa */
+        --color-5: #F8E8E8;  /* Fast weiß mit Rosa-Stich */
+        /* Rest der Variablen bleibt gleich */
+    }
+    /* Global Styles */
     .stApp {
-        background: linear-gradient(135deg, #cd9b9b 0%, #bc8f8f 100%);
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        background: var(--primary-gradient);
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        min-height: 100vh;
+    }
+
     }
     /* Zentriertes Layout */
     .main .block-container {
@@ -57,7 +76,7 @@ st.markdown("""
 
     /* Tabs größer und präsenter */
     .stTabs [data-baseweb="tab-list"] {
-        background: rgba(255, 255, 255, 0.2) !important;
+        background: rgba(255, 255, 255, 0.3) !important;
         padding: 0.5rem !important;
         border-radius: 15px !important;
         margin-bottom: 1.5rem !important;
@@ -68,16 +87,17 @@ st.markdown("""
         font-weight: 600 !important;
         padding: 0.8rem 1.5rem !important;
         min-height: 50px !important;
-        background: rgba(255, 255, 255, 0.1) !important;
-        color: white !important;
+        background: var(--color-5) !important;
+        color: black !important;
         border-radius: 12px !important;
         margin: 0 0.2rem !important;
     }
 
     .stTabs [aria-selected="true"] {
         background: white !important;
-        color: #831843 !important;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+        color: black !important;
+        box-shadow: 0 4px 12px rgba(200, 159, 163, 0.3) !important;
+
     }
 
     /* Metriken kleiner */
@@ -96,7 +116,7 @@ st.markdown("""
     
     /* Karten-Design */
     .custom-card {
-        background: rgba(255, 255, 255, 0.95);
+        background: white !important;
         border-radius: 15px;
         padding: 1.5rem;
         color: black !important;
@@ -106,12 +126,12 @@ st.markdown("""
     
     /* Metric Cards */
     .metric-card {
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.2) !important;
         border-radius: 12px;
         padding: 1rem;
         text-align: center;
         backdrop-filter: blur(10px);
-        color: #8b3a3a;
+        color: white !important;
     }
     
     .metric-value {
@@ -141,6 +161,8 @@ st.markdown("""
         
         .custom-card {
             padding: 1rem;
+            background: white !important;
+            color: black !important;
         }
         
         .metric-value {
@@ -159,16 +181,22 @@ st.markdown("""
     }
     
     /* Buttons mobil-optimiert */
+    /* Buttons */
     .stButton > button {
-        width: 100%;
-        background: linear-gradient(135deg, #ffe4e1, #eed5d2);
-        color: #8b3a3a;
+        background: var(--color-5) !important;
         color: black !important;
-        border: none;
-        padding: 0.75rem;
+        border: 1px solid var(--color-4) !important;
         border-radius: 25px;
+        padding: 0.75rem 1.5rem;
         font-weight: 600;
-        min-height: 44px; /* Touch-friendly */
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(200, 159, 163, 0.2);
+    }
+
+    .stButton > button:hover {
+        background: var(--color-2) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(200, 159, 163, 0.3);
     }
     
     /* Success/Warning/Info Messages */
