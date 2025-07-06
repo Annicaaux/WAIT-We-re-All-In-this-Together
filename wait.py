@@ -214,7 +214,7 @@ if "initialized" not in st.session_state:
     }
     st.session_state.reward_stamps = 0
     st.session_state.user_level = "Neuling"
-    st.session_state.user_avatar = "🌱"
+    st.session_state.user_avatar = "🌚"
     st.session_state.reward_claimed = False
     st.session_state.countdown_active = False
     st.session_state.countdown_time = 120
