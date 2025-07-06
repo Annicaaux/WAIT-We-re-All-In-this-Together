@@ -1264,18 +1264,20 @@ with col2:
         <div style="font-size: 4rem; margin-bottom: 1rem;">{avatar}</div>
         <h2 style="color: #92400E; margin: 0.5rem 0;">{level_name}</h2>
         <p style="color: #78350F; margin: 1rem 0; font-size: 1.1rem;">{description}</p>
-        
-        <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap;">
-            <span style="background: white; padding: 0.5rem 1rem; border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                🏆 {st.session_state.reward_stamps} Stempel
-            </span>
-            <span style="background: white; padding: 0.5rem 1rem; border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                🧘 {st.session_state.pause_statistics["solo_pausen"]} Pausen
-            </span>
-            <span style="background: white; padding: 0.5rem 1rem; border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                👥 {len(st.session_state.joined_groups)} Gruppen
-            </span>
-        </div>
+     </div>
+     """, unsafe_allow_html=True)
+
+    st.markdown (f"""
+    <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap;">
+        <span style="background: white; padding: 0.5rem 1rem; border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            🏆 {st.session_state.reward_stamps} Stempel
+        </span>
+        <span style="background: white; padding: 0.5rem 1rem; border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            🧘 {st.session_state.pause_statistics["solo_pausen"]} Pausen
+        </span>
+        <span style="background: white; padding: 0.5rem 1rem; border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            👥 {len(st.session_state.joined_groups)} Gruppen
+        </span>
      </div>
      """, unsafe_allow_html=True)
 
