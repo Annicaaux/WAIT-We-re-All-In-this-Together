@@ -320,11 +320,11 @@ st.markdown('<p style="text-align: center; color: #faf0e6; font-size: 1.2rem; ma
     
 # Tabs
 tab1, tab2, tab3, tab4, tab5 = st.tabs([
-    "🌿 Pausengestaltung",
-    "🔍 Gruppen finden", 
-    "➕ Gruppe erstellen", 
-    "👥 Meine Gruppen", 
-    "📌 Community"
+    "Pausengestaltung",
+    "Gruppen finden", 
+    "Gruppe erstellen", 
+    "Meine Gruppen", 
+    "Community"
 ])
 
 
@@ -357,14 +357,14 @@ with tab1:
     st.markdown("---")
     
     # 2-Minuten Countdown (einfache Version)
-    st.subheader("⏱️ Die 2-Minuten-Nichtstun-Challenge")
+    st.subheader("Die 2-Minuten-Nichtstun-Challenge")
 
     col1, col2, col3 = st.columns([2, 1, 1])
     with col1:
         st.write("Nimm dir 2 Minuten nur für dich. Kein Handy, keine Ablenkung. Nur du und eine Gedanken (spooky)")
     with col2:
         # Externe Timer-Links
-        st.link_button("⏰ Online Timer", "https://donothingfor2minutes.org")
+        st.link_button("Online Timer", "https://donothingfor2minutes.org")
     with col3:
         if st.button("Fertig", key="timer_done"):
             st.session_state.pause_statistics["meditation_minuten"] += 2
@@ -373,7 +373,7 @@ with tab1:
             st.success("Super! 2 Minuten Ruhe - das hast du dir verdient! +1 Stempel")
             st.balloons()
 
-    st.info("💡 Starte den Timer, lege dein Handy weg und konzentriere dich nur auf deine Atmung und Umgebung.")
+    st.info("Starte den Timer, lege dein Handy weg und konzentriere dich nur auf deine Atmung und Umgebung.")
 
     st.markdown("---")
     
@@ -531,7 +531,7 @@ with tab1:
                     st.rerun()
             
             with col2:
-                if st.button("🔄 Andere Aktivität", key="other_activity"):
+                if st.button("Andere Aktivität", key="other_activity"):
                     st.session_state.current_solo_activity = None
                     st.session_state.current_solo_activity = None
                     st.rerun()
@@ -604,7 +604,7 @@ with tab2:
     # Filter
     col1, col2 = st.columns([2, 1])
     with col1:
-        search = st.text_input("🔍 Suche nach Thema", placeholder="z.B. Statistik, Anatomie...")
+        search = st.text_input("Suche nach Thema", placeholder="z.B. Statistik, Anatomie...")
     with col2:
         only_free = st.checkbox("Nur freie Plätze", value=True)
     
@@ -787,7 +787,7 @@ with tab4:
         <div class="custom-card" style="background: linear-gradient(135deg, #EDE9FE, #DDD6FE); margin-bottom: 1rem;">
             <p style="margin: 0; color: #5B21B6; text-align: center; font-size: 1.1rem;">
                 <strong>Du bist in {len(my_groups)} Gruppe{'n' if len(my_groups) > 1 else ''}!</strong> 
-                Das sind etwa {sum(len(g['members']) for g in my_groups)} Studierende, die dich unterstützen. 💜
+                Das sind etwa {sum(len(g['members']) for g in my_groups)} Studierende, die dich unterstützen. 
             </p>
         </div>
         """, unsafe_allow_html=True)
@@ -838,13 +838,13 @@ with tab4:
                 if len(group['members']) < group['max']:
                     st.write("")
                     invite_text = f"Hey! Wir haben noch {group['max'] - len(group['members'])} Plätze frei in unserer {group['topic']}-Gruppe. Komm dazu! 🎓"
-                    if st.button(f"📤 Einladungstext kopieren", key=f"invite_{idx}"):
+                    if st.button(f"Einladungstext kopieren", key=f"invite_{idx}"):
                         st.code(invite_text, language=None)
                         st.info("Text markieren und kopieren!")
             
             with tab_b:
                 # Gruppenpause planen
-                st.write("**🌿 Gemeinsame Pause planen**")
+                st.write("**Gemeinsame Pause planen**")
                 
                 pause_activities = [
                     {
@@ -867,7 +867,7 @@ with tab4:
                     }
                 ]
                 
-                if st.button("🎲 Pausenvorschlag", key=f"pause_{idx}"):
+                if st.button("Pausenvorschlag", key=f"pause_{idx}"):
                     activity = random.choice(pause_activities)
                     st.session_state[f"group_pause_{idx}"] = activity
                 
@@ -891,7 +891,7 @@ with tab4:
                             st.balloons()
                             st.rerun()
                     with col2:
-                        if st.button("🔄 Andere Aktivität", key=f"pause_other_{idx}"):
+                        if st.button("Andere Aktivität", key=f"pause_other_{idx}"):
                             del st.session_state[f"group_pause_{idx}"]
                             st.rerun()
             
@@ -907,7 +907,7 @@ with tab4:
                 # Nachricht senden
                 with st.form(f"chat_form_{idx}"):
                     message = st.text_input("Nachricht:", placeholder="Schreibe etwas Nettes...")
-                    if st.form_submit_button("📤 Senden"):
+                    if st.form_submit_button("Senden"):
                         if message.strip():
                             st.session_state[chat_key].append({
                                 "author": "Du",
@@ -940,7 +940,7 @@ with tab4:
             
             with tab_d:
                 # Aktionen
-                st.write("**⚙️ Gruppenaktionen**")
+                st.write("**Gruppenaktionen**")
                 
                 # Nächstes Treffen
                 next_meeting = st.date_input(
@@ -972,7 +972,7 @@ with tab4:
             st.markdown("---")
            
         # Zusammenfassung
-        st.markdown("### 📊 Deine Lerngruppen-Statistik")
+        st.markdown("### Deine Lerngruppen-Statistik")
         
         col1, col2, col3 = st.columns(3)
         with col1:
@@ -1007,7 +1007,7 @@ with tab4:
     
 
 with tab5:
-    st.header("📌 Community-Pinnwand")
+    st.header("Community-Pinnwand")
     
     # Pinnwand-Hintergrund
     st.markdown("""
@@ -1243,17 +1243,17 @@ with col2:
      """, unsafe_allow_html=True)
 
 # Fortschritts-Hinweise
-st.markdown("### 🎯 Nächste Level-Ziele:")
+st.markdown("### Nächste Level-Ziele:")
 
 next_goals = []
 stats = st.session_state.pause_statistics
 
 if stats["solo_pausen"] < 5:
-    next_goals.append(f"🎯 Noch {5 - stats['solo_pausen']} Solo-Pausen bis zum 'Entspannungs-Entdecker'")
+    next_goals.append(f"Noch {5 - stats['solo_pausen']} Solo-Pausen bis zum 'Entspannungs-Entdecker'")
 if stats["meditation_minuten"] < 10:
-    next_goals.append(f"🧘 Noch {10 - stats['meditation_minuten']} Minuten meditieren bis zum 'Zen-Schüler'")
+    next_goals.append(f"Noch {10 - stats['meditation_minuten']} Minuten meditieren bis zum 'Zen-Schüler'")
 if len(st.session_state.joined_groups) < 2:
-    next_goals.append(f"👥 Noch {2 - len(st.session_state.joined_groups)} Gruppe beitreten bis zum 'Gruppen-Liebhaber'")
+    next_goals.append(f"Noch {2 - len(st.session_state.joined_groups)} Gruppe beitreten bis zum 'Gruppen-Liebhaber'")
 
 if next_goals:
     for goal in next_goals[:3]:  # Zeige max. 3 Ziele
