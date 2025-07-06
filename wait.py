@@ -668,7 +668,7 @@ with tab2:
           
             st.markdown("---")
         
-        show_mini_metrics()           
+    show_mini_metrics()           
 
 with tab3:
     st.header("➕ Neue Lerngruppe gründen")
@@ -731,7 +731,7 @@ with tab3:
             else:
                 st.error("Bitte fülle alle Felder aus!")
 
-         show_mini_metrics()
+    show_mini_metrics()
 
 with tab4:
     st.header("👥 Meine Lerngruppen")
@@ -958,8 +958,8 @@ with tab4:
                             st.rerun()
         
             st.markdown("---")
-        show_mini_metrics()
-       
+    show_mini_metrics()
+           
         # Zusammenfassung
         st.markdown("### 📊 Deine Lerngruppen-Statistik")
         
