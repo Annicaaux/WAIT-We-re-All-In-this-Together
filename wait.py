@@ -12,8 +12,19 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed"
 )
+
+# --- CSS-Block ---
 st.markdown ("""
 <style>
+    /* Force Light Mode */
+    .stApp, [data-testid="stAppViewContainer"] {
+        background: var(--primary-gradient) !important;
+        color: #000000 !important;
+    }
+    
+    /* Root Variables */
+    :root {
+        /* deine Farben... */
     /* Root Variables */
     :root {
         /* Hauptfarbpalette - 5 harmonische rote Pastelltöne basierend auf #880608 */
@@ -257,6 +268,7 @@ st.markdown ("""
         font-size: 2rem;
         filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
     }
+   
 </style>
 """, unsafe_allow_html=True)
 
