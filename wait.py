@@ -16,12 +16,6 @@ st.set_page_config(
 # --- CSS-Block ---
 st.markdown ("""
 <style>
-    /* Force Light Mode */
-    .stApp, [data-testid="stAppViewContainer"] {
-        background: var(--primary-gradient) !important;
-        color: #000000 !important;
-    }
-    
     /* Root Variables */
     :root {
         /* deine Farben... */
@@ -231,17 +225,19 @@ st.markdown ("""
 
     /* Pinnwand Styles (behält bunte Post-Its) */
     .pinnwand {
-        background: linear-gradient(135deg, #D2691E 0%, #A0522D 100%);
-        border: 15px solid #8B4513;
-        border-radius: 10px;
+        background: var(--color-2) !important;
+        border: 10px solid var(--color-4) !important;
+        border-radius: 15px;
         padding: 2rem;
-        box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
         min-height: 400px;
         position: relative;
+        margin: 1rem 0;
     }
-    
+
+    /* Post-Its pastelliger und richtig positioniert */
     .postit {
-        background: #FFEB3B;
+        background: #FFF8E1 !important; /* Pastellgelb */
         padding: 1.5rem;
         margin: 0.5rem;
         box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
@@ -249,17 +245,34 @@ st.markdown ("""
         position: relative;
         font-family: 'Comic Sans MS', cursive;
         transition: all 0.3s ease;
+        border-radius: 8px;
+        border: 1px solid #F0F0F0;
+    }
+
+    .postit-pink { 
+        background: #FCE4EC !important; /* Pastellrosa */
+        transform: rotate(2deg); 
+    }
+
+    .postit-green { 
+        background: #E8F5E8 !important; /* Pastellgrün */
+        transform: rotate(-1deg); 
+    }
+
+    .postit-blue { 
+        background: #E3F2FD !important; /* Pastellblau */
+        transform: rotate(1deg); 
+    }
+
+    .postit-orange { 
+        background: #FFF3E0 !important; /* Pastellorange */
+        transform: rotate(-3deg); 
     }
     
     .postit:hover {
         transform: rotate(0deg) scale(1.05);
         z-index: 10;
     }
-    
-    .postit-pink { background: #FF69B4; transform: rotate(2deg); }
-    .postit-green { background: #90EE90; transform: rotate(-1deg); }
-    .postit-blue { background: #87CEEB; transform: rotate(1deg); }
-    .postit-orange { background: #FFB347; transform: rotate(-3deg); }
     
     .pin {
         position: absolute;
@@ -1213,7 +1226,7 @@ with tab5:
                 st.rerun()
     
     # Pinnwand anzeigen
-    st.markdown('<div class="pinnwand">', unsafe_allow_html=True)
+    st.markdown('<div class="pinnwand" style="margin-top: 1rem;">', unsafe_allow_html=True)
     
     # Einträge als Post-its
     if selected_week == st.session_state.current_week:
@@ -1246,7 +1259,7 @@ with tab5:
     else:
         st.info("Noch keine Einträge. Sei der/die Erste!")
     
-    st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown('</div><div style="clear: both;"></div>', unsafe_allow_html=True)
     
     # Admin-Bereich
     st.markdown("---")
