@@ -12,7 +12,7 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed"
 )
-
+st.markdown ("""
 <style>
     /* Root Variables */
     :root {
@@ -258,6 +258,7 @@ st.set_page_config(
         filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
     }
 </style>
+""", unsafe_allow_html=True)
 
 # --- Session State Initialisierung ---
 if "initialized" not in st.session_state:
