@@ -1186,11 +1186,11 @@ with tab5:
     else:
         entries = st.session_state.pinnwand_archiv.get(selected_week, {}).get("entries", [])
 
-   if entries:
-        # Post-its direkt in der Pinnwand anzeigen
+   # Pinnwand mit Post-Its als ein HTML-Block
+    if entries:
         postits_html = ""
         colors = ["postit", "postit-pink", "postit-green", "postit-blue", "postit-orange"]
-        
+    
         for idx, entry in enumerate(entries):
             color = colors[idx % len(colors)]
             postits_html += f"""
@@ -1203,14 +1203,22 @@ with tab5:
                     - {entry.get('author', 'Anonym')}<br>
                     <small>{entry.get('timestamp', '')}</small>
                 </p>
-            </div>
-            """
-        
-        st.markdown(postits_html, unsafe_allow_html=True)
-    else:
-        st.info("Noch keine Einträge. Sei der/die Erste!")
+        </div>
+        """
     
-    st.markdown('</div><div style="clear: both;"></div>', unsafe_allow_html=True)
+        # Komplette Pinnwand mit Post-Its als ein HTML-Block
+        st.markdown(f"""
+        <div class="pinnwand" style="margin-top: 1rem;">
+            {postits_html}
+        </div>
+        """, unsafe_allow_html=True)
+    else:
+        st.markdown("""
+        <div class="pinnwand" style="margin-top: 1rem;">
+            <p style="text-align: center; color: #666; margin-top: 2rem;">Noch keine Einträge. Sei der/die Erste!</p>
+        </div>
+        """, unsafe_allow_html=True)
+
     # Admin-Bereich
     st.markdown("---")
     
