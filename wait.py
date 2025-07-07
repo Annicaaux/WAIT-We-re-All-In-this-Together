@@ -13,25 +13,26 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# --- Custom CSS ---
-st.markdown("""
 <style>
     /* Root Variables */
     :root {
-        --primary-gradient: linear-gradient(135deg, #E8B4B8 0%, #D4A5A5 100%);
-        --secondary-gradient: linear-gradient(135deg, #F5D5D8, #E8B4B8);
+        /* Hauptfarbpalette - 5 harmonische rote Pastelltöne basierend auf #880608 */
+        --color-1: #D4A5A5;  /* Weiches Altrosa - Hauptfarbe */
+        --color-2: #E8B4B8;  /* Sanftes Rosa - sekundär */
+        --color-3: #F5D5D8;  /* Sehr helles Rosa - für Hintergründe */
+        --color-4: #C89FA3;  /* Mittleres Pastellrosa - für Akzente */
+        --color-5: #F8E8E8;  /* Fast weiß mit Rosa-Stich - für Buttons */
+        
+        /* Gradients */
+        --primary-gradient: linear-gradient(135deg, var(--color-2) 0%, var(--color-1) 100%);
+        --secondary-gradient: linear-gradient(135deg, var(--color-3), var(--color-2));
         --card-bg: rgba(255, 255, 255, 0.95);
         --text-primary: #000000;
         --text-secondary: #333333;
-        --accent-pink: #C89FA3;
-        --accent-light: #F8E8E8;
-        --color-1: #E8B4B8;  /* Haupt-Pastellrosa */
-        --color-2: #F5D5D8;  /* Sehr helles Rosa */
-        --color-3: #D4A5A5;  /* Gedämpftes Altrosa */
-        --color-4: #C89FA3;  /* Mittleres Pastellrosa */
-        --color-5: #F8E8E8;  /* Fast weiß mit Rosa-Stich */
-        /* Rest der Variablen bleibt gleich */
+        --accent-pink: var(--color-4);
+        --accent-light: var(--color-5);
     }
+    
     /* Global Styles */
     .stApp {
         background: var(--primary-gradient);
@@ -39,7 +40,6 @@ st.markdown("""
         min-height: 100vh;
     }
 
-    }
     /* Zentriertes Layout */
     .main .block-container {
         max-width: 1200px;
@@ -97,7 +97,6 @@ st.markdown("""
         background: white !important;
         color: black !important;
         box-shadow: 0 4px 12px rgba(200, 159, 163, 0.3) !important;
-
     }
 
     /* Metriken kleiner */
@@ -148,11 +147,11 @@ st.markdown("""
     
     /* Mobile Anpassungen */
     @media (max-width: 768px) {
-    .stTabs [data-baseweb="tab"] {
-        font-size: 0.9rem !important;
-        padding: 0.6rem 0.8rem !important;
-        min-height: 40px !important;
-    }
+        .stTabs [data-baseweb="tab"] {
+            font-size: 0.9rem !important;
+            padding: 0.6rem 0.8rem !important;
+            min-height: 40px !important;
+        }
         .main .block-container {
             max-width: 100%;
             padding: 0.5rem;
@@ -180,7 +179,6 @@ st.markdown("""
         }
     }
     
-    /* Buttons mobil-optimiert */
     /* Buttons */
     .stButton > button {
         background: var(--color-5) !important;
@@ -194,7 +192,7 @@ st.markdown("""
     }
 
     .stButton > button:hover {
-        background: var(--color-2) !important;
+        background: var(--color-3) !important;
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(200, 159, 163, 0.3);
     }
@@ -207,17 +205,57 @@ st.markdown("""
     }
 
     .anleitung-box {
-        background: #F5E6D3 !important;
+        background: var(--color-5) !important;
         color: black !important;
         padding: 1rem;
         border-radius: 10px;
-        border: 1px solid #D4B5A0;
+        border: 1px solid var(--color-4);
     }
 
     .anleitung-button {
-        background: #F5E6D3 !important;
+        background: var(--color-5) !important;
         color: black !important;
-        border: 2px solid #D4B5A0 !important;
+        border: 2px solid var(--color-4) !important;
+    }
+
+    /* Pinnwand Styles (behält bunte Post-Its) */
+    .pinnwand {
+        background: linear-gradient(135deg, #D2691E 0%, #A0522D 100%);
+        border: 15px solid #8B4513;
+        border-radius: 10px;
+        padding: 2rem;
+        box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+        min-height: 400px;
+        position: relative;
+    }
+    
+    .postit {
+        background: #FFEB3B;
+        padding: 1.5rem;
+        margin: 0.5rem;
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+        transform: rotate(-2deg);
+        position: relative;
+        font-family: 'Comic Sans MS', cursive;
+        transition: all 0.3s ease;
+    }
+    
+    .postit:hover {
+        transform: rotate(0deg) scale(1.05);
+        z-index: 10;
+    }
+    
+    .postit-pink { background: #FF69B4; transform: rotate(2deg); }
+    .postit-green { background: #90EE90; transform: rotate(-1deg); }
+    .postit-blue { background: #87CEEB; transform: rotate(1deg); }
+    .postit-orange { background: #FFB347; transform: rotate(-3deg); }
+    
+    .pin {
+        position: absolute;
+        top: -10px;
+        right: 20px;
+        font-size: 2rem;
+        filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
     }
 </style>
 """, unsafe_allow_html=True)
