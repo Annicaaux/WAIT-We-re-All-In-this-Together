@@ -1121,50 +1121,6 @@ with tab4:
 with tab5:
     st.header("Community-Pinnwand")
     
-    # Pinnwand-Hintergrund
-    st.markdown("""
-    <style>
-    .pinnwand {
-        background: linear-gradient(135deg, #D2691E 0%, #A0522D 100%);
-        border: 15px solid #8B4513;
-        border-radius: 10px;
-        padding: 2rem;
-        box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
-        min-height: 400px;
-        position: relative;
-    }
-    
-    .postit {
-        background: #FFEB3B;
-        padding: 1.5rem;
-        margin: 0.5rem;
-        box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
-        transform: rotate(-2deg);
-        position: relative;
-        font-family: 'Comic Sans MS', cursive;
-        transition: all 0.3s ease;
-    }
-    
-    .postit:hover {
-        transform: rotate(0deg) scale(1.05);
-        z-index: 10;
-    }
-    
-    .postit-pink { background: #FF69B4; transform: rotate(2deg); }
-    .postit-green { background: #90EE90; transform: rotate(-1deg); }
-    .postit-blue { background: #87CEEB; transform: rotate(1deg); }
-    .postit-orange { background: #FFB347; transform: rotate(-3deg); }
-    
-    .pin {
-        position: absolute;
-        top: -10px;
-        right: 20px;
-        font-size: 2rem;
-        filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
-    }
-    </style>
-    """, unsafe_allow_html=True)
-    
     # Initialisiere Archiv wenn nicht vorhanden
     if "pinnwand_archiv" not in st.session_state:
         st.session_state.pinnwand_archiv = {}
@@ -1231,7 +1187,6 @@ with tab5:
         entries = st.session_state.pinnwand_archiv.get(selected_week, {}).get("entries", [])
 
     if entries:
-    
         # Post-its direkt in der Pinnwand anzeigen
         postits_html = ""
         colors = ["postit", "postit-pink", "postit-green", "postit-blue", "postit-orange"]
