@@ -17,15 +17,15 @@ st.set_page_config(
     /* Root Variables */
     :root {
         /* Hauptfarbpalette - 5 harmonische rote Pastelltöne basierend auf #880608 */
-        --color-1: #D4A5A5;  /* Weiches Altrosa - Hauptfarbe */
-        --color-2: #E8B4B8;  /* Sanftes Rosa - sekundär */
-        --color-3: #F5D5D8;  /* Sehr helles Rosa - für Hintergründe */
-        --color-4: #C89FA3;  /* Mittleres Pastellrosa - für Akzente */
-        --color-5: #F8E8E8;  /* Fast weiß mit Rosa-Stich - für Buttons */
+        --color-1: #F4E6E7;  /* Sehr helles Rosé */
+        --color-2: #E8C1C5;  /* Sanftes Rosa */
+        --color-3: #D89DA3;  /* Mittleres Rosa */
+        --color-4: #C87882;  /* Kräftigeres Rosa */
+        --color-5: #B85461;  /* Intensives Rosa (basierend auf #880608) */
         
         /* Gradients */
-        --primary-gradient: linear-gradient(135deg, var(--color-2) 0%, var(--color-1) 100%);
-        --secondary-gradient: linear-gradient(135deg, var(--color-3), var(--color-2));
+        --primary-gradient: linear-gradient(135deg, var(--color-1) 0%, var(--color-2) 100%);
+        --secondary-gradient: linear-gradient(135deg, var(--color-2), var(--color-3));
         --card-bg: rgba(255, 255, 255, 0.95);
         --text-primary: #000000;
         --text-secondary: #333333;
@@ -192,7 +192,7 @@ st.set_page_config(
     }
 
     .stButton > button:hover {
-        background: var(--color-3) !important;
+        background: var(--color-2) !important;
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(200, 159, 163, 0.3);
     }
