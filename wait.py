@@ -633,11 +633,11 @@ with tab1:
                     if "Bewegung" in activity_cat:
                         st.session_state.pause_statistics["bewegung_minuten"] += int(activity['duration'].split()[0])
                    
-                old_level = st.session_state.user_level
-                new_level, new_avatar, _ = calculate_user_level()
-                if new_level != old_level:
-                    st.balloons()
-                    st.success(f"Level Up! Du bist jetzt: {new_avatar} {new_level}!")
+               old_level = st.session_state.user_level
+                    new_level, new_avatar, _ = calculate_user_level()
+                    if new_level != old_level:
+                        st.balloons()
+                        st.success(f"Level Up! Du bist jetzt: {new_avatar} {new_level}!")
                     st.success(f"Super! +{activity['stamps']} Stempel für deine Pause!")
                     st.session_state.current_solo_activity = None
                     st.rerun()
@@ -1186,11 +1186,11 @@ with tab5:
     else:
         entries = st.session_state.pinnwand_archiv.get(selected_week, {}).get("entries", [])
 
-    if entries:
+   if entries:
         # Post-its direkt in der Pinnwand anzeigen
         postits_html = ""
         colors = ["postit", "postit-pink", "postit-green", "postit-blue", "postit-orange"]
-    
+        
         for idx, entry in enumerate(entries):
             color = colors[idx % len(colors)]
             postits_html += f"""
@@ -1205,13 +1205,12 @@ with tab5:
                 </p>
             </div>
             """
-    
+        
         st.markdown(postits_html, unsafe_allow_html=True)
     else:
         st.info("Noch keine Einträge. Sei der/die Erste!")
-
+    
     st.markdown('</div><div style="clear: both;"></div>', unsafe_allow_html=True)
-
     # Admin-Bereich
     st.markdown("---")
     
