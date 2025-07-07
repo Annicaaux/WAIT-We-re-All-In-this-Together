@@ -1221,43 +1221,42 @@ with tab5:
                 st.session_state.reward_stamps += 1
                 st.success("Angepinnt! +1 Stempel")
                 st.rerun()
-    
     # Pinnwand anzeigen
     st.markdown('<div class="pinnwand" style="margin-top: 1rem;">', unsafe_allow_html=True)
-    
+
     # Einträge als Post-its
     if selected_week == st.session_state.current_week:
         entries = st.session_state.pinnwand_entries
     else:
         entries = st.session_state.pinnwand_archiv.get(selected_week, {}).get("entries", [])
-    
+
     if entries:
-        # Post-its in Reihen anordnen
-        cols = st.columns(3)
+    
+        # Post-its direkt in der Pinnwand anzeigen
+        postits_html = ""
         colors = ["postit", "postit-pink", "postit-green", "postit-blue", "postit-orange"]
-        
+    
         for idx, entry in enumerate(entries):
-            with cols[idx % 3]:
-                color = colors[idx % len(colors)]
-                
-                # Einfache Version für Streamlit
-                st.markdown(f"""
-                <div class="{color}" style="margin-bottom: 1rem;">
-                    <div class="pin">📌</div>
-                    <p style="margin: 0; color: #333; font-size: 0.9rem;">
-                        "{entry.get('text', entry)}"
-                    </p>
-                    <p style="text-align: right; margin-top: 1rem; font-size: 0.8rem; color: #666;">
-                        - {entry.get('author', 'Anonym')}<br>
-                        <small>{entry.get('timestamp', '')}</small>
-                    </p>
-                </div>
-                """, unsafe_allow_html=True)
-    else:
-        st.info("Noch keine Einträge. Sei der/die Erste!")
+            color = colors[idx % len(colors)]
+            postits_html += f"""
+            <div class="{color}" style="margin-bottom: 1rem; display: inline-block; width: 30%; vertical-align: top;">
+                <div class="pin">📌</div>
+                <p style="margin: 0; color: #333; font-size: 0.9rem;">
+                    "{entry.get('text', entry)}"
+                </p>
+                <p style="text-align: right; margin-top: 1rem; font-size: 0.8rem; color: #666;">
+                    - {entry.get('author', 'Anonym')}<br>
+                    <small>{entry.get('timestamp', '')}</small>
+                </p>
+            </div>
+            """
     
-    st.markdown('</div><div style="clear: both;"></div>', unsafe_allow_html=True)
-    
+    st.markdown(postits_html, unsafe_allow_html=True)
+else:
+    st.info("Noch keine Einträge. Sei der/die Erste!")
+
+st.markdown('</div><div style="clear: both;"></div>', unsafe_allow_html=True)
+
     # Admin-Bereich
     st.markdown("---")
     
