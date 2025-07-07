@@ -18,9 +18,6 @@ st.markdown ("""
 <style>
     /* Root Variables */
     :root {
-        /* deine Farben... */
-    /* Root Variables */
-    :root {
         /* Hauptfarbpalette - 5 harmonische rote Pastelltöne basierend auf #880608 */
         --color-1: #F4E6E7;  /* Sehr helles Rosé */
         --color-2: #E8C1C5;  /* Sanftes Rosa */
