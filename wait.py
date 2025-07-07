@@ -1185,39 +1185,29 @@ with tab5:
         entries = st.session_state.pinnwand_entries
     else:
         entries = st.session_state.pinnwand_archiv.get(selected_week, {}).get("entries", [])
+   
+    # Alternative: Card-Layout
+    st.markdown("### 💭 Community-Gedanken")
 
-   # Pinnwand mit Post-Its als ein HTML-Block
     if entries:
-        postits_html = ""
-        colors = ["postit", "postit-pink", "postit-green", "postit-blue", "postit-orange"]
-    
+        cols = st.columns(3)
         for idx, entry in enumerate(entries):
-            color = colors[idx % len(colors)]
-            postits_html += f"""
-            <div class="{color}" style="margin-bottom: 1rem; display: inline-block; width: 30%; vertical-align: top;">
-                <div class="pin">📌</div>
-                <p style="margin: 0; color: #333; font-size: 0.9rem;">
-                    "{entry.get('text', entry)}"
-                </p>
-                <p style="text-align: right; margin-top: 1rem; font-size: 0.8rem; color: #666;">
-                    - {entry.get('author', 'Anonym')}<br>
-                    <small>{entry.get('timestamp', '')}</small>
-                </p>
-        </div>
-        """
-    
-        # Komplette Pinnwand mit Post-Its als ein HTML-Block
-        st.markdown(f"""
-        <div class="pinnwand" style="margin-top: 1rem;">
-            {postits_html}
-        </div>
-        """, unsafe_allow_html=True)
+            with cols[idx % 3]:
+                st.markdown(f"""
+                <div style="background: var(--color-1); padding: 1rem; border-radius: 10px; 
+                            margin: 0.5rem 0; transform: rotate({random.choice([-2, -1, 0, 1, 2])}deg);
+                            box-shadow: 2px 2px 8px rgba(0,0,0,0.1); border: 2px solid var(--color-3);">
+                    <p style="margin: 0; color: #333; font-style: italic;">
+                        "{entry.get('text', entry)}"
+                    </p>
+                    <p style="text-align: right; margin-top: 0.5rem; font-size: 0.8rem; color: #666;">
+                        - {entry.get('author', 'Anonym')}<br>
+                        <small>{entry.get('timestamp', '')}</small>
+                    </p>
+                </div>
+                """, unsafe_allow_html=True)
     else:
-        st.markdown("""
-        <div class="pinnwand" style="margin-top: 1rem;">
-            <p style="text-align: center; color: #666; margin-top: 2rem;">Noch keine Einträge. Sei der/die Erste!</p>
-        </div>
-        """, unsafe_allow_html=True)
+        st.info("Noch keine Einträge. Sei der/die Erste!")
 
     # Admin-Bereich
     st.markdown("---")
