@@ -1206,11 +1206,11 @@ with tab5:
             </div>
             """
     
-    st.markdown(postits_html, unsafe_allow_html=True)
-else:
-    st.info("Noch keine Einträge. Sei der/die Erste!")
+        st.markdown(postits_html, unsafe_allow_html=True)
+    else:
+        st.info("Noch keine Einträge. Sei der/die Erste!")
 
-st.markdown('</div><div style="clear: both;"></div>', unsafe_allow_html=True)
+    st.markdown('</div><div style="clear: both;"></div>', unsafe_allow_html=True)
 
     # Admin-Bereich
     st.markdown("---")
