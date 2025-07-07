@@ -633,7 +633,7 @@ with tab1:
                     if "Bewegung" in activity_cat:
                         st.session_state.pause_statistics["bewegung_minuten"] += int(activity['duration'].split()[0])
                    
-               old_level = st.session_state.user_level
+                    old_level = st.session_state.user_level
                     new_level, new_avatar, _ = calculate_user_level()
                     if new_level != old_level:
                         st.balloons()
