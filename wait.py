@@ -432,7 +432,7 @@ def show_mini_metrics():
     """, unsafe_allow_html=True)
 
 # --- Haupttitel mit Level ---
-st.markdown('<h1 style="text-align: center; color: #8b0000; font-size: 5rem; margin-bottom: -10px;">WAITT</h1>', unsafe_allow_html=True)
+st.markdown('<h1 style="text-align: center; color: #8b0000; font-size: 5rem; margin-bottom: -1rem;">WAITT</h1>', unsafe_allow_html=True)
 st.markdown('<p style="text-align: center; color: #8b0000; font-size: 1.8rem; margin-top: 0; margin-bottom: 1rem;">We\'re All In This Together</p>', unsafe_allow_html=True)
 
     
