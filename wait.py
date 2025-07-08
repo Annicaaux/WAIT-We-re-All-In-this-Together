@@ -424,11 +424,10 @@ def show_mini_metrics():
         """, unsafe_allow_html=True)
     
     with col4:
-    stamps = st.session_state.reward_stamps
-    st.markdown(f"""
-    <div class="metric-card" style="background: rgba(255,255,255,0.05);">
-        <p class="metric-value">{stamps}&#11088;</p>
-        <p class="metric-label">Stempel</p>
+        st.markdown(f"""
+        <div class="metric-card" style="background: rgba(255,255,255,0.05);">
+            <p class="metric-value">{stamps}⭐</p>
+            <p class="metric-label">Stempel</p>
     </div>
     """, unsafe_allow_html=True)
 
