@@ -1,4 +1,3 @@
-
 import streamlit as st
 from datetime import datetime, time
 import random
@@ -207,7 +206,7 @@ st.markdown ("""
     }
 
     .anleitung-box {
-        background: var(--color-5) !important;
+        background: white !important;
         color: black !important;
         padding: 1rem;
         border-radius: 10px;
@@ -215,7 +214,7 @@ st.markdown ("""
     }
 
     .anleitung-button {
-        background: var(--color-5) !important;
+        background: white !important;
         color: black !important;
         border: 2px solid var(--color-4) !important;
     }
@@ -1281,7 +1280,7 @@ with tab6:
     st.header("💬 Gespräche & Verbindungen")
     
     st.markdown("""
-    <div class="custom-card" style="background: linear-gradient(135deg, #FEF3C7, #FED7AA); border-left: 4px solid #F59E0B;">
+    <div class="custom-card" style="background: linear-gradient(135deg, #FEF3C7, #FED7AA); border-left: 4px solid #8b0000;">
         <p style="margin: 0; color: #92400E;">
             <strong>Echte Verbindungen entstehen durch echte Gespräche.</strong> 
             Hier findest du wissenschaftlich fundierte Fragen und Techniken, um aus Small Talk 
