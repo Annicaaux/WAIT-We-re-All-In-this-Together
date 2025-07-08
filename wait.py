@@ -515,10 +515,7 @@ with tab1:
                     "duration": "3 Min",
                     "location": "Dein Arbeitsplatz",
                     "description": "Dehne Nacken, Schultern und Rücken direkt am Schreibtisch",
-                    "anleitung": "1. Schultern kreisen (10x vor, 10x zurück)
-                                 \n2. Kopf langsam von Seite zu Seite
-                                 \n3. Arme über Kopf strecken
-                                 \n4. Rücken durchstrecken",
+                    "anleitung": "1. Schultern kreisen (10x vor, 10x zurück)\n2. Kopf langsam von Seite zu Seite\n3. Arme über Kopf strecken\n4. Rücken durchstrecken",
                     "stamps": 1
                 },
                 {
@@ -526,11 +523,7 @@ with tab1:
                     "duration": "5 Min",
                     "location": "Am Fenster",
                     "description": "Schaue aus dem Fenster und beobachte ohne zu bewerten",
-                    "anleitung": "1. Fenster öffnen für frische Luft
-                                 \n2. 5 Dinge die du siehst benennen
-                                 \n3. 4 Geräusche wahrnehmen
-                                 \n4. 3 tiefe Atemzüge
-                                 \n5. Gedanken ziehen lassen wie Wolken",
+                    "anleitung": "1. Fenster öffnen für frische Luft\n2. 5 Dinge die du siehst benennen\n3. 4 Geräusche wahrnehmen\n4. 3 tiefe Atemzüge\n5. Gedanken ziehen lassen wie Wolken",
                     "stamps": 1
                 },
                 {
@@ -538,11 +531,7 @@ with tab1:
                     "duration": "10 Min",
                     "location": "Küche/Pausenraum",
                     "description": "Bewusst Tee kochen und trinken - volle Achtsamkeit",
-                    "anleitung": "1. Wasser bewusst aufkochen
-                                 \n2. Tee mit Bedacht auswählen
-                                 \n3. Während des Ziehens nur warten
-                                 \n4. Ersten Schluck 30 Sek im Mund
-                                 \n5. Wärme spüren",
+                    "anleitung": "1. Wasser bewusst aufkochen\n2. Tee mit Bedacht auswählen\n3. Während des Ziehens nur warten\n4. Ersten Schluck 30 Sek im Mund\n5. Wärme spüren",
                     "stamps": 1
                 },
                 {
@@ -550,12 +539,7 @@ with tab1:
                     "duration": "10 Min",
                     "location": "Ruhige Ecke",
                     "description": "Kurzer Powernap für neue Energie (Timer stellen!)",
-                    "anleitung": "1. Timer auf 10 Min stellen
-                                \n2. Augen schließen\
-                                n3. An nichts denken\
-                                n4. Wenn Gedanken kommen: 
-                                'lass sie rein und wieder weiterziehen, wie die Wolken, werte sie nicht'
-                                \n5. Nach Timer: Strecken!",
+                    "anleitung": "1. Timer auf 10 Min stellen\n2. Augen schließen\n3. An nichts denken\n4. Wenn Gedanken kommen:'lass sie rein und wieder weiterziehen, wie die Wolken, werte sie nicht'\n5. Nach Timer: Strecken!",
                     "stamps": 1
                 }
             ],
@@ -565,11 +549,7 @@ with tab1:
                     "duration": "5 Min",
                     "location": "Treppenhaus",
                     "description": "Rauf und runter - Kreislauf aktivieren",
-                    "anleitung": "1. 2x normal hoch und runter
-                                 \n2. 1x zwei Stufen auf einmal
-                                 \n3. 1x seitlich gehen
-                                 \n4. Oben 10 Hampelmänner
-                                 \n5. Unten dehnen",
+                    "anleitung": "1. 2x normal hoch und runter\n2. 1x zwei Stufen auf einmal\n3. 1x seitlich gehen\n4. Oben 10 Hampelmänner\n5. Unten dehnen",
                     "stamps": 1
                 },
                 {
@@ -577,11 +557,7 @@ with tab1:
                     "duration": "10 Min",
                     "location": "Um den Campus",
                     "description": "Einmal ums Gebäude - frische Luft tanken",
-                    "anleitung": "1. Zügig gehen (nicht schlendern)
-                                 \n2. Bewusst atmen: 4 ein, 4 aus
-                                 \n3. Himmel beobachten
-                                 \n4. 3 schöne Details entdecken
-                                 \n5. Lächeln!",
+                    "anleitung": "1. Zügig gehen (nicht schlendern)\n2. Bewusst atmen: 4 ein, 4 aus\n3. Himmel beobachten\n4. 3 schöne Details entdecken\n5. Lächeln!",
                     "stamps": 1
                 },
                 {
@@ -589,11 +565,7 @@ with tab1:
                     "duration": "10 Min",
                     "location": "Mensa Dachterrasse",
                     "description": "Frische Luft mit Aussicht über Lübeck",
-                    "anleitung": "1. Zur Terrasse gehen
-                                 \n2. Aussicht genießen
-                                 \n3. 5 tiefe Atemzüge
-                                 \n4. Arme weit ausbreiten
-                                 \n5. Energie tanken",
+                    "anleitung": "1. Zur Terrasse gehen\n2. Aussicht genießen\n3. 5 tiefe Atemzüge\n4. Arme weit ausbreiten\n5. Energie tanken",
                     "stamps": 1
                 }
             ],
@@ -603,11 +575,7 @@ with tab1:
                     "duration": "20 Min",
                     "location": "Wakenitz-Ufer (5 Min vom Campus)",
                     "description": "Entspannung am 'Amazonas des Nordens'",
-                    "anleitung": "1. Zum Wakenitz-Ufer radeln/gehen
-                                 \n2. Ruhigen Platz suchen
-                                 \n3. Wasser beobachten
-                                 \n4. Enten zählen
-                                 \n5. Gedanken mit dem Wasser fließen lassen",
+                    "anleitung": "1. Zum Wakenitz-Ufer radeln/gehen\n2. Ruhigen Platz suchen\n3. Wasser beobachten\n4. Enten zählen\n5. Gedanken mit dem Wasser fließen lassen",     
                     "stamps": 2
                 },
                 {
@@ -615,11 +583,7 @@ with tab1:
                     "duration": "15 Min",
                     "location": "Trave-Promenade",
                     "description": "Bewegung mit Blick auf die Altstadt",
-                    "anleitung": "1. Zur Trave gehen
-                                 \n2. Richtung Holstentor
-                                 \n3. Schiffe beobachten
-                                 \n4. 3 Fotos machen
-                                 \n5. Auf Bank 2 Min sitzen",
+                    "anleitung": "1. Zur Trave gehen\n2. Richtung Holstentor\n3. Schiffe beobachten\n4. 3 Fotos machen\n5. Auf Bank 2 Min sitzen",  
                     "stamps": 2
                 },
                 {
@@ -627,11 +591,7 @@ with tab1:
                     "duration": "15 Min",
                     "location": "Holstentor",
                     "description": "Geschichte trifft Gegenwart - Perspektivwechsel",
-                    "anleitung": "1. Zum Holstentor (Rad/Bus)
-                                 \n2. Details am Tor entdecken
-                                 \n3. Touristen beobachten
-                                 \n4. Selfie mit Tor
-                                 \n5. Niederegger-Marzipan als Belohnung?",
+                    "anleitung": "1. Zum Holstentor (Rad/Bus)\n2. Details am Tor entdecken\n3. Touristen beobachten\n4. Selfie mit Tor\n5. Niederegger-Marzipan als Belohnung?",           
                     "stamps": 2
                 },
                 {
@@ -639,11 +599,7 @@ with tab1:
                     "duration": "15 Min",
                     "location": "Lübecker Dom",
                     "description": "Ruhe in historischen Mauern finden",
-                    "anleitung": "1. Zum Dom gehen
-                                 \n2. Einmal durchgehen
-                                 \n3. Kerze anzünden (optional)
-                                 \n4. 5 Min still sitzen
-                                 \n5. Akustik genießen",
+                    "anleitung": "1. Zum Dom gehen\n2. Einmal durchgehen\n3. Kerze anzünden (optional)\n4. 5 Min still sitzen\n5. Akustik genießen",              
                     "stamps": 2
                 }
             ]
