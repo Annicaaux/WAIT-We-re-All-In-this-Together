@@ -276,7 +276,7 @@ st.markdown ("""
         right: 20px;
         font-size: 2rem;
         filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
-     } 
+    } 
     """
 </style>
 """, unsafe_allow_html=True)
@@ -425,13 +425,13 @@ def show_mini_metrics():
         """, unsafe_allow_html=True)
     
     with col4:
-        stamps = st.session_state.reward_stamps
-        st.markdown(f"""
-        <div class="metric-card" style="background: rgba(255,255,255,0.05);">
-            <p class="metric-value">{stamps}⭐</p>
-            <p class="metric-label">Stempel</p>
-        </div>
-        """, unsafe_allow_html=True)
+    stamps = st.session_state.reward_stamps
+    st.markdown(f"""
+    <div class="metric-card" style="background: rgba(255,255,255,0.05);">
+        <p class="metric-value">{stamps}&#11088;</p>
+        <p class="metric-label">Stempel</p>
+    </div>
+    """, unsafe_allow_html=True)
 
 # --- Haupttitel mit Level ---
 st.markdown('<h1 style="text-align: center; color: #8b0000; font-size: 3rem; margin-bottom: 0;">WAITT</h1>', unsafe_allow_html=True)
