@@ -438,10 +438,10 @@ st.markdown('<p style="text-align: center; color: #8b0000; font-size: 1.8rem; ma
     
 # Tabs
 tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
-    "Pausenraum",
     "Gruppen finden", 
     "Gruppe erstellen", 
-    "Meine Gruppen", 
+    "Meine Gruppen",
+    "Pausenraum",
     "Gemeinschaftsraum",
     "Gesprächsfetzen",
     "Zukunftsgedanken" 
@@ -449,264 +449,6 @@ tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
 
 
 with tab1:
-    st.markdown(
-        '<h1 style="color: #8b3a3a;">Gesunde Pausen für Körper & Geist</h1>',
-        unsafe_allow_html=True
-    )
-   
-    
-    st.markdown("""
-    <div class="custom-card" style="background: #ffe4e1; border-left: 4px solid #8b3a3a;">
-        <p style="margin: 0; color: #8b3a3a;">
-            <strong>Du bist nicht allein!</strong> Es ist völlig okay und sogar richtig wichtig beim 
-            Lernen Pausen zu machen. Dein Gehirn braucht diese kleinen Auszeiten, 
-            um das Gelernte zu verarbeiten und neue Energie zu tanken. Statt dich durchzubeißen, 
-            helfen dir bewusste Pausen dabei, konzentrierter und entspannter weiterzumachen. 
-            Gönn dir also ruhig mal eine Pause!
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    # Pausentyp wählen
-    pause_type = st.radio(
-        "Wie möchtest du deine Pause verbringen?",
-        ["🧘 Solo-Pause (Zeit für mich)", "👥 Gruppen-Pause (Gemeinsam entspannen)"],
-        horizontal=True
-    )
-    
-    st.markdown("---")
-    
-    
-    # Aktivitäten
-    if "Solo-Pause" in pause_type:
-        st.subheader("🌊 Solo-Aktivitäten")
-        
-        # Aktivitätskategorie wählen
-        activity_cat = st.selectbox(
-            "Was brauchst du gerade?",
-            ["🏠 Vor Ort (Zimmer/Bibliothek)", "🚶 Bewegung (Rausgehen)", "🌿 Natur (Lübeck erkunden)"]
-        )
-        
-        # Aktivitäten nach Kategorie
-        activities = {
-            "🏠 Vor Ort (Zimmer/Bibliothek)": [
-                {
-                    "name": "Schreibtisch-Yoga",
-                    "duration": "3 Min",
-                    "location": "Dein Arbeitsplatz",
-                    "description": "Dehne Nacken, Schultern und Rücken direkt am Schreibtisch",
-                    "anleitung": "1. Schultern kreisen (10x vor, 10x zurück)\n2. Kopf langsam von Seite zu Seite\n3. Arme über Kopf strecken\n4. Rücken durchstrecken",
-                    "stamps": 1
-                },
-                {
-                    "name": "Fenster-Meditation",
-                    "duration": "5 Min",
-                    "location": "Am Fenster",
-                    "description": "Schaue aus dem Fenster und beobachte ohne zu bewerten",
-                    "anleitung": "1. Fenster öffnen für frische Luft\n2. 5 Dinge die du siehst benennen\n3. 4 Geräusche wahrnehmen\n4. 3 tiefe Atemzüge\n5. Gedanken ziehen lassen wie Wolken",
-                    "stamps": 1
-                },
-                {
-                    "name": "Tee-Zeremonie",
-                    "duration": "10 Min",
-                    "location": "Küche/Pausenraum",
-                    "description": "Bewusst Tee kochen und trinken - volle Achtsamkeit",
-                    "anleitung": "1. Wasser bewusst aufkochen\n2. Tee mit Bedacht auswählen\n3. Während des Ziehens nur warten\n4. Ersten Schluck 30 Sek im Mund\n5. Wärme spüren",
-                    "stamps": 1
-                },
-                {
-                    "name": "Power-Nap",
-                    "duration": "10 Min",
-                    "location": "Ruhige Ecke",
-                    "description": "Kurzer Powernap für neue Energie (Timer stellen!)",
-                    "anleitung": "1. Timer auf 10 Min stellen\n2. Augen schließen\n3. An nichts denken\n4. Wenn Gedanken kommen:'lass sie rein und wieder weiterziehen, wie die Wolken, werte sie nicht'\n5. Nach Timer: Strecken!",
-                    "stamps": 1
-                }
-            ],
-            "🚶 Bewegung (Rausgehen)": [
-                {
-                    "name": "Treppen-Workout",
-                    "duration": "5 Min",
-                    "location": "Treppenhaus",
-                    "description": "Rauf und runter - Kreislauf aktivieren",
-                    "anleitung": "1. 2x normal hoch und runter\n2. 1x zwei Stufen auf einmal\n3. 1x seitlich gehen\n4. Oben 10 Hampelmänner\n5. Unten dehnen",
-                    "stamps": 1
-                },
-                {
-                    "name": "Campus-Runde",
-                    "duration": "10 Min",
-                    "location": "Um den Campus",
-                    "description": "Einmal ums Gebäude - frische Luft tanken",
-                    "anleitung": "1. Zügig gehen (nicht schlendern)\n2. Bewusst atmen: 4 ein, 4 aus\n3. Himmel beobachten\n4. 3 schöne Details entdecken\n5. Lächeln!",
-                    "stamps": 1
-                },
-                {
-                    "name": "Mensa-Terrassen-Pause",
-                    "duration": "10 Min",
-                    "location": "Mensa Dachterrasse",
-                    "description": "Frische Luft mit Aussicht über Lübeck",
-                    "anleitung": "1. Zur Terrasse gehen\n2. Aussicht genießen\n3. 5 tiefe Atemzüge\n4. Arme weit ausbreiten\n5. Energie tanken",
-                    "stamps": 1
-                }
-            ],
-            "🌿 Natur (Lübeck erkunden)": [
-                {
-                    "name": "Wakenitz-Meditation",
-                    "duration": "20 Min",
-                    "location": "Wakenitz-Ufer (5 Min vom Campus)",
-                    "description": "Entspannung am 'Amazonas des Nordens'",
-                    "anleitung": "1. Zum Wakenitz-Ufer radeln/gehen\n2. Ruhigen Platz suchen\n3. Wasser beobachten\n4. Enten zählen\n5. Gedanken mit dem Wasser fließen lassen",     
-                    "stamps": 2
-                },
-                {
-                    "name": "Trave-Spaziergang",
-                    "duration": "15 Min",
-                    "location": "Trave-Promenade",
-                    "description": "Bewegung mit Blick auf die Altstadt",
-                    "anleitung": "1. Zur Trave gehen\n2. Richtung Holstentor\n3. Schiffe beobachten\n4. 3 Fotos machen\n5. Auf Bank 2 Min sitzen",  
-                    "stamps": 2
-                },
-                {
-                    "name": "Holstentor-Auszeit",
-                    "duration": "15 Min",
-                    "location": "Holstentor",
-                    "description": "Geschichte trifft Gegenwart - Perspektivwechsel",
-                    "anleitung": "1. Zum Holstentor (Rad/Bus)\n2. Details am Tor entdecken\n3. Touristen beobachten\n4. Selfie mit Tor\n5. Niederegger-Marzipan als Belohnung?",           
-                    "stamps": 2
-                },
-                {
-                    "name": "Dom-Besuch",
-                    "duration": "15 Min",
-                    "location": "Lübecker Dom",
-                    "description": "Ruhe in historischen Mauern finden",
-                    "anleitung": "1. Zum Dom gehen\n2. Einmal durchgehen\n3. Kerze anzünden (optional)\n4. 5 Min still sitzen\n5. Akustik genießen",              
-                    "stamps": 2
-                }
-            ]
-        }
-        
-        # Zufällige Aktivität aus gewählter Kategorie
-        if st.button("Zufällige Aktivität", key="random_activity"):
-            available_activities = activities.get(activity_cat, [])
-            if available_activities:
-                st.session_state.current_solo_activity = random.choice(available_activities)
-        
-        # Aktivität anzeigen
-        if st.session_state.current_solo_activity:
-            activity = st.session_state.current_solo_activity
-            
-            st.markdown(f"""
-            <div class="custom-card" style="border-left: 4px solid #059669;">
-                <h4>📍 {activity['name']}</h4>
-                <p><strong>Ort:</strong> {activity['location']} | <strong>Dauer:</strong> {activity['duration']}</p>
-                <p style="font-style: italic;">{activity['description']}</p>
-            </div>
-            """, unsafe_allow_html=True)
-            
-            with st.expander("Anleitung"):
-                st.markdown(f'<div class="anleitung-box">{activity.get("anleitung", "Keine Anleitung verfügbar")}</div>', unsafe_allow_html=True)
-                st.markdown('<style>div.row-widget.stButton:nth-of-type(1) > button {background: #F5E6D3 !important; color: black !important;}</style>', unsafe_allow_html=True)
-           
-            col1, col2 = st.columns(2)
-            with col1:
-                if st.button("Pause gemacht!", key="done_activity", type="primary"):
-                    st.session_state.pause_statistics["solo_pausen"] += 1
-                    st.session_state.reward_stamps += activity['stamps']
-                    
-                    # Spezifische Statistiken
-                    if "Wakenitz" in activity['name']:
-                        st.session_state.pause_statistics["wakenitz_besuche"] += 1
-                    if "Trave" in activity['name']:
-                        st.session_state.pause_statistics["trave_spaziergaenge"] += 1
-                    if "Bewegung" in activity_cat:
-                        st.session_state.pause_statistics["bewegung_minuten"] += int(activity['duration'].split()[0])
-                   
-                    old_level = st.session_state.user_level
-                    new_level, new_avatar, _ = calculate_user_level()
-                    if new_level != old_level:
-                        st.balloons()
-                        st.success(f"Level Up! Du bist jetzt: {new_avatar} {new_level}!")
-                    st.success(f"Super! +{activity['stamps']} Stempel für deine Pause!")
-                    st.session_state.current_solo_activity = None
-                    st.rerun()
-            
-            with col2:
-                if st.button("Andere Aktivität", key="other_activity"):
-                    st.session_state.current_solo_activity = None
-                    st.session_state.current_solo_activity = None
-                    st.rerun()
-    
-    else:
-        st.subheader("👥 Gruppen-Aktivitäten")
-        
-        if not st.session_state.joined_groups:
-            st.warning("Tritt erst einer Gruppe bei, um Gruppenpausen zu planen!")
-            st.info("💡 Gemeinsame Pausen stärken den Zusammenhalt und machen mehr Spaß!")
-        else:
-            st.success("Gruppenaktivitäten kommen bald! Z.B. gemeinsame Spaziergänge, Spiele, Talk-Runden...")
-
-    # 2-Minuten Countdown (einfache Version)
-    st.subheader("Die 2-Minuten-Nichtstun-Challenge")
-
-    col1, col2, col3 = st.columns([2, 1, 1])
-    with col1:
-        st.write("Nimm dir 2 Minuten nur für dich. Kein Handy, keine Ablenkung. Nur du und eine Gedanken (spooky)")
-    with col2:
-        # Externe Timer-Links
-        st.link_button("Online Timer", "https://donothingfor2minutes.org")
-    with col3:
-        if st.button("Fertig", key="timer_done"):
-            st.session_state.pause_statistics["meditation_minuten"] += 2
-            st.session_state.pause_statistics["solo_pausen"] += 1
-            st.session_state.reward_stamps += 1
-            st.success("Super! 2 Minuten Ruhe - das hast du dir verdient! +1 Stempel")
-            st.balloons()
-
-    st.info("Starte den Timer, lege dein Handy weg und konzentriere dich nur auf deine Atmung und Umgebung.")
-
-    st.markdown("---")
-    
-    # Belohnungssystem
-    if st.session_state.reward_stamps > 0:
-        st.markdown("---")
-        st.subheader("Deine Stempel-Sammlung")
-        
-        col1, col2 = st.columns([3, 1])
-        with col1:
-            # Stempel visualisieren
-            stamps_html = '<div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 1rem;">'
-            for i in range(10):
-                if i < st.session_state.reward_stamps:
-                    stamps_html += '<div style="width: 50px; height: 50px; background: #10B981; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">⭐</div>'
-                else:
-                    stamps_html += '<div style="width: 50px; height: 50px; background: #E5E7EB; border: 2px dashed #9CA3AF; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #9CA3AF;">' + str(i+1) + '</div>'
-            stamps_html += '</div>'
-            
-            st.markdown(stamps_html, unsafe_allow_html=True)
-            st.progress(st.session_state.reward_stamps / 10)
-        
-        with col2:
-            st.metric("Stempel", f"{st.session_state.reward_stamps}/10")
-        
-        if st.session_state.reward_stamps >= 10:
-            st.markdown("""
-            <div class="custom-card" style="background: linear-gradient(135deg, #10B981, #059669); color: white; text-align: center;">
-                <h2 style="margin: 0;">BELOHNUNG FREIGESCHALTET!</h2>
-                <p style="font-size: 1.2rem; margin: 1rem 0;">Kostenloses Essen in der Mensa!</p>
-                <p><strong>So geht's:</strong><br>
-                1. Screenshot machen<br>
-                2. In der Mensa zeigen<br>
-                3. Gratis essen!</p>
-                <p style="margin-top: 1rem;"><strong>📍 Mensa Uni Lübeck</strong><br>Mönkhofer Weg 241</p>
-            </div>
-            """, unsafe_allow_html=True)
-            
-            if st.button("Belohnung eingelöst - Neu starten"):
-                st.session_state.reward_stamps = 0
-                st.success("Glückwunsch! Sammle wieder neue Stempel!")
-                st.rerun()
-
-with tab2:
     st.markdown(
         '<h1 style="color: #8b3a3a;">Lerngruppen finden & vernetzen</h1>',
         unsafe_allow_html=True
@@ -805,7 +547,7 @@ with tab2:
             st.markdown("---")
                
 
-with tab3:
+with tab2:
     st.header("➕ Neue Lerngruppe gründen")
     
     st.markdown("""
@@ -866,7 +608,7 @@ with tab3:
             else:
                 st.error("Bitte fülle alle Felder aus!")
 
-with tab4:
+with tab3:
     st.header("👥 Meine Lerngruppen")
     
     # Filtere nur die Gruppen, in denen der User Mitglied ist
@@ -1126,7 +868,264 @@ with tab4:
                 </div>
                 """, unsafe_allow_html=True)
     
+with tab4: 
+st.markdown(
+        '<h1 style="color: #8b3a3a;">Gesunde Pausen für Körper & Geist</h1>',
+        unsafe_allow_html=True
+    )
+   
+    
+    st.markdown("""
+    <div class="custom-card" style="background: #ffe4e1; border-left: 4px solid #8b3a3a;">
+        <p style="margin: 0; color: #8b3a3a;">
+            <strong>Du bist nicht allein!</strong> Es ist völlig okay und sogar richtig wichtig beim 
+            Lernen Pausen zu machen. Dein Gehirn braucht diese kleinen Auszeiten, 
+            um das Gelernte zu verarbeiten und neue Energie zu tanken. Statt dich durchzubeißen, 
+            helfen dir bewusste Pausen dabei, konzentrierter und entspannter weiterzumachen. 
+            Gönn dir also ruhig mal eine Pause!
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Pausentyp wählen
+    pause_type = st.radio(
+        "Wie möchtest du deine Pause verbringen?",
+        ["🧘 Solo-Pause (Zeit für mich)", "👥 Gruppen-Pause (Gemeinsam entspannen)"],
+        horizontal=True
+    )
+    
+    st.markdown("---")
+    
+    
+    # Aktivitäten
+    if "Solo-Pause" in pause_type:
+        st.subheader("🌊 Solo-Aktivitäten")
+        
+        # Aktivitätskategorie wählen
+        activity_cat = st.selectbox(
+            "Was brauchst du gerade?",
+            ["🏠 Vor Ort (Zimmer/Bibliothek)", "🚶 Bewegung (Rausgehen)", "🌿 Natur (Lübeck erkunden)"]
+        )
+        
+        # Aktivitäten nach Kategorie
+        activities = {
+            "🏠 Vor Ort (Zimmer/Bibliothek)": [
+                {
+                    "name": "Schreibtisch-Yoga",
+                    "duration": "3 Min",
+                    "location": "Dein Arbeitsplatz",
+                    "description": "Dehne Nacken, Schultern und Rücken direkt am Schreibtisch",
+                    "anleitung": "1. Schultern kreisen (10x vor, 10x zurück)\n2. Kopf langsam von Seite zu Seite\n3. Arme über Kopf strecken\n4. Rücken durchstrecken",
+                    "stamps": 1
+                },
+                {
+                    "name": "Fenster-Meditation",
+                    "duration": "5 Min",
+                    "location": "Am Fenster",
+                    "description": "Schaue aus dem Fenster und beobachte ohne zu bewerten",
+                    "anleitung": "1. Fenster öffnen für frische Luft\n2. 5 Dinge die du siehst benennen\n3. 4 Geräusche wahrnehmen\n4. 3 tiefe Atemzüge\n5. Gedanken ziehen lassen wie Wolken",
+                    "stamps": 1
+                },
+                {
+                    "name": "Tee-Zeremonie",
+                    "duration": "10 Min",
+                    "location": "Küche/Pausenraum",
+                    "description": "Bewusst Tee kochen und trinken - volle Achtsamkeit",
+                    "anleitung": "1. Wasser bewusst aufkochen\n2. Tee mit Bedacht auswählen\n3. Während des Ziehens nur warten\n4. Ersten Schluck 30 Sek im Mund\n5. Wärme spüren",
+                    "stamps": 1
+                },
+                {
+                    "name": "Power-Nap",
+                    "duration": "10 Min",
+                    "location": "Ruhige Ecke",
+                    "description": "Kurzer Powernap für neue Energie (Timer stellen!)",
+                    "anleitung": "1. Timer auf 10 Min stellen\n2. Augen schließen\n3. An nichts denken\n4. Wenn Gedanken kommen:'lass sie rein und wieder weiterziehen, wie die Wolken, werte sie nicht'\n5. Nach Timer: Strecken!",
+                    "stamps": 1
+                }
+            ],
+            "🚶 Bewegung (Rausgehen)": [
+                {
+                    "name": "Treppen-Workout",
+                    "duration": "5 Min",
+                    "location": "Treppenhaus",
+                    "description": "Rauf und runter - Kreislauf aktivieren",
+                    "anleitung": "1. 2x normal hoch und runter\n2. 1x zwei Stufen auf einmal\n3. 1x seitlich gehen\n4. Oben 10 Hampelmänner\n5. Unten dehnen",
+                    "stamps": 1
+                },
+                {
+                    "name": "Campus-Runde",
+                    "duration": "10 Min",
+                    "location": "Um den Campus",
+                    "description": "Einmal ums Gebäude - frische Luft tanken",
+                    "anleitung": "1. Zügig gehen (nicht schlendern)\n2. Bewusst atmen: 4 ein, 4 aus\n3. Himmel beobachten\n4. 3 schöne Details entdecken\n5. Lächeln!",
+                    "stamps": 1
+                },
+                {
+                    "name": "Mensa-Terrassen-Pause",
+                    "duration": "10 Min",
+                    "location": "Mensa Dachterrasse",
+                    "description": "Frische Luft mit Aussicht über Lübeck",
+                    "anleitung": "1. Zur Terrasse gehen\n2. Aussicht genießen\n3. 5 tiefe Atemzüge\n4. Arme weit ausbreiten\n5. Energie tanken",
+                    "stamps": 1
+                }
+            ],
+            "🌿 Natur (Lübeck erkunden)": [
+                {
+                    "name": "Wakenitz-Meditation",
+                    "duration": "20 Min",
+                    "location": "Wakenitz-Ufer (5 Min vom Campus)",
+                    "description": "Entspannung am 'Amazonas des Nordens'",
+                    "anleitung": "1. Zum Wakenitz-Ufer radeln/gehen\n2. Ruhigen Platz suchen\n3. Wasser beobachten\n4. Enten zählen\n5. Gedanken mit dem Wasser fließen lassen",     
+                    "stamps": 2
+                },
+                {
+                    "name": "Trave-Spaziergang",
+                    "duration": "15 Min",
+                    "location": "Trave-Promenade",
+                    "description": "Bewegung mit Blick auf die Altstadt",
+                    "anleitung": "1. Zur Trave gehen\n2. Richtung Holstentor\n3. Schiffe beobachten\n4. 3 Fotos machen\n5. Auf Bank 2 Min sitzen",  
+                    "stamps": 2
+                },
+                {
+                    "name": "Holstentor-Auszeit",
+                    "duration": "15 Min",
+                    "location": "Holstentor",
+                    "description": "Geschichte trifft Gegenwart - Perspektivwechsel",
+                    "anleitung": "1. Zum Holstentor (Rad/Bus)\n2. Details am Tor entdecken\n3. Touristen beobachten\n4. Selfie mit Tor\n5. Niederegger-Marzipan als Belohnung?",           
+                    "stamps": 2
+                },
+                {
+                    "name": "Dom-Besuch",
+                    "duration": "15 Min",
+                    "location": "Lübecker Dom",
+                    "description": "Ruhe in historischen Mauern finden",
+                    "anleitung": "1. Zum Dom gehen\n2. Einmal durchgehen\n3. Kerze anzünden (optional)\n4. 5 Min still sitzen\n5. Akustik genießen",              
+                    "stamps": 2
+                }
+            ]
+        }
+        
+        # Zufällige Aktivität aus gewählter Kategorie
+        if st.button("Zufällige Aktivität", key="random_activity"):
+            available_activities = activities.get(activity_cat, [])
+            if available_activities:
+                st.session_state.current_solo_activity = random.choice(available_activities)
+        
+        # Aktivität anzeigen
+        if st.session_state.current_solo_activity:
+            activity = st.session_state.current_solo_activity
+            
+            st.markdown(f"""
+            <div class="custom-card" style="border-left: 4px solid #059669;">
+                <h4>📍 {activity['name']}</h4>
+                <p><strong>Ort:</strong> {activity['location']} | <strong>Dauer:</strong> {activity['duration']}</p>
+                <p style="font-style: italic;">{activity['description']}</p>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            with st.expander("Anleitung"):
+                st.markdown(f'<div class="anleitung-box">{activity.get("anleitung", "Keine Anleitung verfügbar")}</div>', unsafe_allow_html=True)
+                st.markdown('<style>div.row-widget.stButton:nth-of-type(1) > button {background: #F5E6D3 !important; color: black !important;}</style>', unsafe_allow_html=True)
+           
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("Pause gemacht!", key="done_activity", type="primary"):
+                    st.session_state.pause_statistics["solo_pausen"] += 1
+                    st.session_state.reward_stamps += activity['stamps']
+                    
+                    # Spezifische Statistiken
+                    if "Wakenitz" in activity['name']:
+                        st.session_state.pause_statistics["wakenitz_besuche"] += 1
+                    if "Trave" in activity['name']:
+                        st.session_state.pause_statistics["trave_spaziergaenge"] += 1
+                    if "Bewegung" in activity_cat:
+                        st.session_state.pause_statistics["bewegung_minuten"] += int(activity['duration'].split()[0])
+                   
+                    old_level = st.session_state.user_level
+                    new_level, new_avatar, _ = calculate_user_level()
+                    if new_level != old_level:
+                        st.balloons()
+                        st.success(f"Level Up! Du bist jetzt: {new_avatar} {new_level}!")
+                    st.success(f"Super! +{activity['stamps']} Stempel für deine Pause!")
+                    st.session_state.current_solo_activity = None
+                    st.rerun()
+            
+            with col2:
+                if st.button("Andere Aktivität", key="other_activity"):
+                    st.session_state.current_solo_activity = None
+                    st.session_state.current_solo_activity = None
+                    st.rerun()
+    
+    else:
+        st.subheader("👥 Gruppen-Aktivitäten")
+        
+        if not st.session_state.joined_groups:
+            st.warning("Tritt erst einer Gruppe bei, um Gruppenpausen zu planen!")
+            st.info("💡 Gemeinsame Pausen stärken den Zusammenhalt und machen mehr Spaß!")
+        else:
+            st.success("Gruppenaktivitäten kommen bald! Z.B. gemeinsame Spaziergänge, Spiele, Talk-Runden...")
 
+    # 2-Minuten Countdown (einfache Version)
+    st.subheader("Die 2-Minuten-Nichtstun-Challenge")
+
+    col1, col2, col3 = st.columns([2, 1, 1])
+    with col1:
+        st.write("Nimm dir 2 Minuten nur für dich. Kein Handy, keine Ablenkung. Nur du und eine Gedanken (spooky)")
+    with col2:
+        # Externe Timer-Links
+        st.link_button("Online Timer", "https://donothingfor2minutes.org")
+    with col3:
+        if st.button("Fertig", key="timer_done"):
+            st.session_state.pause_statistics["meditation_minuten"] += 2
+            st.session_state.pause_statistics["solo_pausen"] += 1
+            st.session_state.reward_stamps += 1
+            st.success("Super! 2 Minuten Ruhe - das hast du dir verdient! +1 Stempel")
+            st.balloons()
+
+    st.info("Starte den Timer, lege dein Handy weg und konzentriere dich nur auf deine Atmung und Umgebung.")
+
+    st.markdown("---")
+    
+    # Belohnungssystem
+    if st.session_state.reward_stamps > 0:
+        st.markdown("---")
+        st.subheader("Deine Stempel-Sammlung")
+        
+        col1, col2 = st.columns([3, 1])
+        with col1:
+            # Stempel visualisieren
+            stamps_html = '<div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 1rem;">'
+            for i in range(10):
+                if i < st.session_state.reward_stamps:
+                    stamps_html += '<div style="width: 50px; height: 50px; background: #10B981; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">⭐</div>'
+                else:
+                    stamps_html += '<div style="width: 50px; height: 50px; background: #E5E7EB; border: 2px dashed #9CA3AF; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #9CA3AF;">' + str(i+1) + '</div>'
+            stamps_html += '</div>'
+            
+            st.markdown(stamps_html, unsafe_allow_html=True)
+            st.progress(st.session_state.reward_stamps / 10)
+        
+        with col2:
+            st.metric("Stempel", f"{st.session_state.reward_stamps}/10")
+        
+        if st.session_state.reward_stamps >= 10:
+            st.markdown("""
+            <div class="custom-card" style="background: linear-gradient(135deg, #10B981, #059669); color: white; text-align: center;">
+                <h2 style="margin: 0;">BELOHNUNG FREIGESCHALTET!</h2>
+                <p style="font-size: 1.2rem; margin: 1rem 0;">Kostenloses Essen in der Mensa!</p>
+                <p><strong>So geht's:</strong><br>
+                1. Screenshot machen<br>
+                2. In der Mensa zeigen<br>
+                3. Gratis essen!</p>
+                <p style="margin-top: 1rem;"><strong>📍 Mensa Uni Lübeck</strong><br>Mönkhofer Weg 241</p>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            if st.button("Belohnung eingelöst - Neu starten"):
+                st.session_state.reward_stamps = 0
+                st.success("Glückwunsch! Sammle wieder neue Stempel!")
+                st.rerun()
+                
 with tab5:
     st.header("Gemeinschaftsraum")
     
