@@ -444,7 +444,7 @@ tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
     "Meine Gruppen", 
     "Community",
     "Gesprächsfetzen",
-    "Adieu" 
+    "Zukunftsgedanken" 
 ])
 
 
@@ -1561,7 +1561,7 @@ with tab6:
 
 # Tab 7 mit eigenem Video und Spotify-Song-Button - KORRIGIERT
 with tab7:
-    st.header("Adieu")
+    st.header("Zukunftsgedanken")
     
     st.markdown("""
     <div class="custom-card" style="background: linear-gradient(135deg, #E0F2FE, #BAE6FD); border-left: 4px solid #0EA5E9;">
