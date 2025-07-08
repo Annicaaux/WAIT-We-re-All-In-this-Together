@@ -464,7 +464,7 @@ with tab1:
             nie genug zu tun. Doch oftmals sind Pausen gerade das, was am wichtigsten ist 
             und dennoch stets zukurz kommt. Doch egal was du heute geschafft hast, du hast 
             dir eine Pause verdient. Wer nur 10% hat und 10% gibt hat am Ende trotzdem 100%
-            gegeben❤️
+            gegeben
         </p>
     </div>
     """, unsafe_allow_html=True)
