@@ -303,8 +303,7 @@ st.markdown ("""
         display: flex;
         flex-direction: column;
         justify-content: center;
-    }
-    """  
+    } 
 </style>
 """, unsafe_allow_html=True)
 
