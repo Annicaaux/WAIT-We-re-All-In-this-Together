@@ -1458,7 +1458,6 @@ with tab6:
     tips = [
         ("👂 Aktives Zuhören", "Zeige echtes Interesse durch Nachfragen und Körpersprache"),
         ("🤝 Reziprozität", "Teile auch etwas von dir - Gespräche sind keine Interviews"),
-        ("⏰ Timing", "Achte auf die Stimmung - nicht jeder Moment passt für tiefe Fragen"),
         ("🌟 Authentizität", "Sei du selbst - echte Verbindungen brauchen Ehrlichkeit"),
         ("🚫 Kein Druck", "Respektiere Grenzen - niemand muss alles teilen")
     ]
