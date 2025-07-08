@@ -1586,8 +1586,8 @@ with tab6:
                     st.session_state.conversation_badges["story_collector"] = True
                     st.balloons()
                     st.success("🏆 Badge freigeschaltet: Story Collector!")
-# Tab 7 mit eigenem Video und Spotify-Song-Button
 
+# Tab 7 mit eigenem Video und Spotify-Song-Button - KORRIGIERT
 with tab7:
     st.header("Adieu")
     
@@ -1596,24 +1596,23 @@ with tab7:
         <p style="margin: 0; color: #0C4A6E;">
             <strong>Das wars erstmal, passt auf euch auf</strong> 
             Und vergiss nicht: egal wie alleine du dich fühlst, 
-            es gibt jemandem, der für dich da ist. Es gibt immer eine Lösung.
+            es gibt jemanden, der für dich da ist. Es gibt immer eine Lösung.
         </p>
     </div>
     """, unsafe_allow_html=True)
     
-    
     # SPOTIFY SONG SECTION
     st.markdown("---")
-    st.markdown("### Abschiedlied")
+    st.markdown("### Abschiedslied")
     
-    # Song-Informationen
+    # Song-Informationen - NUR die ID, ohne ?si=...
     song_info = {
         "title": "Hört zu und nehmt was mit", 
         "artist": "Römer",
-        "spotify_id": "3dAzv37uGPy8dz1zxxDzqN?si=0e2c36a2a1c94753", 
+        "spotify_id": "3dAzv37uGPy8dz1zxxDzqN",  # KORRIGIERT: Nur die ID
         "message": "Nur ein Mensch um noch im letzten Augenblick nach Links zu lenken"
     }
-    
+
     # Song-Card
     st.markdown(f"""
     <div class="custom-card" style="background: linear-gradient(135deg, #1DB954, #1ED760); color: white; text-align: center; padding: 2rem;">
@@ -1626,14 +1625,13 @@ with tab7:
     # Spotify-Button zentriert
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        # Spotify Song URL
-        spotify_song_url = f"https://open.spotify.com/intl-de/track/3dAzv37uGPy8dz1zxxDzqN?si=0e2c36a2a1c94753/{song_info['spotify_id']}"
+        # Spotify Song URL - KORRIGIERT
+        spotify_song_url = f"https://open.spotify.com/track/{song_info['spotify_id']}"
         
-        
-        # Großer Spotify-Button mit HTML/CSS
+        # Großer Spotify-Button mit HTML/CSS - KORRIGIERT
         st.markdown(f"""
         <div style="text-align: center; margin: 2rem 0;">
-            <a href="{https://open.spotify.com/intl-de/track/3dAzv37uGPy8dz1zxxDzqN?si=0e2c36a2a1c94753}" target="_blank" style="text-decoration: none;">
+            <a href="{spotify_song_url}" target="_blank" style="text-decoration: none;">
                 <button style="
                     background-color: #1DB954;
                     color: white;
