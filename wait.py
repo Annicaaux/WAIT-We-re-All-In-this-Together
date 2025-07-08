@@ -1277,63 +1277,6 @@ with tab5:
     </div>
     """, unsafe_allow_html=True)
 
-# --- Level-System am Ende der Seite ---
-
-st.markdown("---")
-st.markdown("## Dein WAITT-Level")
-
-level_name, avatar, description = calculate_user_level()
-st.session_state.user_level = level_name
-st.session_state.user_avatar = avatar
-
-col1, col2, col3 = st.columns([1, 3, 1])
-with col2:
-    st.markdown(f"""
-    <div style="background: linear-gradient(135deg, #FEF3C7, #FDE68A); 
-         border-radius: 25px; 
-         padding: 2rem; 
-         text-align: center; 
-         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-         border: 2px solid #F59E0B;">
-        <div style="font-size: 4rem; margin-bottom: 1rem;">{avatar}</div>
-        <h2 style="color: #92400E; margin: 0.5rem 0;">{level_name}</h2>
-        <p style="color: #78350F; margin: 1rem 0; font-size: 1.1rem;">{description}</p>
-     </div>
-     """, unsafe_allow_html=True)
-
-    st.markdown (f"""
-    <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap;">
-        <span style="background: white; padding: 0.5rem 1rem; border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-            🏆 {st.session_state.reward_stamps} Stempel
-        </span>
-        <span style="background: white; padding: 0.5rem 1rem; border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-            🧘 {st.session_state.pause_statistics["solo_pausen"]} Pausen
-        </span>
-        <span style="background: white; padding: 0.5rem 1rem; border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-            👥 {len(st.session_state.joined_groups)} Gruppen
-        </span>
-     </div>
-     """, unsafe_allow_html=True)
-
-# Fortschritts-Hinweise
-st.markdown("### Nächste Level-Ziele:")
-
-next_goals = []
-stats = st.session_state.pause_statistics
-
-if stats["solo_pausen"] < 5:
-    next_goals.append(f"Noch {5 - stats['solo_pausen']} Solo-Pausen bis zum 'Entspannungs-Entdecker'")
-if stats["meditation_minuten"] < 10:
-    next_goals.append(f"Noch {10 - stats['meditation_minuten']} Minuten meditieren bis zum 'Zen-Schüler'")
-if len(st.session_state.joined_groups) < 2:
-    next_goals.append(f"Noch {2 - len(st.session_state.joined_groups)} Gruppe beitreten bis zum 'Gruppen-Liebhaber'")
-
-if next_goals:
-    for goal in next_goals[:3]:  # Zeige max. 3 Ziele
-        st.info(goal)
-else:
-    st.success("Wow! Du hast schon viele Level erreicht! Weiter so!")
-
 with tab6:
     st.header("💬 Gespräche & Verbindungen")
     
@@ -1614,6 +1557,65 @@ with tab6:
                     st.session_state.conversation_badges["story_collector"] = True
                     st.balloons()
                     st.success("🏆 Badge freigeschaltet: Story Collector!")
+
+# --- Level-System am Ende der Seite ---
+
+st.markdown("---")
+st.markdown("## Dein WAITT-Level")
+
+level_name, avatar, description = calculate_user_level()
+st.session_state.user_level = level_name
+st.session_state.user_avatar = avatar
+
+col1, col2, col3 = st.columns([1, 3, 1])
+with col2:
+    st.markdown(f"""
+    <div style="background: linear-gradient(135deg, #FEF3C7, #FDE68A); 
+         border-radius: 25px; 
+         padding: 2rem; 
+         text-align: center; 
+         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+         border: 2px solid #F59E0B;">
+        <div style="font-size: 4rem; margin-bottom: 1rem;">{avatar}</div>
+        <h2 style="color: #92400E; margin: 0.5rem 0;">{level_name}</h2>
+        <p style="color: #78350F; margin: 1rem 0; font-size: 1.1rem;">{description}</p>
+     </div>
+     """, unsafe_allow_html=True)
+
+    st.markdown (f"""
+    <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap;">
+        <span style="background: white; padding: 0.5rem 1rem; border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            🏆 {st.session_state.reward_stamps} Stempel
+        </span>
+        <span style="background: white; padding: 0.5rem 1rem; border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            🧘 {st.session_state.pause_statistics["solo_pausen"]} Pausen
+        </span>
+        <span style="background: white; padding: 0.5rem 1rem; border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            👥 {len(st.session_state.joined_groups)} Gruppen
+        </span>
+     </div>
+     """, unsafe_allow_html=True)
+
+# Fortschritts-Hinweise
+st.markdown("### Nächste Level-Ziele:")
+
+next_goals = []
+stats = st.session_state.pause_statistics
+
+if stats["solo_pausen"] < 5:
+    next_goals.append(f"Noch {5 - stats['solo_pausen']} Solo-Pausen bis zum 'Entspannungs-Entdecker'")
+if stats["meditation_minuten"] < 10:
+    next_goals.append(f"Noch {10 - stats['meditation_minuten']} Minuten meditieren bis zum 'Zen-Schüler'")
+if len(st.session_state.joined_groups) < 2:
+    next_goals.append(f"Noch {2 - len(st.session_state.joined_groups)} Gruppe beitreten bis zum 'Gruppen-Liebhaber'")
+
+if next_goals:
+    for goal in next_goals[:3]:  # Zeige max. 3 Ziele
+        st.info(goal)
+else:
+    st.success("Wow! Du hast schon viele Level erreicht! Weiter so!")
+
+
 
 
     
