@@ -332,6 +332,15 @@ if "initialized" not in st.session_state:
     st.session_state.countdown_time = 120
     st.session_state.current_solo_activity = None
     st.session_state.current_group_activity = None
+    st.session_state.conversation_history = []
+    st.session_state.favorite_questions = []
+    st.session_state.conversation_badges = {
+        "icebreaker": False,
+        "deep_diver": False,
+        "empathy_master": False,
+        "story_collector": False,
+        "connection_builder": False
+    }
 
 def calculate_user_level():
     """Berechnet das lustige User-Level basierend auf Aktivitäten"""
@@ -431,12 +440,13 @@ st.markdown('<p style="text-align: center; color: #faf0e6; font-size: 1.2rem; ma
 
     
 # Tabs
-tab1, tab2, tab3, tab4, tab5 = st.tabs([
+tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
     "Pausengestaltung",
     "Gruppen finden", 
     "Gruppe erstellen", 
     "Meine Gruppen", 
-    "Community"
+    "Community",
+    "Gespräche & Verbindungen"
 ])
 
 
@@ -1323,6 +1333,287 @@ if next_goals:
         st.info(goal)
 else:
     st.success("Wow! Du hast schon viele Level erreicht! Weiter so!")
+
+with tab6:
+    st.header("💬 Gespräche & Verbindungen")
+    
+    st.markdown("""
+    <div class="custom-card" style="background: linear-gradient(135deg, #FEF3C7, #FED7AA); border-left: 4px solid #F59E0B;">
+        <p style="margin: 0; color: #92400E;">
+            <strong>Echte Verbindungen entstehen durch echte Gespräche.</strong> 
+            Hier findest du wissenschaftlich fundierte Fragen und Techniken, um aus Small Talk 
+            bedeutsame Verbindungen zu machen. Basierend auf Forschung zu sozialer Verbundenheit 
+            und interpersoneller Nähe.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Gesprächskategorien
+    categories = {
+        "🌱 Eisbrecher": {
+            "description": "Leichte Einstiegsfragen für den ersten Kontakt",
+            "color": "#D1FAE5",
+            "level": "Anfänger",
+            "questions": [
+                "Was war das Highlight deiner letzten Woche?",
+                "Wenn du einen Tag lang eine Superkraft hättest, welche wäre es?",
+                "Was ist deine aktuelle Lieblings-Playlist oder Podcast?",
+                "Welche kleine Sache hat dich heute zum Lächeln gebracht?",
+                "Was ist dein Go-to Comfort Food?",
+                "Wenn du jetzt spontan verreisen könntest, wohin würdest du gehen?",
+                "Was ist eine Fähigkeit, die du gerne hättest?",
+                "Welches Buch/Film/Serie hat dich zuletzt begeistert?"
+            ]
+        },
+        "🌊 Tiefgang": {
+            "description": "Fragen für bedeutsamere Verbindungen (36 Fragen Prinzip)",
+            "color": "#DBEAFE",
+            "level": "Fortgeschritten",
+            "questions": [
+                "Was bedeutet Heimat für dich?",
+                "Wann hast du dich das letzte Mal richtig lebendig gefühlt?",
+                "Was würdest du ändern, wenn du wüsstest, niemand würde dich verurteilen?",
+                "Welche Lektion hat das Leben dir auf die harte Tour beigebracht?",
+                "Was ist eine Überzeugung, die du früher hattest und jetzt nicht mehr?",
+                "Wofür bist du in deinem Leben am dankbarsten?",
+                "Was macht dich verletzlich?",
+                "Wenn du mit einer Person aus der Vergangenheit sprechen könntest, wer wäre es?"
+            ]
+        },
+        "💭 Philosophisch": {
+            "description": "Zum gemeinsamen Nachdenken und Philosophieren",
+            "color": "#E9D5FF",
+            "level": "Nachdenklich",
+            "questions": [
+                "Glaubst du, dass alles aus einem Grund passiert?",
+                "Was macht ein erfülltes Leben für dich aus?",
+                "Wie definierst du Erfolg für dich persönlich?",
+                "Was denkst du, ist der Sinn von Kunst?",
+                "Glaubst du an Schicksal oder freien Willen?",
+                "Was macht einen Menschen zu einem guten Menschen?",
+                "Wie wichtig ist dir Authentizität?",
+                "Was bedeutet Freiheit für dich?"
+            ]
+        },
+        "🎭 Kreativ & Spielerisch": {
+            "description": "Lustige hypothetische Szenarien",
+            "color": "#FFE4E1",
+            "level": "Spielerisch",
+            "questions": [
+                "Du kannst drei fiktive Charaktere zum Dinner einladen - wen wählst du?",
+                "Welche drei Gegenstände würdest du auf eine einsame Insel mitnehmen?",
+                "Wenn dein Leben ein Film wäre, welches Genre wäre es?",
+                "Du kannst eine Regel für die ganze Welt aufstellen - welche?",
+                "Welches Tier repräsentiert deine Persönlichkeit am besten?",
+                "Wenn du eine Zeitmaschine hättest - Vergangenheit oder Zukunft?",
+                "Du gewinnst 10 Millionen, musst aber alles in 24h ausgeben - was kaufst du?",
+                "Welche übernatürliche Kreatur wärst du gerne?"
+            ]
+        },
+        "❤️ Verbindung & Empathie": {
+            "description": "Fragen die Nähe und Verständnis fördern",
+            "color": "#FCE7F3",
+            "level": "Verbindend",
+            "questions": [
+                "Was ist eine Eigenschaft an dir, die andere oft übersehen?",
+                "Wobei fühlst du dich am meisten wie du selbst?",
+                "Was war ein Moment, in dem du dich wirklich verstanden gefühlt hast?",
+                "Welche Ängste teilst du ungern mit anderen?",
+                "Was brauchst du, wenn es dir nicht gut geht?",
+                "Welche Art von Unterstützung schätzt du am meisten?",
+                "Was ist etwas, wofür du dir selbst vergeben musstest?",
+                "Wie zeigst du Menschen, dass sie dir wichtig sind?"
+            ]
+        }
+    }
+    
+    # Wissenschaftlicher Hintergrund (collapsed)
+    with st.expander("🔬 Wissenschaftlicher Hintergrund"):
+        st.markdown("""
+        **Die Psychologie hinter tiefen Gesprächen:**
+        
+        🧠 **36 Fragen Studie (Aron et al., 1997)**
+        - Fremde können durch strukturierte, zunehmend persönliche Fragen Intimität aufbauen
+        - Gegenseitige Verletzlichkeit schafft Verbindung
+        
+        🤝 **Social Penetration Theory**
+        - Beziehungen entwickeln sich von oberflächlich zu tief
+        - Schrittweise Selbstoffenbarung ist der Schlüssel
+        
+        💡 **Mere Exposure Effect**
+        - Je öfter wir jemanden sehen, desto sympathischer wird uns die Person
+        - Regelmäßige positive Interaktionen verstärken dies
+        
+        ⚡ **Peak-End Rule**
+        - Wir erinnern uns an den emotionalen Höhepunkt und das Ende eines Gesprächs
+        - Ein positiver Abschluss ist wichtig!
+        """)
+    
+    # Hauptinterface
+    col1, col2 = st.columns([2, 1])
+    
+    with col1:
+        selected_category = st.selectbox(
+            "Wähle eine Gesprächskategorie:",
+            options=list(categories.keys()),
+            format_func=lambda x: f"{x} - {categories[x]['level']}"
+        )
+    
+    with col2:
+        st.markdown(f"""
+        <div style="background: {categories[selected_category]['color']}; 
+                    padding: 1rem; border-radius: 10px; text-align: center;">
+            <strong>{categories[selected_category]['level']}</strong>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.info(f"💡 {categories[selected_category]['description']}")
+    
+    # Zufällige Frage Generator
+    st.markdown("### 🎲 Deine Gesprächsfrage")
+    
+    if 'current_question_index' not in st.session_state:
+        st.session_state.current_question_index = 0
+    
+    questions = categories[selected_category]['questions']
+    current_question = questions[st.session_state.current_question_index % len(questions)]
+    
+    # Frage anzeigen
+    st.markdown(f"""
+    <div class="custom-card" style="background: linear-gradient(135deg, #F0F9FF, #E0F2FE); 
+                                    border: 2px solid #0EA5E9; text-align: center; padding: 2rem;">
+        <h2 style="color: #0C4A6E; margin: 0; font-size: 1.5rem;">
+            "{current_question}"
+        </h2>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    col1, col2, col3 = st.columns([1, 1, 1])
+    
+    with col1:
+        if st.button("⬅️ Vorherige", key="prev_q"):
+            st.session_state.current_question_index -= 1
+            st.rerun()
+    
+    with col2:
+        if st.button("🎲 Zufällige Frage", key="random_q", type="primary"):
+            st.session_state.current_question_index = random.randint(0, len(questions)-1)
+            st.rerun()
+    
+    with col3:
+        if st.button("Nächste ➡️", key="next_q"):
+            st.session_state.current_question_index += 1
+            st.rerun()
+    
+    # Favoriten speichern
+    col1, col2 = st.columns([3, 1])
+    with col2:
+        if st.button("⭐ Favorit", key="fav_q"):
+            if current_question not in st.session_state.favorite_questions:
+                st.session_state.favorite_questions.append(current_question)
+                st.success("Zur Favoritenliste hinzugefügt!")
+    
+    # Gesprächstipps
+    st.markdown("---")
+    st.markdown("### 🎯 Gesprächstipps")
+    
+    tips = [
+        ("👂 Aktives Zuhören", "Zeige echtes Interesse durch Nachfragen und Körpersprache"),
+        ("🤝 Reziprozität", "Teile auch etwas von dir - Gespräche sind keine Interviews"),
+        ("⏰ Timing", "Achte auf die Stimmung - nicht jeder Moment passt für tiefe Fragen"),
+        ("🌟 Authentizität", "Sei du selbst - echte Verbindungen brauchen Ehrlichkeit"),
+        ("🚫 Kein Druck", "Respektiere Grenzen - niemand muss alles teilen")
+    ]
+    
+    tip_cols = st.columns(len(tips))
+    for idx, (title, desc) in enumerate(tips):
+        with tip_cols[idx]:
+            st.markdown(f"""
+            <div style="background: var(--color-1); padding: 1rem; border-radius: 10px; 
+                        text-align: center; min-height: 120px;">
+                <h4 style="margin: 0; color: var(--color-5);">{title}</h4>
+                <p style="font-size: 0.85rem; margin-top: 0.5rem;">{desc}</p>
+            </div>
+            """, unsafe_allow_html=True)
+    
+    # Gesprächs-Challenges
+    st.markdown("---")
+    st.markdown("### 🏆 Wochen-Challenges")
+    
+    challenges = [
+        {
+            "name": "Small Talk Transformer",
+            "task": "Verwandle diese Woche 3 Small Talks in meaningful Gespräche",
+            "reward": "🏅 +3 Stempel"
+        },
+        {
+            "name": "Vulnerability Champion",
+            "task": "Teile etwas Persönliches mit jemandem (wenn es sich richtig anfühlt)",
+            "reward": "💎 +2 Stempel"
+        },
+        {
+            "name": "Curiosity Cat",
+            "task": "Stelle 5 verschiedenen Menschen eine 'Tiefgang'-Frage",
+            "reward": "🌟 +4 Stempel"
+        }
+    ]
+    
+    for challenge in challenges:
+        with st.container():
+            col1, col2 = st.columns([3, 1])
+            with col1:
+                st.markdown(f"""
+                <div style="background: var(--color-2); padding: 1rem; border-radius: 10px;">
+                    <strong>{challenge['name']}</strong><br>
+                    {challenge['task']}
+                </div>
+                """, unsafe_allow_html=True)
+            with col2:
+                if st.button(f"Geschafft!", key=f"challenge_{challenge['name']}"):
+                    reward_stamps = int(challenge['reward'].split('+')[1].split()[0])
+                    st.session_state.reward_stamps += reward_stamps
+                    st.success(f"Wow! {challenge['reward']}")
+                    st.balloons()
+    
+    # Favoriten anzeigen
+    if st.session_state.favorite_questions:
+        st.markdown("---")
+        st.markdown("### ⭐ Deine Lieblingsfragen")
+        
+        for q in st.session_state.favorite_questions[-5:]:  # Zeige letzte 5
+            st.markdown(f"""
+            <div style="background: #FFFBEB; padding: 0.75rem; border-radius: 8px; 
+                        margin: 0.5rem 0; border-left: 3px solid #F59E0B;">
+                "{q}"
+            </div>
+            """, unsafe_allow_html=True)
+    
+    # Reflexions-Tagebuch
+    st.markdown("---")
+    st.markdown("### 📝 Reflexions-Ecke")
+    st.markdown("*Welches Gespräch hat dich heute berührt? Was hast du über dich oder andere gelernt?*")
+    
+    with st.form("reflection_form"):
+        reflection = st.text_area(
+            "Deine Gedanken:",
+            placeholder="Heute habe ich gelernt, dass...",
+            max_chars=500
+        )
+        
+        if st.form_submit_button("Speichern", type="primary"):
+            if reflection.strip():
+                st.session_state.conversation_history.append({
+                    "date": datetime.now().strftime("%d.%m.%Y"),
+                    "text": reflection.strip()
+                })
+                st.session_state.reward_stamps += 1
+                st.success("Danke fürs Teilen! +1 Stempel für deine Reflexion")
+                
+                # Badge Check
+                if len(st.session_state.conversation_history) >= 5:
+                    st.session_state.conversation_badges["story_collector"] = True
+                    st.balloons()
+                    st.success("🏆 Badge freigeschaltet: Story Collector!")
 
 
     
