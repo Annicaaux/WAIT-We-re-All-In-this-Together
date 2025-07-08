@@ -1277,15 +1277,12 @@ with tab5:
     """, unsafe_allow_html=True)
 
 with tab6:
-    st.header("💬 Gespräche & Verbindungen")
+    st.header("Gesprächsfetzen")
     
     st.markdown("""
     <div class="custom-card" style="background: linear-gradient(135deg, #FEF3C7, #FED7AA); border-left: 4px solid #8b0000;">
-        <p style="margin: 0; color: #92400E;">
+        <p style="margin: 0; color: black;">
             <strong>Echte Verbindungen entstehen durch echte Gespräche.</strong> 
-            Hier findest du wissenschaftlich fundierte Fragen und Techniken, um aus Small Talk 
-            bedeutsame Verbindungen zu machen. Basierend auf Forschung zu sozialer Verbundenheit 
-            und interpersoneller Nähe.
         </p>
     </div>
     """, unsafe_allow_html=True)
@@ -1294,7 +1291,7 @@ with tab6:
     categories = {
         "🌱 Eisbrecher": {
             "description": "Leichte Einstiegsfragen für den ersten Kontakt",
-            "color": "#D1FAE5",
+            "color": #d89da3",
             "level": "Anfänger",
             "questions": [
                 "Was war das Highlight deiner letzten Woche?",
@@ -1309,8 +1306,8 @@ with tab6:
         },
         "🌊 Tiefgang": {
             "description": "Fragen für bedeutsamere Verbindungen (36 Fragen Prinzip)",
-            "color": "#DBEAFE",
-            "level": "Fortgeschritten",
+            "color": "#d89da3",
+            "level": "Ein Schritt weiter",
             "questions": [
                 "Was bedeutet Heimat für dich?",
                 "Wann hast du dich das letzte Mal richtig lebendig gefühlt?",
@@ -1324,7 +1321,7 @@ with tab6:
         },
         "💭 Philosophisch": {
             "description": "Zum gemeinsamen Nachdenken und Philosophieren",
-            "color": "#E9D5FF",
+            "color": "#d89da3",
             "level": "Nachdenklich",
             "questions": [
                 "Glaubst du, dass alles aus einem Grund passiert?",
@@ -1339,8 +1336,8 @@ with tab6:
         },
         "🎭 Kreativ & Spielerisch": {
             "description": "Lustige hypothetische Szenarien",
-            "color": "#FFE4E1",
-            "level": "Spielerisch",
+            "color": "#d89da3",
+            "level": "no risk no fun",
             "questions": [
                 "Du kannst drei fiktive Charaktere zum Dinner einladen - wen wählst du?",
                 "Welche drei Gegenstände würdest du auf eine einsame Insel mitnehmen?",
@@ -1354,8 +1351,8 @@ with tab6:
         },
         "❤️ Verbindung & Empathie": {
             "description": "Fragen die Nähe und Verständnis fördern",
-            "color": "#FCE7F3",
-            "level": "Verbindend",
+            "color": "#d89da3",
+            "level": "Soulmates",
             "questions": [
                 "Was ist eine Eigenschaft an dir, die andere oft übersehen?",
                 "Wobei fühlst du dich am meisten wie du selbst?",
@@ -1369,27 +1366,6 @@ with tab6:
         }
     }
     
-    # Wissenschaftlicher Hintergrund (collapsed)
-    with st.expander("🔬 Wissenschaftlicher Hintergrund"):
-        st.markdown("""
-        **Die Psychologie hinter tiefen Gesprächen:**
-        
-        🧠 **36 Fragen Studie (Aron et al., 1997)**
-        - Fremde können durch strukturierte, zunehmend persönliche Fragen Intimität aufbauen
-        - Gegenseitige Verletzlichkeit schafft Verbindung
-        
-        🤝 **Social Penetration Theory**
-        - Beziehungen entwickeln sich von oberflächlich zu tief
-        - Schrittweise Selbstoffenbarung ist der Schlüssel
-        
-        💡 **Mere Exposure Effect**
-        - Je öfter wir jemanden sehen, desto sympathischer wird uns die Person
-        - Regelmäßige positive Interaktionen verstärken dies
-        
-        ⚡ **Peak-End Rule**
-        - Wir erinnern uns an den emotionalen Höhepunkt und das Ende eines Gesprächs
-        - Ein positiver Abschluss ist wichtig!
-        """)
     
     # Hauptinterface
     col1, col2 = st.columns([2, 1])
