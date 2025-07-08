@@ -1588,9 +1588,9 @@ with tab7:
     # Song-Card
     st.markdown(f"""
     <div class="custom-card" style="background: linear-gradient(135deg, #1DB954, #1ED760); color: white; text-align: center; padding: 2rem;">
-        <h2 style="color: white; margin: 0;">🎶 {song_info['title']}</h2>
-        <p style="color: white; margin: 0.5rem 0; font-size: 1.2rem;">von {song_info['artist']}</p>
-        <p style="color: white; margin: 1rem 0; font-style: italic;">"{song_info['message']}"</p>
+        <h2 style="color: black; margin: 0;">🎶 {song_info['title']}</h2>
+        <p style="color: black; margin: 0.5rem 0; font-size: 1.2rem;">von {song_info['artist']}</p>
+        <p style="color: black; margin: 1rem 0; font-style: italic;">"{song_info['message']}"</p>
     </div>
     """, unsafe_allow_html=True)
     
