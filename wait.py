@@ -923,10 +923,10 @@ with tab4:
                     "duration": "5 Min",
                     "location": "Am Fenster",
                     "description": "Schaue aus dem Fenster und beobachte ohne zu bewerten",
-                    "anleitung": "1. Fenster öffnen für frische Luft
-                                  2. 5 Dinge die du siehst benennen
-                                  3. 4 Geräusche wahrnehmen
-                                  4. 3 tiefe Atemzüge
+                    "anleitung": "1. Fenster öffnen für frische Luft/
+                                  2. 5 Dinge die du siehst benennen/
+                                  3. 4 Geräusche wahrnehmen/
+                                  4. 3 tiefe Atemzüge/
                                   5. Gedanken ziehen lassen wie Wolken",
                     "stamps": 1
                 },
