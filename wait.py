@@ -1291,7 +1291,7 @@ with tab6:
     categories = {
         "🌱 Eisbrecher": {
             "description": "Leichte Einstiegsfragen für den ersten Kontakt",
-            "color": #d89da3",
+            "color": "#d89da3",
             "level": "Anfänger",
             "questions": [
                 "Was war das Highlight deiner letzten Woche?",
