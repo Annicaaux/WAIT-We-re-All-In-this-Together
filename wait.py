@@ -277,7 +277,34 @@ st.markdown ("""
         font-size: 2rem;
         filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
     }
-   
+    """
+    /* Tab 6 spezifische Fixes */
+    @media (max-width: 768px) {
+        /* Buttons in Tab 6 */
+        .stButton > button {
+            width: 100%;
+            margin: 0.25rem 0;
+        }
+    
+        /* Cards mobile-optimiert */
+        .custom-card {
+            margin-bottom: 0.5rem !important;
+        }
+    }
+
+    /* Bessere Button-Abstände */
+    div[data-testid="column"] {
+        padding: 0 0.5rem;
+    }
+
+    /* Tip-Karten gleich hoch */
+    .tip-card {
+        min-height: 150px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    """  
 </style>
 """, unsafe_allow_html=True)
 
@@ -1280,16 +1307,19 @@ with tab6:
     st.header("Gesprächsfetzen")
     
     st.markdown("""
-    <div class="custom-card" style="background: linear-gradient(135deg, #FEF3C7, #FED7AA); border-left: 4px solid #8b0000;">
-        <p style="margin: 0; color: black;">
+    <div class="custom-card" style="background: linear-gradient(135deg, #FEF3C7, #FED7AA); border-left: 4px solid #F59E0B;">
+        <p style="margin: 0; color: #92400E;">
             <strong>Echte Verbindungen entstehen durch echte Gespräche.</strong> 
+            Hier findest du wissenschaftlich fundierte Fragen und Techniken, um aus Small Talk 
+            bedeutsame Verbindungen zu machen. Basierend auf Forschung zu sozialer Verbundenheit 
+            und interpersoneller Nähe.
         </p>
     </div>
     """, unsafe_allow_html=True)
     
     # Gesprächskategorien
     categories = {
-        "🌱 Eisbrecher": {
+        "Eisbrecher": {
             "description": "Leichte Einstiegsfragen für den ersten Kontakt",
             "color": "#d89da3",
             "level": "Anfänger",
@@ -1304,7 +1334,7 @@ with tab6:
                 "Welches Buch/Film/Serie hat dich zuletzt begeistert?"
             ]
         },
-        "🌊 Tiefgang": {
+        "Tiefgang": {
             "description": "Fragen für bedeutsamere Verbindungen (36 Fragen Prinzip)",
             "color": "#d89da3",
             "level": "Ein Schritt weiter",
@@ -1319,7 +1349,7 @@ with tab6:
                 "Wenn du mit einer Person aus der Vergangenheit sprechen könntest, wer wäre es?"
             ]
         },
-        "💭 Philosophisch": {
+        "Philosophisch": {
             "description": "Zum gemeinsamen Nachdenken und Philosophieren",
             "color": "#d89da3",
             "level": "Nachdenklich",
@@ -1334,10 +1364,10 @@ with tab6:
                 "Was bedeutet Freiheit für dich?"
             ]
         },
-        "🎭 Kreativ & Spielerisch": {
+        "Klassenclown": {
             "description": "Lustige hypothetische Szenarien",
             "color": "#d89da3",
-            "level": "no risk no fun",
+            "level": "Scherzkeks",
             "questions": [
                 "Du kannst drei fiktive Charaktere zum Dinner einladen - wen wählst du?",
                 "Welche drei Gegenstände würdest du auf eine einsame Insel mitnehmen?",
@@ -1349,9 +1379,9 @@ with tab6:
                 "Welche übernatürliche Kreatur wärst du gerne?"
             ]
         },
-        "❤️ Verbindung & Empathie": {
+        "Deep-Dive-Buddy": {
             "description": "Fragen die Nähe und Verständnis fördern",
-            "color": "#d89da3",
+            "color": "##d89da3",
             "level": "Soulmates",
             "questions": [
                 "Was ist eine Eigenschaft an dir, die andere oft übersehen?",
@@ -1366,6 +1396,23 @@ with tab6:
         }
     }
     
+    # Wissenschaftlicher Hintergrund (collapsed)
+    with st.expander("FunFacts"):
+        st.markdown("""
+        **Eine Prise Wissen:**
+        
+        🧠 **36 Fragen Studie (Aron et al., 1997)**
+        - Fremde können durch strukturierte, zunehmend persönliche Fragen Intimität aufbauen
+        - Gegenseitige Verletzlichkeit schafft Verbindung
+        
+        🤝 **Social Penetration Theory**
+        - Beziehungen entwickeln sich von oberflächlich zu tief
+        - Schrittweise Selbstoffenbarung ist der Schlüssel
+        
+        ⚡ **Peak-End Rule**
+        - Wir erinnern uns an den emotionalen Höhepunkt und das Ende eines Gesprächs
+        - Ein positiver Abschluss ist wichtig!
+        """)
     
     # Hauptinterface
     col1, col2 = st.columns([2, 1])
@@ -1388,7 +1435,7 @@ with tab6:
     st.info(f"💡 {categories[selected_category]['description']}")
     
     # Zufällige Frage Generator
-    st.markdown("### 🎲 Deine Gesprächsfrage")
+    st.markdown("### Deine Gesprächsfrage")
     
     if 'current_question_index' not in st.session_state:
         st.session_state.current_question_index = 0
@@ -1406,34 +1453,35 @@ with tab6:
     </div>
     """, unsafe_allow_html=True)
     
+    # Button-Zeile mit besserer Zentrierung
+    st.markdown("<div style='margin: 1rem 0;'>", unsafe_allow_html=True)
     col1, col2, col3 = st.columns([1, 1, 1])
     
     with col1:
-        if st.button("⬅️ Vorherige", key="prev_q"):
+        if st.button("⬅️ Vorherige", key="prev_q", use_container_width=True):
             st.session_state.current_question_index -= 1
             st.rerun()
     
     with col2:
-        if st.button("🎲 Zufällige Frage", key="random_q", type="primary"):
+        if st.button("Zufällige Frage", key="random_q", type="primary", use_container_width=True):
             st.session_state.current_question_index = random.randint(0, len(questions)-1)
             st.rerun()
     
     with col3:
-        if st.button("Nächste ➡️", key="next_q"):
+        if st.button("Nächste", key="next_q", use_container_width=True):
             st.session_state.current_question_index += 1
             st.rerun()
+    st.markdown("</div>", unsafe_allow_html=True)
     
     # Favoriten speichern
-    col1, col2 = st.columns([3, 1])
-    with col2:
-        if st.button("⭐ Favorit", key="fav_q"):
-            if current_question not in st.session_state.favorite_questions:
-                st.session_state.favorite_questions.append(current_question)
-                st.success("Zur Favoritenliste hinzugefügt!")
+    if st.button("Zu Favoriten hinzufügen", key="fav_q"):
+        if current_question not in st.session_state.favorite_questions:
+            st.session_state.favorite_questions.append(current_question)
+            st.success("Zur Favoritenliste hinzugefügt!")
     
-    # Gesprächstipps
+    # Gesprächstipps - Mobile-optimiert
     st.markdown("---")
-    st.markdown("### 🎯 Gesprächstipps")
+    st.markdown("### Gesprächstipps")
     
     tips = [
         ("👂 Aktives Zuhören", "Zeige echtes Interesse durch Nachfragen und Körpersprache"),
@@ -1443,16 +1491,19 @@ with tab6:
         ("🚫 Kein Druck", "Respektiere Grenzen - niemand muss alles teilen")
     ]
     
-    tip_cols = st.columns(len(tips))
-    for idx, (title, desc) in enumerate(tips):
-        with tip_cols[idx]:
-            st.markdown(f"""
-            <div style="background: var(--color-1); padding: 1rem; border-radius: 10px; 
-                        text-align: center; min-height: 120px;">
-                <h4 style="margin: 0; color: var(--color-5);">{title}</h4>
-                <p style="font-size: 0.85rem; margin-top: 0.5rem;">{desc}</p>
-            </div>
-            """, unsafe_allow_html=True)
+    # Mobile-freundliche Darstellung
+    for idx in range(0, len(tips), 2):
+        cols = st.columns(2)
+        for col_idx, col in enumerate(cols):
+            if idx + col_idx < len(tips):
+                title, desc = tips[idx + col_idx]
+                with col:
+                    st.markdown(f"""
+                    <div class="custom-card" style="min-height: 120px; margin-bottom: 1rem;">
+                        <h4 style="margin: 0; color: var(--color-5); text-align: center;">{title}</h4>
+                        <p style="font-size: 0.85rem; margin-top: 0.5rem; text-align: center;">{desc}</p>
+                    </div>
+                    """, unsafe_allow_html=True)
     
     # Gesprächs-Challenges
     st.markdown("---")
@@ -1462,36 +1513,38 @@ with tab6:
         {
             "name": "Small Talk Transformer",
             "task": "Verwandle diese Woche 3 Small Talks in meaningful Gespräche",
-            "reward": "🏅 +3 Stempel"
+            "reward": "🏅 +3 Stempel",
+            "stamps": 3
         },
         {
             "name": "Vulnerability Champion",
             "task": "Teile etwas Persönliches mit jemandem (wenn es sich richtig anfühlt)",
-            "reward": "💎 +2 Stempel"
+            "reward": "💎 +2 Stempel",
+            "stamps": 2
         },
         {
             "name": "Curiosity Cat",
             "task": "Stelle 5 verschiedenen Menschen eine 'Tiefgang'-Frage",
-            "reward": "🌟 +4 Stempel"
+            "reward": "🌟 +4 Stempel",
+            "stamps": 4
         }
     ]
     
     for challenge in challenges:
-        with st.container():
-            col1, col2 = st.columns([3, 1])
-            with col1:
-                st.markdown(f"""
-                <div style="background: var(--color-2); padding: 1rem; border-radius: 10px;">
-                    <strong>{challenge['name']}</strong><br>
-                    {challenge['task']}
-                </div>
-                """, unsafe_allow_html=True)
-            with col2:
-                if st.button(f"Geschafft!", key=f"challenge_{challenge['name']}"):
-                    reward_stamps = int(challenge['reward'].split('+')[1].split()[0])
-                    st.session_state.reward_stamps += reward_stamps
-                    st.success(f"Wow! {challenge['reward']}")
-                    st.balloons()
+        col1, col2 = st.columns([3, 1])
+        with col1:
+            st.markdown(f"""
+            <div class="custom-card" style="margin-bottom: 0.5rem;">
+                <strong>{challenge['name']}</strong><br>
+                {challenge['task']}<br>
+                <small style="color: var(--color-4);">{challenge['reward']}</small>
+            </div>
+            """, unsafe_allow_html=True)
+        with col2:
+            if st.button("Geschafft!", key=f"challenge_{challenge['name']}", use_container_width=True):
+                st.session_state.reward_stamps += challenge['stamps']
+                st.success(f"Wow! {challenge['reward']}")
+                st.balloons()
     
     # Favoriten anzeigen
     if st.session_state.favorite_questions:
@@ -1500,9 +1553,8 @@ with tab6:
         
         for q in st.session_state.favorite_questions[-5:]:  # Zeige letzte 5
             st.markdown(f"""
-            <div style="background: #FFFBEB; padding: 0.75rem; border-radius: 8px; 
-                        margin: 0.5rem 0; border-left: 3px solid #F59E0B;">
-                "{q}"
+            <div class="custom-card" style="background: #FFFBEB; border-left: 3px solid #F59E0B;">
+                <p style="margin: 0; font-style: italic;">"{q}"</p>
             </div>
             """, unsafe_allow_html=True)
     
@@ -1518,7 +1570,9 @@ with tab6:
             max_chars=500
         )
         
-        if st.form_submit_button("Speichern", type="primary"):
+        submitted = st.form_submit_button("Speichern", type="primary", use_container_width=True)
+        
+        if submitted:
             if reflection.strip():
                 st.session_state.conversation_history.append({
                     "date": datetime.now().strftime("%d.%m.%Y"),
@@ -1532,6 +1586,7 @@ with tab6:
                     st.session_state.conversation_badges["story_collector"] = True
                     st.balloons()
                     st.success("🏆 Badge freigeschaltet: Story Collector!")
+
 
 # --- Level-System am Ende der Seite ---
 
