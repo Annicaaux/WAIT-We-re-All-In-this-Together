@@ -438,7 +438,7 @@ st.markdown('<p style="text-align: center; color: #8b0000; font-size: 1.2rem; ma
     
 # Tabs
 tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
-    "Pausengestaltung",
+    "Pausenraum",
     "Gruppen finden", 
     "Gruppe erstellen", 
     "Meine Gruppen", 
