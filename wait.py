@@ -476,26 +476,6 @@ with tab1:
     
     st.markdown("---")
     
-    # 2-Minuten Countdown (einfache Version)
-    st.subheader("Die 2-Minuten-Nichtstun-Challenge")
-
-    col1, col2, col3 = st.columns([2, 1, 1])
-    with col1:
-        st.write("Nimm dir 2 Minuten nur für dich. Kein Handy, keine Ablenkung. Nur du und eine Gedanken (spooky)")
-    with col2:
-        # Externe Timer-Links
-        st.link_button("Online Timer", "https://donothingfor2minutes.org")
-    with col3:
-        if st.button("Fertig", key="timer_done"):
-            st.session_state.pause_statistics["meditation_minuten"] += 2
-            st.session_state.pause_statistics["solo_pausen"] += 1
-            st.session_state.reward_stamps += 1
-            st.success("Super! 2 Minuten Ruhe - das hast du dir verdient! +1 Stempel")
-            st.balloons()
-
-    st.info("Starte den Timer, lege dein Handy weg und konzentriere dich nur auf deine Atmung und Umgebung.")
-
-    st.markdown("---")
     
     # Aktivitäten
     if "Solo-Pause" in pause_type:
@@ -664,6 +644,27 @@ with tab1:
             st.info("💡 Gemeinsame Pausen stärken den Zusammenhalt und machen mehr Spaß!")
         else:
             st.success("Gruppenaktivitäten kommen bald! Z.B. gemeinsame Spaziergänge, Spiele, Talk-Runden...")
+
+    # 2-Minuten Countdown (einfache Version)
+    st.subheader("Die 2-Minuten-Nichtstun-Challenge")
+
+    col1, col2, col3 = st.columns([2, 1, 1])
+    with col1:
+        st.write("Nimm dir 2 Minuten nur für dich. Kein Handy, keine Ablenkung. Nur du und eine Gedanken (spooky)")
+    with col2:
+        # Externe Timer-Links
+        st.link_button("Online Timer", "https://donothingfor2minutes.org")
+    with col3:
+        if st.button("Fertig", key="timer_done"):
+            st.session_state.pause_statistics["meditation_minuten"] += 2
+            st.session_state.pause_statistics["solo_pausen"] += 1
+            st.session_state.reward_stamps += 1
+            st.success("Super! 2 Minuten Ruhe - das hast du dir verdient! +1 Stempel")
+            st.balloons()
+
+    st.info("Starte den Timer, lege dein Handy weg und konzentriere dich nur auf deine Atmung und Umgebung.")
+
+    st.markdown("---")
     
     # Belohnungssystem
     if st.session_state.reward_stamps > 0:
