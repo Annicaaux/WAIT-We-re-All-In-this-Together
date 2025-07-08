@@ -1570,15 +1570,15 @@ st.session_state.user_avatar = avatar
 col1, col2, col3 = st.columns([1, 3, 1])
 with col2:
     st.markdown(f"""
-    <div style="background: linear-gradient(135deg, #FEF3C7, #FDE68A); 
+    <div style="background: linear-gradient(135deg, #E8C1C5, #D89DA3); 
          border-radius: 25px; 
          padding: 2rem; 
          text-align: center; 
          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-         border: 2px solid #F59E0B;">
+         border: 2px solid #D89DA3;">
         <div style="font-size: 4rem; margin-bottom: 1rem;">{avatar}</div>
-        <h2 style="color: #92400E; margin: 0.5rem 0;">{level_name}</h2>
-        <p style="color: #78350F; margin: 1rem 0; font-size: 1.1rem;">{description}</p>
+        <h2 style="color: #8b0000; margin: 0.5rem 0;">{level_name}</h2>
+        <p style="color: #8b0000; margin: 1rem 0; font-size: 1.1rem;">{description}</p>
      </div>
      """, unsafe_allow_html=True)
 
