@@ -1598,7 +1598,7 @@ with tab7:
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         # Spotify Song URL - KORRIGIERT
-        spotify_song_url = https://open.spotify.com/playlist/062JO6PmxDjuL3MfYZtA2h?si=051e3ae64a8f4f9d&pt=68f21bc9713082b637b67b768cd80583/{song_info['spotify_id']}"
+        spotify_song_url = f"https://open.spotify.com/playlist/062JO6PmxDjuL3MfYZtA2h?si=051e3ae64a8f4f9d&pt=68f21bc9713082b637b67b768cd80583/{song_info['spotify_id']}"
         
         # Großer Spotify-Button mit HTML/CSS - KORRIGIERT
         st.markdown(f"""
