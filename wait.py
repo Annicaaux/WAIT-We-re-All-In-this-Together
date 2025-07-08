@@ -276,8 +276,7 @@ st.markdown ("""
         right: 20px;
         font-size: 2rem;
         filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
-     } 
-    """
+    } 
 </style>
 """, unsafe_allow_html=True)
 
