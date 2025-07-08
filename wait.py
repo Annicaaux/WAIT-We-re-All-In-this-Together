@@ -869,7 +869,7 @@ with tab3:
                 """, unsafe_allow_html=True)
     
 with tab4: 
-st.markdown(
+    st.markdown(
         '<h1 style="color: #8b3a3a;">Gesunde Pausen für Körper & Geist</h1>',
         unsafe_allow_html=True
     )
