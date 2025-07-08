@@ -435,8 +435,8 @@ def show_mini_metrics():
         """, unsafe_allow_html=True)
 
 # --- Haupttitel mit Level ---
-st.markdown('<h1 style="text-align: center; color: #faf0e6; font-size: 3rem; margin-bottom: 0;">WAITT</h1>', unsafe_allow_html=True)
-st.markdown('<p style="text-align: center; color: #faf0e6; font-size: 1.2rem; margin-bottom: 1rem;">We\'re All In This Together - Uni Lübeck</p>', unsafe_allow_html=True)
+st.markdown('<h1 style="text-align: center; color: #B85461; font-size: 3rem; margin-bottom: 0;">WAITT</h1>', unsafe_allow_html=True)
+st.markdown('<p style="text-align: center; color: #B85461; font-size: 1.2rem; margin-bottom: 1rem;">We\'re All In This Together - Uni Lübeck</p>', unsafe_allow_html=True)
 
     
 # Tabs
