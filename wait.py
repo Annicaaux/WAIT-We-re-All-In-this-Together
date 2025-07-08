@@ -1559,7 +1559,7 @@ with tab6:
                     st.balloons()
                     st.success("🏆 Badge freigeschaltet: Story Collector!")
 
-# Tab 7 mit eigenem Video und Spotify-Song-Button - KORRIGIERT
+# Tab 7 mit eigenem Video und Spotify-Playlist-Button - KORRIGIERT
 with tab7:
     st.header("Zukunftsgedanken")
     
@@ -1573,7 +1573,7 @@ with tab7:
     </div>
     """, unsafe_allow_html=True)
     
-    # SPOTIFY SONG SECTION
+    # SPOTIFY Playlist SECTION
     st.markdown("---")
     st.markdown("### Abschiedslied")
     
@@ -1588,9 +1588,9 @@ with tab7:
     # Playlist-Card
     st.markdown(f"""
     <div class="custom-card" style="background: linear-gradient(135deg, #1DB954, #1ED760); color: white; text-align: center; padding: 2rem;">
-        <h2 style="color: black; margin: 0;">🎶 {song_info['title']}</h2>
-        <p style="color: black; margin: 0.5rem 0; font-size: 1.2rem;">von {song_info['artist']}</p>
-        <p style="color: black; margin: 1rem 0; font-style: italic;">"{song_info['message']}"</p>
+        <h2 style="color: black; margin: 0;">🎶 {playlist_info['title']}</h2>
+        <p style="color: black; margin: 0.5rem 0; font-size: 1.2rem;">von {playlist_info['artist']}</p>
+        <p style="color: black; margin: 1rem 0; font-style: italic;">"{playlist_info['message']}"</p>
     </div>
     """, unsafe_allow_html=True)
     
