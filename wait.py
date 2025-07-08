@@ -276,7 +276,7 @@ st.markdown ("""
         right: 20px;
         font-size: 2rem;
         filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
-    } 
+     } 
     """
 </style>
 """, unsafe_allow_html=True)
@@ -445,7 +445,8 @@ tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
     "Gruppe erstellen", 
     "Meine Gruppen", 
     "Community",
-    "Gespräche & Verbindungen"
+    "Gesprächnetzen"
+    "Adieu" 
 ])
 
 
