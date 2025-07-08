@@ -442,7 +442,7 @@ tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
     "Gruppen finden", 
     "Gruppe erstellen", 
     "Meine Gruppen", 
-    "Community",
+    "Gemeinschaftsraum",
     "Gesprächsfetzen",
     "Zukunftsgedanken" 
 ])
@@ -1127,7 +1127,7 @@ with tab4:
     
 
 with tab5:
-    st.header("Community-Pinnwand")
+    st.header("Gemeinschaftsraum")
     
     # Initialisiere Archiv wenn nicht vorhanden
     if "pinnwand_archiv" not in st.session_state:
