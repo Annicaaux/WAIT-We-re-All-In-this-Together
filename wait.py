@@ -1568,7 +1568,7 @@ with tab7:
         <p style="margin: 0; color: #0C4A6E;">
             <strong>Das wars erstmal, passt auf euch auf</strong> 
             Und vergiss nicht: egal wie alleine du dich fühlst, 
-            es gibt jemanden, der für dich da ist. Es gibt immer eine Lösung.
+            es gibt jemanden, der für dich da ist. Es gibt immer eine Lösung. We ARE all in this together
         </p>
     </div>
     """, unsafe_allow_html=True)
@@ -1579,10 +1579,10 @@ with tab7:
     
     # Song-Informationen - NUR die ID, ohne ?si=...
     song_info = {
-        "title": "Hört zu und nehmt was mit", 
-        "artist": "Römer",
-        "spotify_id": "3dAzv37uGPy8dz1zxxDzqN",  # KORRIGIERT: Nur die ID
-        "message": "Nur ein Mensch um noch im letzten Augenblick nach Links zu lenken"
+        "title": "Welches Lied hat eure letzte Woche am meisten geprägt?", 
+        "artist": "uns allen",
+        "spotify_id": "062JO6PmxDjuL3MfYZtA2h",  # KORRIGIERT: Nur die ID
+        "message": "Let´s start connecting with a shared Playlist"
     }
 
     # Song-Card
@@ -1598,7 +1598,7 @@ with tab7:
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         # Spotify Song URL - KORRIGIERT
-        spotify_song_url = f"https://open.spotify.com/track/{song_info['spotify_id']}"
+        spotify_song_url = https://open.spotify.com/playlist/062JO6PmxDjuL3MfYZtA2h?si=051e3ae64a8f4f9d&pt=68f21bc9713082b637b67b768cd80583/{song_info['spotify_id']}"
         
         # Großer Spotify-Button mit HTML/CSS - KORRIGIERT
         st.markdown(f"""
