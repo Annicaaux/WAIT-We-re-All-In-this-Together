@@ -1567,7 +1567,7 @@ with tab7:
     <div class="custom-card" style="background: linear-gradient(135deg, #E0F2FE, #BAE6FD); border-left: 4px solid #0EA5E9;">
         <p style="margin: 0; color: #0C4A6E;">
             <strong>Das wars erstmal, passt auf euch auf</strong> 
-            Und vergiss nicht: egal wie alleine du dich fühlst, 
+            Und vergesst nicht: egal wie alleine du dich fühlst, 
             es gibt jemanden, der für dich da ist. Es gibt immer eine Lösung. We ARE all in this together
         </p>
     </div>
