@@ -276,34 +276,8 @@ st.markdown ("""
         right: 20px;
         font-size: 2rem;
         filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
-    }
-    """
-    /* Tab 6 spezifische Fixes */
-    @media (max-width: 768px) {
-        /* Buttons in Tab 6 */
-        .stButton > button {
-            width: 100%;
-            margin: 0.25rem 0;
-        }
-    
-        /* Cards mobile-optimiert */
-        .custom-card {
-            margin-bottom: 0.5rem !important;
-        }
-    }
-
-    /* Bessere Button-Abstände */
-    div[data-testid="column"] {
-        padding: 0 0.5rem;
-    }
-
-    /* Tip-Karten gleich hoch */
-    .tip-card {
-        min-height: 150px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
     } 
+    """
 </style>
 """, unsafe_allow_html=True)
 
