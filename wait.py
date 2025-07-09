@@ -437,14 +437,13 @@ st.markdown('<p style="text-align: center; color: #8b0000; font-size: 1.8rem; ma
 
     
 # Tabs
-tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
+tab1, tab2, tab3, tab4, tab5, tab6= st.tabs([
     "Gruppen finden", 
     "Gruppe erstellen", 
     "Meine Gruppen",
     "Pausenraum",
     "Gemeinschaftsraum",
-    "Gesprächsfetzen",
-    "Zukunftsgedanken" 
+    "Gesprächsfetzen"
 ])
 
 
@@ -1665,78 +1664,6 @@ with tab6:
                     st.balloons()
                     st.success("🏆 Badge freigeschaltet: Story Collector!")
 
-# Tab 7 mit eigenem Video und Spotify-Playlist-Button - KORRIGIERT
-with tab7:
-    st.header("Zukunftsgedanken")
-    
-    st.markdown("""
-    <div class="custom-card" style="background: linear-gradient(135deg, #E0F2FE, #BAE6FD); border-left: 4px solid #0EA5E9;">
-        <p style="margin: 0; color: #0C4A6E;">
-            <strong>Das wars erstmal, passt auf euch auf</strong> 
-            Und vergesst nicht: egal wie alleine du dich fühlst, 
-            es gibt jemanden, der für dich da ist. Es gibt immer eine Lösung. We ARE all in this together
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    # SPOTIFY Playlist SECTION
-    st.markdown("---")
-    st.markdown("### Abschiedslied")
-    
-    # Playlistg-Informationen - NUR die ID, ohne ?si=...
-    playlist_info = {
-        "title": "Welches Lied hat eure letzte Woche am meisten geprägt?", 
-        "artist": "uns allen",
-        "spotify_id": "062JO6PmxDjuL3MfYZtA2h",  # KORRIGIERT: Nur die ID
-        "message": "Let´s start connecting with a shared Playlist"
-    }
-
-    # Playlist-Card
-    st.markdown(f"""
-    <div class="custom-card" style="background: linear-gradient(135deg, #1DB954, #1ED760); color: white; text-align: center; padding: 2rem;">
-        <h2 style="color: black; margin: 0;">🎶 {playlist_info['title']}</h2>
-        <p style="color: black; margin: 0.5rem 0; font-size: 1.2rem;">von {playlist_info['artist']}</p>
-        <p style="color: black; margin: 1rem 0; font-style: italic;">"{playlist_info['message']}"</p>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    # Spotify-Button zentriert
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        # Spotify Song URL - KORRIGIERT
-        spotify_playlist_url = "https://open.spotify.com/playlist/062JO6PmxDjuL3MfYZtA2h"
-        
-        # Großer Spotify-Button mit HTML/CSS - KORRIGIERT
-        st.markdown(f"""
-        <div style="text-align: center; margin: 2rem 0;">
-            <a href="{spotify_playlist_url}" target="_blank" style="text-decoration: none;">
-                <button style="
-                    background-color: #1DB954;
-                    color: white;
-                    border: none;
-                    padding: 1rem 2.5rem;
-                    font-size: 1.2rem;
-                    font-weight: bold;
-                    border-radius: 50px;
-                    cursor: pointer;
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 0.8rem;
-                    box-shadow: 0 4px 15px rgba(29, 185, 84, 0.3);
-                    transition: all 0.3s ease;
-                    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-                "
-                onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(29, 185, 84, 0.4)';"
-                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(29, 185, 84, 0.3)';">
-                    <svg style="width: 24px; height: 24px;" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
-                    </svg>
-                    Auf Spotify öffnen
-                </button>
-            </a>
-        </div>
-        """, unsafe_allow_html=True)
-    
 
 # --- Level-System am Ende der Seite ---
 
