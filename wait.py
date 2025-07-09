@@ -437,14 +437,13 @@ st.markdown('<p style="text-align: center; color: #8b0000; font-size: 1.8rem; ma
 
     
 # Tabs
-tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
+tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
     "Gruppen finden", 
     "Gruppe erstellen", 
     "Meine Gruppen",
     "Pausenraum",
     "Gemeinschaftsraum",
-    "Gesprächsfetzen", 
-    "Freiraum"
+    "Gesprächsfetzen"
 ])
 
 
@@ -1664,7 +1663,6 @@ with tab6:
                     st.session_state.conversation_badges["story_collector"] = True
                     st.balloons()
                     st.success("🏆 Badge freigeschaltet: Story Collector!")
-with tab7 
     
 
 # --- Level-System am Ende der Seite ---
