@@ -1055,15 +1055,6 @@ with tab4:
                     st.session_state.current_solo_activity = None
                     st.session_state.current_solo_activity = None
                     st.rerun()
-    
-    else:
-    st.subheader("👥 Gruppen-Aktivitäten")
-    
-    if not st.session_state.joined_groups:
-        st.warning("Tritt erst einer Gruppe bei, um Gruppenpausen zu planen!")
-        st.info("💡 Gemeinsame Pausen stärken den Zusammenhalt und machen mehr Spaß!")
-    else:
-        st.success("Gruppenaktivitäten kommen bald! Z.B. gemeinsame Spaziergänge, Spiele, Talk-Runden...")
 
     else:
         st.subheader("👥 Gruppen-Aktivitäten")
