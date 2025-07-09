@@ -1057,13 +1057,130 @@ with tab4:
                     st.rerun()
     
     else:
-        st.subheader("👥 Gruppen-Aktivitäten")
+    st.subheader("👥 Gruppen-Aktivitäten")
+    
+    if not st.session_state.joined_groups:
+        st.warning("Tritt erst einer Gruppe bei, um Gruppenpausen zu planen!")
+        st.info("💡 Gemeinsame Pausen stärken den Zusammenhalt und machen mehr Spaß!")
+    else:
+        st.success("Gruppenaktivitäten kommen bald! Z.B. gemeinsame Spaziergänge, Spiele, Talk-Runden...")
+
+# ERSETZE MIT:
+else:
+    st.subheader("👥 Gruppen-Aktivitäten")
+    
+    if not st.session_state.joined_groups:
+        st.warning("Tritt erst einer Gruppe bei, um Gruppenpausen zu planen!")
+        st.info("💡 Gemeinsame Pausen stärken den Zusammenhalt und machen mehr Spaß!")
+    else:
+        # Gruppenpausen-Aktivitäten
+        st.write("Wähle eine Gruppenaktivität für deine Lerngruppe:")
         
-        if not st.session_state.joined_groups:
-            st.warning("Tritt erst einer Gruppe bei, um Gruppenpausen zu planen!")
-            st.info("💡 Gemeinsame Pausen stärken den Zusammenhalt und machen mehr Spaß!")
-        else:
-            st.success("Gruppenaktivitäten kommen bald! Z.B. gemeinsame Spaziergänge, Spiele, Talk-Runden...")
+        group_activities = [
+            {
+                "name": "Gemeinsamer Spaziergang",
+                "duration": "15 Min",
+                "location": "Campus-Runde",
+                "description": "Frische Luft und Bewegung mit der Gruppe",
+                "stamps": 2
+            },
+            {
+                "name": "Kaffee-Pause",
+                "duration": "20 Min", 
+                "location": "Mensa Café",
+                "description": "Entspannter Austausch bei Kaffee und Snacks",
+                "stamps": 2
+            },
+            {
+                "name": "Stretching-Session",
+                "duration": "10 Min",
+                "location": "Bibliothek Foyer",
+                "description": "Gemeinsam dehnen und lockern",
+                "stamps": 2
+            },
+            {
+                "name": "Motivations-Runde",
+                "duration": "15 Min",
+                "location": "Gruppenraum",
+                "description": "Jeder teilt einen positiven Gedanken",
+                "stamps": 3
+            },
+            {
+                "name": "Mini-Meditation",
+                "duration": "5 Min",
+                "location": "Ruhezone",
+                "description": "Kurze gemeinsame Achtsamkeitsübung",
+                "stamps": 2
+            },
+            {
+                "name": "Lach-Yoga",
+                "duration": "10 Min",
+                "location": "Draußen",
+                "description": "Gemeinsam lachen für gute Stimmung",
+                "stamps": 3
+            }
+        ]
+        
+        # Zufällige Gruppenaktivität
+        if st.button("🎲 Gruppenaktivität vorschlagen", key="random_group_activity"):
+            st.session_state.current_group_activity = random.choice(group_activities)
+        
+        # Aktivität anzeigen
+        if st.session_state.current_group_activity:
+            activity = st.session_state.current_group_activity
+            
+            st.markdown(f"""
+            <div class="custom-card" style="border-left: 4px solid #10B981;">
+                <h4>👥 {activity['name']}</h4>
+                <p><strong>Ort:</strong> {activity['location']} | <strong>Dauer:</strong> {activity['duration']}</p>
+                <p style="font-style: italic;">{activity['description']}</p>
+                <p style="color: #059669;"><strong>Bonus:</strong> Gruppenpausen geben doppelte Stempel!</p>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("Gruppenpause gemacht!", key="done_group_activity", type="primary"):
+                    st.session_state.pause_statistics["gruppen_pausen"] += 1
+                    st.session_state.reward_stamps += activity['stamps']
+                    st.success(f"Großartig! +{activity['stamps']} Stempel für die Gruppenpause!")
+                    st.balloons()
+                    
+                    # Achievement check
+                    if st.session_state.pause_statistics["gruppen_pausen"] == 1:
+                        st.success("🏆 Erste Gruppenpause! Du stärkst den Zusammenhalt!")
+                    elif st.session_state.pause_statistics["gruppen_pausen"] == 5:
+                        st.success("🦋 Social Butterfly Level erreicht!")
+                    
+                    st.session_state.current_group_activity = None
+                    st.rerun()
+            
+            with col2:
+                if st.button("Andere Aktivität", key="other_group_activity"):
+                    st.session_state.current_group_activity = None
+                    st.rerun()
+        
+        # Quick-Actions für Gruppen
+        st.markdown("---")
+        st.markdown("### ⚡ Quick-Gruppenpausen")
+        
+        quick_cols = st.columns(3)
+        quick_actions = [
+            ("☕ 5-Min Kaffee", 1),
+            ("🚶 10-Min Walk", 2),
+            ("🧘 3-Min Atmen", 1)
+        ]
+        
+        for idx, (action, stamps) in enumerate(quick_actions):
+            with quick_cols[idx]:
+                if st.button(action, key=f"quick_{idx}", use_container_width=True):
+                    st.session_state.pause_statistics["gruppen_pausen"] += 1
+                    st.session_state.reward_stamps += stamps
+                    st.success(f"✅ {action} erledigt! +{stamps} Stempel")
+        
+        # Gruppen-Statistik
+        st.markdown("---")
+        st.info(f"🎉 Du hast bereits **{st.session_state.pause_statistics['gruppen_pausen']}** Gruppenpausen gemacht!")
 
     # 2-Minuten Countdown (einfache Version)
     st.subheader("Die 2-Minuten-Nichtstun-Challenge")
